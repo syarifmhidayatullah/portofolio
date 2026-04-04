@@ -1,0 +1,70 @@
+{{define "admin_login.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex items-center justify-center px-4">
+
+  <div class="w-full max-w-sm">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <span class="font-mono text-emerald-400 font-medium text-lg">syarif<span class="text-zinc-500">.</span>dev</span>
+      <p class="text-zinc-500 text-sm mt-1">Admin Access</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
+      <h1 class="text-xl font-semibold text-zinc-100 mb-6">Sign in</h1>
+
+      {{if .error}}
+      <div class="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+        {{.error}}
+      </div>
+      {{end}}
+
+      <form method="POST" action="/admin/login" class="flex flex-col gap-4">
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">Email</label>
+          <input
+            type="email"
+            name="email"
+            required
+            autofocus
+            placeholder="admin@example.com"
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">Password</label>
+          <input
+            type="password"
+            name="password"
+            required
+            placeholder="••••••••"
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all mt-2"
+        >
+          Sign in
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center mt-6">
+      <a href="/" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">← Back to site</a>
+    </p>
+  </div>
+
+</body>
+</html>
+{{end}}

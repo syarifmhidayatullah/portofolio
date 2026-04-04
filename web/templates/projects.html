@@ -1,0 +1,80 @@
+{{define "projects.html"}}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>{{template "head" .}}</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+
+{{template "navbar" .}}
+
+<main class="max-w-5xl mx-auto px-6 pt-32 pb-24">
+  <div class="mb-14">
+    <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Work</p>
+    <h1 class="text-4xl font-semibold text-zinc-100">Projects</h1>
+    <p class="text-zinc-400 mt-3 max-w-lg">A collection of things I've built — from production systems to side experiments.</p>
+  </div>
+
+  {{if .projects}}
+  <div class="grid md:grid-cols-2 gap-5">
+    {{range .projects}}
+    <div class="group relative bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl overflow-hidden transition-all hover:-translate-y-0.5">
+      {{if .ImageURL}}
+      <div class="w-full h-44 overflow-hidden bg-zinc-800">
+        <img src="{{.ImageURL}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" />
+      </div>
+      {{else}}
+      <div class="w-full h-44 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
+        <span class="text-4xl font-semibold text-zinc-700">{{slice .Title 0 1}}</span>
+      </div>
+      {{end}}
+
+      <div class="p-6">
+        <div class="flex items-start justify-between mb-2">
+          <h3 class="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors">{{.Title}}</h3>
+          {{if .Featured}}
+          <span class="text-xs font-mono text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">Featured</span>
+          {{end}}
+        </div>
+
+        <p class="text-zinc-400 text-sm leading-relaxed mb-4">{{.Description}}</p>
+
+        <div class="flex flex-wrap gap-1.5 mb-5">
+          {{range .TechStack}}
+          <span class="px-2 py-0.5 bg-zinc-800/80 text-zinc-400 text-xs font-mono rounded">{{.}}</span>
+          {{end}}
+        </div>
+
+        <div class="flex items-center gap-4 pt-4 border-t border-zinc-800">
+          {{if .LiveURL}}
+          <a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-emerald-400 transition-colors font-medium">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Live Demo
+          </a>
+          {{end}}
+          {{if .GithubURL}}
+          <a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+            </svg>
+            Source
+          </a>
+          {{end}}
+        </div>
+      </div>
+    </div>
+    {{end}}
+  </div>
+  {{else}}
+  <div class="text-center py-20">
+    <p class="text-zinc-500">No projects yet. Check back soon.</p>
+  </div>
+  {{end}}
+</main>
+
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

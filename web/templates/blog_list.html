@@ -1,0 +1,50 @@
+{{define "blog_list.html"}}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>{{template "head" .}}</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+
+{{template "navbar" .}}
+
+<main class="max-w-5xl mx-auto px-6 pt-32 pb-24">
+  <div class="mb-14">
+    <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Writing</p>
+    <h1 class="text-4xl font-semibold text-zinc-100">Blog</h1>
+    <p class="text-zinc-400 mt-3 max-w-lg">Thoughts on software engineering, architecture, and the craft of building things.</p>
+  </div>
+
+  {{if .posts}}
+  <div class="flex flex-col divide-y divide-zinc-800">
+    {{range .posts}}
+    <a href="/blog/{{.Slug}}" class="group py-8 flex items-start gap-6 hover:bg-zinc-900/40 -mx-4 px-4 rounded-xl transition-colors">
+      {{if .CoverImage}}
+      <div class="hidden sm:block w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-800">
+        <img src="{{.CoverImage}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+      </div>
+      {{end}}
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-3 mb-2">
+          {{if .PublishedAt}}
+          <span class="text-xs text-zinc-500 font-mono">{{.PublishedAt.Format "Jan 2, 2006"}}</span>
+          {{end}}
+        </div>
+        <h2 class="text-lg font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-2 leading-snug">{{.Title}}</h2>
+        <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2">{{.Excerpt}}</p>
+      </div>
+      <svg class="hidden md:block w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+      </svg>
+    </a>
+    {{end}}
+  </div>
+  {{else}}
+  <div class="text-center py-20">
+    <p class="text-zinc-500">No posts yet. Check back soon.</p>
+  </div>
+  {{end}}
+</main>
+
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

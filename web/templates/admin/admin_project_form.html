@@ -1,0 +1,114 @@
+{{define "admin_project_form.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{.title}} — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex">
+
+{{template "admin_sidebar" .}}
+
+<div class="flex-1 flex flex-col min-h-screen overflow-auto">
+  <header class="border-b border-zinc-800 px-8 py-4 flex items-center gap-4">
+    <a href="/admin/projects" class="text-zinc-500 hover:text-zinc-300 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <h1 class="text-lg font-semibold text-zinc-100">{{.title}}</h1>
+  </header>
+
+  <main class="flex-1 px-8 py-8 max-w-2xl">
+    {{if .error}}
+    <div class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{{.error}}</div>
+    {{end}}
+
+    {{$p := .project}}
+    {{if $p}}
+    <form method="POST" action="/admin/projects/{{$p.ID}}" class="flex flex-col gap-5">
+    {{else}}
+    <form method="POST" action="/admin/projects" class="flex flex-col gap-5">
+    {{end}}
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Title <span class="text-red-500">*</span></label>
+        <input type="text" name="title" required
+          value="{{if $p}}{{$p.Title}}{{end}}"
+          placeholder="My Project"
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+      </div>
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Description</label>
+        <textarea name="description" rows="3" placeholder="What does this project do?"
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none">{{if $p}}{{$p.Description}}{{end}}</textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Tech Stack <span class="text-zinc-600">(comma-separated)</span></label>
+        <input type="text" name="tech_stack"
+          value="{{if .techStackRaw}}{{.techStackRaw}}{{end}}"
+          placeholder="Go, PostgreSQL, Docker, Redis"
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors font-mono" />
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">Live URL</label>
+          <input type="url" name="live_url"
+            value="{{if $p}}{{$p.LiveURL}}{{end}}"
+            placeholder="https://..."
+            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+        </div>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">GitHub URL</label>
+          <input type="url" name="github_url"
+            value="{{if $p}}{{$p.GithubURL}}{{end}}"
+            placeholder="https://github.com/..."
+            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Image URL</label>
+        <input type="url" name="image_url"
+          value="{{if $p}}{{$p.ImageURL}}{{end}}"
+          placeholder="https://..."
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">Order Index</label>
+          <input type="number" name="order_index" min="0"
+            value="{{if $p}}{{$p.OrderIndex}}{{else}}0{{end}}"
+            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none transition-colors" />
+        </div>
+        <div class="flex items-end pb-3">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" name="featured"
+              {{if $p}}{{if $p.Featured}}checked{{end}}{{end}}
+              class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 accent-emerald-500 cursor-pointer" />
+            <span class="text-sm text-zinc-300">Featured on homepage</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2 border-t border-zinc-800">
+        <button type="submit"
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
+          {{if $p}}Update Project{{else}}Create Project{{end}}
+        </button>
+        <a href="/admin/projects" class="text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Cancel</a>
+      </div>
+    </form>
+  </main>
+</div>
+
+</body>
+</html>
+{{end}}

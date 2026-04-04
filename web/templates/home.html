@@ -1,0 +1,246 @@
+{{define "home.html"}}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>{{template "head" .}}</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+
+{{template "navbar" .}}
+
+<!-- Hero -->
+<section class="min-h-screen flex items-center pt-20">
+  <div class="max-w-5xl mx-auto px-6 py-24">
+    <div class="max-w-2xl">
+      <span class="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1.5 rounded-full mb-6">
+        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+        Available for opportunities
+      </span>
+
+      <h1 class="text-5xl md:text-6xl font-semibold text-zinc-50 leading-tight tracking-tight mb-6">
+        Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Syarif</span>
+      </h1>
+
+      <p class="text-lg text-zinc-400 leading-relaxed mb-8">
+        Software Engineer specializing in backend systems and distributed architecture.
+        I build reliable, scalable APIs and developer tools using Go, PostgreSQL, and cloud-native technologies.
+      </p>
+
+      <div class="flex flex-wrap gap-3 mb-12">
+        <a href="/projects" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
+          View Projects
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a href="/#contact" class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium text-sm rounded-lg transition-all">
+          Get in touch
+        </a>
+      </div>
+
+      <!-- Tech stack -->
+      <div>
+        <p class="text-xs text-zinc-500 uppercase tracking-widest mb-3 font-mono">Tech Stack</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Go</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">MySQL</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Redis</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Docker</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Kubernetes</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">gRPC</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">REST</span>
+          <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Linux</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Projects -->
+{{if .projects}}
+<section class="py-20 border-t border-zinc-800/50">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Work</p>
+        <h2 class="text-3xl font-semibold text-zinc-100">Featured Projects</h2>
+      </div>
+      <a href="/projects" class="text-sm text-zinc-400 hover:text-emerald-400 transition-colors group flex items-center gap-1">
+        All projects
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      {{range .projects}}
+      <div class="group relative bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl p-6 transition-all hover:-translate-y-0.5">
+        {{if .ImageURL}}
+        <div class="w-full h-40 rounded-lg overflow-hidden mb-5 bg-zinc-800">
+          <img src="{{.ImageURL}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+        </div>
+        {{end}}
+
+        <h3 class="font-semibold text-zinc-100 mb-2 group-hover:text-emerald-400 transition-colors">{{.Title}}</h3>
+        <p class="text-zinc-400 text-sm leading-relaxed mb-4">{{.Description}}</p>
+
+        <div class="flex flex-wrap gap-1.5 mb-5">
+          {{range .TechStack}}
+          <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">{{.}}</span>
+          {{end}}
+        </div>
+
+        <div class="flex items-center gap-4">
+          {{if .LiveURL}}
+          <a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-emerald-400 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Live Demo
+          </a>
+          {{end}}
+          {{if .GithubURL}}
+          <a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+            </svg>
+            Source
+          </a>
+          {{end}}
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Recent Blog Posts -->
+{{if .posts}}
+<section class="py-20 border-t border-zinc-800/50">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Writing</p>
+        <h2 class="text-3xl font-semibold text-zinc-100">Recent Posts</h2>
+      </div>
+      <a href="/blog" class="text-sm text-zinc-400 hover:text-emerald-400 transition-colors group flex items-center gap-1">
+        All posts
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="flex flex-col divide-y divide-zinc-800">
+      {{range .posts}}
+      <a href="/blog/{{.Slug}}" class="group py-6 flex items-start justify-between gap-4 hover:bg-zinc-900/50 -mx-4 px-4 rounded-lg transition-colors">
+        <div>
+          <h3 class="font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-1">{{.Title}}</h3>
+          <p class="text-zinc-500 text-sm">{{.Excerpt}}</p>
+        </div>
+        {{if .PublishedAt}}
+        <span class="text-xs text-zinc-600 font-mono whitespace-nowrap mt-1">{{.PublishedAt.Format "Jan 2, 2006"}}</span>
+        {{end}}
+      </a>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{end}}
+
+<!-- Contact -->
+<section id="contact" class="py-20 border-t border-zinc-800/50">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-xl">
+      <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Contact</p>
+      <h2 class="text-3xl font-semibold text-zinc-100 mb-4">Let's work together</h2>
+      <p class="text-zinc-400 mb-10">
+        Have a project in mind or just want to chat about technology?
+        Drop me a message and I'll get back to you within 24 hours.
+      </p>
+    </div>
+
+    <div
+      x-data="{
+        form: { name: '', email: '', subject: '', message: '' },
+        loading: false,
+        success: false,
+        error: '',
+        async submit() {
+          this.loading = true
+          this.error = ''
+          try {
+            const res = await fetch('/contact', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams(this.form).toString()
+            })
+            const data = await res.json()
+            if (res.ok) {
+              this.success = true
+              this.form = { name: '', email: '', subject: '', message: '' }
+            } else {
+              this.error = data.error || 'Something went wrong.'
+            }
+          } catch(e) {
+            this.error = 'Network error. Please try again.'
+          } finally {
+            this.loading = false
+          }
+        }
+      }"
+      class="max-w-xl"
+    >
+      <div x-show="success" class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm">
+        Message sent! I'll get back to you soon.
+      </div>
+      <div x-show="error" class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm" x-text="error"></div>
+
+      <form @submit.prevent="submit" class="flex flex-col gap-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1.5">Name</label>
+            <input x-model="form.name" type="text" required placeholder="John Doe"
+              class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1.5">Email</label>
+            <input x-model="form.email" type="email" required placeholder="john@example.com"
+              class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">Subject</label>
+          <input x-model="form.subject" type="text" placeholder="Project inquiry"
+            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1.5">Message</label>
+          <textarea x-model="form.message" required rows="5" placeholder="Tell me about your project..."
+            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none"></textarea>
+        </div>
+
+        <button
+          type="submit"
+          :disabled="loading"
+          class="self-start inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-zinc-900 font-medium text-sm rounded-lg transition-all"
+        >
+          <span x-show="!loading">Send Message</span>
+          <span x-show="loading">Sending...</span>
+          <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

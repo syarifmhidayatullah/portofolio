@@ -1,0 +1,55 @@
+{{define "blog_detail.html"}}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>{{template "head" .}}</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+
+{{template "navbar" .}}
+
+<main class="max-w-3xl mx-auto px-6 pt-32 pb-24">
+
+  <!-- Back link -->
+  <a href="/blog" class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors mb-10 group">
+    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+    </svg>
+    Back to blog
+  </a>
+
+  <!-- Post header -->
+  <header class="mb-12">
+    {{if .post.PublishedAt}}
+    <time class="text-xs font-mono text-zinc-500">{{.post.PublishedAt.Format "January 2, 2006"}}</time>
+    {{end}}
+    <h1 class="text-3xl md:text-4xl font-semibold text-zinc-50 leading-tight mt-3 mb-4">{{.post.Title}}</h1>
+    {{if .post.Excerpt}}
+    <p class="text-zinc-400 text-lg leading-relaxed border-l-2 border-emerald-500 pl-4">{{.post.Excerpt}}</p>
+    {{end}}
+  </header>
+
+  {{if .post.CoverImage}}
+  <div class="w-full rounded-xl overflow-hidden mb-12 bg-zinc-900">
+    <img src="{{.post.CoverImage}}" alt="{{.post.Title}}" class="w-full h-64 object-cover" />
+  </div>
+  {{end}}
+
+  <!-- Post content (rendered markdown) -->
+  <article class="prose prose-invert prose-emerald max-w-none
+    prose-headings:font-semibold prose-headings:text-zinc-100
+    prose-p:text-zinc-300 prose-p:leading-relaxed
+    prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
+    prose-code:text-emerald-300 prose-code:bg-zinc-900 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono
+    prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800
+    prose-blockquote:border-l-emerald-500 prose-blockquote:text-zinc-400
+    prose-strong:text-zinc-200
+    prose-img:rounded-lg
+    prose-hr:border-zinc-800">
+    {{safeHTML .renderedHTML}}
+  </article>
+
+</main>
+
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

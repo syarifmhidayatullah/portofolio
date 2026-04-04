@@ -1,0 +1,110 @@
+{{define "admin_dashboard.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex">
+
+{{template "admin_sidebar" .}}
+
+<div class="flex-1 flex flex-col min-h-screen overflow-auto">
+  <!-- Top bar -->
+  <header class="border-b border-zinc-800 px-8 py-4 flex items-center justify-between">
+    <h1 class="text-lg font-semibold text-zinc-100">Dashboard</h1>
+    <a href="/" target="_blank" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1.5">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+      </svg>
+      View site
+    </a>
+  </header>
+
+  <main class="flex-1 px-8 py-8">
+    <!-- Stats -->
+    <div class="grid sm:grid-cols-3 gap-4 mb-10">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+        <p class="text-xs text-zinc-500 uppercase tracking-widest font-mono mb-2">Posts</p>
+        <p class="text-3xl font-semibold text-zinc-100">{{.postCount}}</p>
+        <a href="/admin/posts" class="text-xs text-emerald-400 hover:text-emerald-300 mt-2 inline-block">Manage →</a>
+      </div>
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+        <p class="text-xs text-zinc-500 uppercase tracking-widest font-mono mb-2">Projects</p>
+        <p class="text-3xl font-semibold text-zinc-100">{{.projectCount}}</p>
+        <a href="/admin/projects" class="text-xs text-emerald-400 hover:text-emerald-300 mt-2 inline-block">Manage →</a>
+      </div>
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+        <p class="text-xs text-zinc-500 uppercase tracking-widest font-mono mb-2">Unread Messages</p>
+        <p class="text-3xl font-semibold {{if gt .unreadCount 0}}text-amber-400{{else}}text-zinc-100{{end}}">{{.unreadCount}}</p>
+        <a href="/admin/messages" class="text-xs text-emerald-400 hover:text-emerald-300 mt-2 inline-block">View inbox →</a>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Recent Posts -->
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="font-medium text-zinc-100">Recent Posts</h2>
+          <a href="/admin/posts/new" class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">+ New</a>
+        </div>
+        {{if .recentPosts}}
+        <ul class="space-y-3">
+          {{range .recentPosts}}
+          <li class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <a href="/admin/posts/{{.ID}}/edit" class="text-sm text-zinc-300 hover:text-zinc-100 truncate block transition-colors">{{.Title}}</a>
+              <span class="text-xs text-zinc-600">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
+            </div>
+            {{if .Published}}
+            <span class="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full flex-shrink-0">Live</span>
+            {{else}}
+            <span class="text-xs font-mono text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded-full flex-shrink-0">Draft</span>
+            {{end}}
+          </li>
+          {{end}}
+        </ul>
+        {{else}}
+        <p class="text-sm text-zinc-600">No posts yet.</p>
+        {{end}}
+      </div>
+
+      <!-- Recent Messages -->
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="font-medium text-zinc-100">Recent Messages</h2>
+          <a href="/admin/messages" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">View all →</a>
+        </div>
+        {{if .recentMessages}}
+        <ul class="space-y-3">
+          {{range .recentMessages}}
+          <li class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0 text-xs font-medium text-zinc-400">
+              {{slice .Name 0 1}}
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm text-zinc-300 font-medium truncate">{{.Name}}</span>
+                {{if not .IsRead}}
+                <span class="w-2 h-2 bg-emerald-400 rounded-full flex-shrink-0"></span>
+                {{end}}
+              </div>
+              <p class="text-xs text-zinc-500 truncate">{{.Message}}</p>
+            </div>
+          </li>
+          {{end}}
+        </ul>
+        {{else}}
+        <p class="text-sm text-zinc-600">No messages yet.</p>
+        {{end}}
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
+{{end}}

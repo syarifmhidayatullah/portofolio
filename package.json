@@ -1,0 +1,13 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "css": "tailwindcss -i ./web/static/css/input.css -o ./web/static/css/app.css --watch",
+    "css:build": "tailwindcss -i ./web/static/css/input.css -o ./web/static/css/app.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "tailwindcss": "^3.4.17"
+  }
+}

@@ -1,0 +1,142 @@
+{{define "admin_post_form.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{.title}} — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- EasyMDE markdown editor -->
+  <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
+  <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .EasyMDEContainer { background: #18181b; }
+    .EasyMDEContainer .CodeMirror {
+      background: #18181b;
+      color: #f4f4f5;
+      border: 1px solid #27272a;
+      border-radius: 0 0 0.5rem 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      min-height: 400px;
+    }
+    .editor-toolbar {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .editor-toolbar button { color: #a1a1aa !important; }
+    .editor-toolbar button:hover, .editor-toolbar button.active { background: #3f3f46 !important; color: #f4f4f5 !important; }
+    .editor-preview { background: #18181b; color: #d4d4d8; }
+    .CodeMirror-scroll { min-height: 400px; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex">
+
+{{template "admin_sidebar" .}}
+
+<div class="flex-1 flex flex-col min-h-screen overflow-auto">
+  <header class="border-b border-zinc-800 px-8 py-4 flex items-center gap-4">
+    <a href="/admin/posts" class="text-zinc-500 hover:text-zinc-300 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <h1 class="text-lg font-semibold text-zinc-100">{{.title}}</h1>
+  </header>
+
+  <main class="flex-1 px-8 py-8 max-w-4xl">
+    {{if .error}}
+    <div class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{{.error}}</div>
+    {{end}}
+
+    {{$post := .post}}
+    {{if $post}}
+    <form method="POST" action="/admin/posts/{{$post.ID}}" class="flex flex-col gap-6">
+    {{else}}
+    <form method="POST" action="/admin/posts" class="flex flex-col gap-6">
+    {{end}}
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Title <span class="text-red-500">*</span></label>
+        <input
+          type="text"
+          name="title"
+          required
+          value="{{if $post}}{{$post.Title}}{{end}}"
+          placeholder="My awesome blog post"
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Excerpt <span class="text-zinc-600">(auto-generated if empty)</span></label>
+        <input
+          type="text"
+          name="excerpt"
+          value="{{if $post}}{{$post.Excerpt}}{{end}}"
+          placeholder="Short description shown in previews..."
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Cover Image URL</label>
+        <input
+          type="url"
+          name="cover_image"
+          value="{{if $post}}{{$post.CoverImage}}{{end}}"
+          placeholder="https://..."
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Content (Markdown) <span class="text-red-500">*</span></label>
+        <textarea id="editor" name="content">{{if $post}}{{$post.Content}}{{end}}</textarea>
+      </div>
+
+      <div class="flex items-center gap-6 pt-2">
+        <label class="flex items-center gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            name="published"
+            {{if $post}}{{if $post.Published}}checked{{end}}{{end}}
+            class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emerald-500 accent-emerald-500 cursor-pointer"
+          />
+          <span class="text-sm text-zinc-300">Publish immediately</span>
+        </label>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2 border-t border-zinc-800">
+        <button
+          type="submit"
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all"
+        >
+          {{if $post}}Update Post{{else}}Create Post{{end}}
+        </button>
+        <a href="/admin/posts" class="text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Cancel</a>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+  const easyMDE = new EasyMDE({
+    element: document.getElementById('editor'),
+    spellChecker: false,
+    autosave: { enabled: true, uniqueId: 'post-editor' },
+    toolbar: [
+      'bold', 'italic', 'heading', '|',
+      'quote', 'unordered-list', 'ordered-list', '|',
+      'link', 'image', 'code', 'table', '|',
+      'preview', 'side-by-side', 'fullscreen', '|',
+      'guide'
+    ],
+  })
+</script>
+</body>
+</html>
+{{end}}

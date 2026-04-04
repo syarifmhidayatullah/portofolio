@@ -1,0 +1,28 @@
+# Environment
+.env
+
+# Binary
+bin/
+server
+
+# Go
+vendor/
+
+# Node
+node_modules/
+
+# Tailwind build output
+web/static/css/app.css
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

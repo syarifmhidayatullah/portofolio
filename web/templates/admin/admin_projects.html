@@ -1,0 +1,98 @@
+{{define "admin_projects.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex">
+
+{{template "admin_sidebar" .}}
+
+<div class="flex-1 flex flex-col min-h-screen overflow-auto">
+  <header class="border-b border-zinc-800 px-8 py-4 flex items-center justify-between">
+    <h1 class="text-lg font-semibold text-zinc-100">Projects</h1>
+    <a href="/admin/projects/new"
+      class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Project
+    </a>
+  </header>
+
+  <main class="flex-1 px-8 py-8">
+    {{if .error}}
+    <div class="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{{.error}}</div>
+    {{end}}
+
+    {{if .projects}}
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-zinc-800">
+            <th class="text-left px-5 py-3 text-xs text-zinc-500 font-medium uppercase tracking-wider">Project</th>
+            <th class="text-left px-5 py-3 text-xs text-zinc-500 font-medium uppercase tracking-wider hidden sm:table-cell">Tech Stack</th>
+            <th class="text-left px-5 py-3 text-xs text-zinc-500 font-medium uppercase tracking-wider hidden md:table-cell">Featured</th>
+            <th class="px-5 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800">
+          {{range .projects}}
+          <tr class="hover:bg-zinc-800/40 transition-colors group">
+            <td class="px-5 py-4">
+              <div class="flex items-center gap-3">
+                {{if .ImageURL}}
+                <div class="w-10 h-10 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
+                  <img src="{{.ImageURL}}" alt="" class="w-full h-full object-cover" />
+                </div>
+                {{end}}
+                <div>
+                  <p class="font-medium text-zinc-200 text-sm">{{.Title}}</p>
+                  <p class="text-xs text-zinc-500 truncate max-w-xs">{{.Description}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-4 hidden sm:table-cell">
+              <div class="flex flex-wrap gap-1">
+                {{range .TechStack}}
+                <span class="text-xs font-mono text-zinc-500 bg-zinc-800 px-1.5 py-0.5 rounded">{{.}}</span>
+                {{end}}
+              </div>
+            </td>
+            <td class="px-5 py-4 hidden md:table-cell">
+              {{if .Featured}}
+              <span class="text-xs font-mono text-amber-400">★ Yes</span>
+              {{else}}
+              <span class="text-xs text-zinc-600">—</span>
+              {{end}}
+            </td>
+            <td class="px-5 py-4">
+              <div class="flex items-center gap-3 justify-end">
+                <a href="/admin/projects/{{.ID}}/edit" class="text-xs text-zinc-400 hover:text-zinc-100 transition-colors">Edit</a>
+                <form method="POST" action="/admin/projects/{{.ID}}/delete"
+                  onsubmit="return confirm('Delete this project?')" class="inline">
+                  <button type="submit" class="text-xs text-zinc-600 hover:text-red-400 transition-colors">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    {{else}}
+    <div class="text-center py-20">
+      <p class="text-zinc-500 mb-4">No projects yet.</p>
+      <a href="/admin/projects/new" class="text-sm text-emerald-400 hover:text-emerald-300">Add your first project →</a>
+    </div>
+    {{end}}
+  </main>
+</div>
+
+</body>
+</html>
+{{end}}
