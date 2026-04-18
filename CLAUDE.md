@@ -69,13 +69,9 @@ make dev
 
 # Atau langsung
 CGO_ENABLED=0 go run ./cmd/server/main.go
-
-# Build Tailwind CSS (opsional, butuh Node.js)
-npm install && npm run css:build
 ```
 
-> Saat ini semua template menggunakan **Tailwind CDN**.
-> Untuk production, build CSS lokal dan ganti CDN dengan `/static/css/app.css`.
+> Semua template menggunakan **Tailwind CDN** — tidak butuh Node.js atau build step.
 
 ## Routes
 

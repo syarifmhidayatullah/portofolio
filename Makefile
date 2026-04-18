@@ -1,4 +1,4 @@
-.PHONY: dev build run css css-build deps
+.PHONY: dev build run deps
 
 # Run server in development
 dev:
@@ -12,15 +12,6 @@ build:
 run: build
 	./bin/server
 
-# Watch and compile Tailwind CSS
-css:
-	npx tailwindcss -i ./web/static/css/input.css -o ./web/static/css/app.css --watch
-
-# Build Tailwind for production
-css-build:
-	npx tailwindcss -i ./web/static/css/input.css -o ./web/static/css/app.css --minify
-
-# Install dependencies
+# Install go dependencies
 deps:
 	go mod tidy
-	npm install
