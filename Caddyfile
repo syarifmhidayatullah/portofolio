@@ -1,4 +1,0 @@
-yourdomain.com {
-    reverse_proxy app:8083
-    encode gzip
-}

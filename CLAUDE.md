@@ -9,21 +9,20 @@ Monolith Go dengan server-side rendering — tidak ada frontend framework terpis
 
 | Layer | Tech |
 |---|---|
-| Backend | Go 1.26 + Gin framework |
+| Backend | Go 1.23 + Gin framework |
 | ORM | GORM v2 |
-| Database | MySQL 8.0 |
+| Database | PostgreSQL |
 | Frontend | Alpine.js (CDN) + Tailwind CSS (CDN) |
 | Templates | Go `html/template` |
 | Markdown | goldmark |
 | Auth | Session-based (gin-contrib/sessions + bcrypt) |
 | Email | SMTP atau Resend API |
-| Deploy | Docker + Caddy (reverse proxy + auto HTTPS) |
 
 ## Project Structure
 
 ```
 cmd/server/main.go          # Entry point, router setup, DB init, admin seed
-config/config.go            # Load env vars, build MySQL DSN
+config/config.go            # Load env vars, build PostgreSQL DSN
 internal/
   model/                    # GORM models (User, Post, Project, ContactMessage)
   repository/               # DB queries, satu file per entity
@@ -31,7 +30,7 @@ internal/
   handler/                  # Public HTTP handlers (home, blog, project, contact)
   handler/admin/            # Admin HTTP handlers (auth, dashboard, post, project, message)
   middleware/auth.go         # Session auth middleware
-migrations/001_init.sql     # MySQL DDL (referensi, AutoMigrate yang dipakai)
+migrations/001_init.sql     # PostgreSQL DDL (referensi, AutoMigrate yang dipakai)
 web/
   templates/
     partials/               # head.html, navbar.html, footer.html, admin_sidebar.html
@@ -43,32 +42,39 @@ web/
 
 ## Database Config
 
-Menggunakan variabel terpisah, bukan `DATABASE_URL`:
+PostgreSQL, menggunakan variabel terpisah (bukan `DATABASE_URL`):
 
 ```env
 DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_USER=wayt_svc
-DB_PASSWORD=Password0!
-DB_NAME=wayt
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=
+DB_NAME=portfolio
+DB_SSLMODE=disable
 ```
 
 DSN dibangun otomatis di `config/config.go` via fungsi `buildDSN()`.
 
-## Development
+## Menjalankan
 
 ```bash
-# Jalankan server
+# 1. Buat database
+createdb portfolio
+
+# 2. Copy dan isi env
+cp .env.example .env
+
+# 3. Jalankan server
 make dev
 
 # Atau langsung
-go run ./cmd/server/main.go
+CGO_ENABLED=0 go run ./cmd/server/main.go
 
-# Build Tailwind CSS (butuh Node.js)
+# Build Tailwind CSS (opsional, butuh Node.js)
 npm install && npm run css:build
 ```
 
-> Saat ini semua template menggunakan **Tailwind CDN** karena npm tidak tersedia di environment dev.
+> Saat ini semua template menggunakan **Tailwind CDN**.
 > Untuk production, build CSS lokal dan ganti CDN dengan `/static/css/app.css`.
 
 ## Routes
@@ -113,7 +119,7 @@ npm install && npm run css:build
 
 ## Model UUID
 
-MySQL tidak support `gen_random_uuid()` sebagai default. UUID di-generate di Go via `BeforeCreate` hook:
+UUID di-generate di Go via `BeforeCreate` hook:
 
 ```go
 func (m *Model) BeforeCreate(tx *gorm.DB) error {
@@ -123,8 +129,6 @@ func (m *Model) BeforeCreate(tx *gorm.DB) error {
     return nil
 }
 ```
-
-Semua string field yang ada index (uniqueIndex) wajib pakai `gorm:"type:varchar(255)"` — MySQL error 1170 jika tidak.
 
 ## Admin User
 
