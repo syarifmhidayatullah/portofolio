@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+func (Project) TableName() string { return "por_projects" }
+
 type Project struct {
 	ID          uuid.UUID      `gorm:"type:varchar(36);primaryKey"`
 	Title       string         `gorm:"type:varchar(255);not null"`

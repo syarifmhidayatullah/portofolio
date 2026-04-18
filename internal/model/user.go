@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+func (User) TableName() string { return "por_users" }
+
 type User struct {
 	ID           uuid.UUID      `gorm:"type:varchar(36);primaryKey"`
 	Email        string         `gorm:"type:varchar(255);uniqueIndex;not null"`

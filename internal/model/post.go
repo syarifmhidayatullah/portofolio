@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+func (Post) TableName() string { return "por_posts" }
+
 type Post struct {
 	ID          uuid.UUID      `gorm:"type:varchar(36);primaryKey"`
 	Title       string         `gorm:"type:varchar(255);not null"`

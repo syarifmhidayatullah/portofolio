@@ -63,13 +63,14 @@ func Load() *Config {
 
 func buildDSN() string {
 	host := getEnv("DB_HOST", "127.0.0.1")
-	port := getEnv("DB_PORT", "3306")
-	user := getEnv("DB_USER", "root")
+	port := getEnv("DB_PORT", "5432")
+	user := getEnv("DB_USER", "postgres")
 	password := getEnv("DB_PASSWORD", "")
 	name := getEnv("DB_NAME", "portfolio")
+	sslmode := getEnv("DB_SSLMODE", "disable")
 
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		user, password, host, port, name,
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Jakarta",
+		host, port, user, password, name, sslmode,
 	)
 }
 

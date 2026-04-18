@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+func (ContactMessage) TableName() string { return "por_contact_messages" }
+
 type ContactMessage struct {
 	ID        uuid.UUID      `gorm:"type:varchar(36);primaryKey"`
 	Name      string         `gorm:"type:varchar(255);not null"`
