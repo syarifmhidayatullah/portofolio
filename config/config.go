@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -38,7 +39,7 @@ func Load() *Config {
 	}
 
 	cfg := &Config{
-		Port:          getEnv("PORT", ":8080"),
+		Port:          normalizePort(getEnv("PORT", "8080")),
 		SessionSecret: getEnv("SESSION_SECRET", "super-secret-change-this"),
 
 		EmailDriver:  getEnv("EMAIL_DRIVER", "smtp"),
@@ -79,4 +80,11 @@ func getEnv(key, fallback string) string {
 		return v
 	}
 	return fallback
+}
+
+func normalizePort(port string) string {
+	if strings.HasPrefix(port, ":") {
+		return port
+	}
+	return ":" + port
 }
