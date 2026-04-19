@@ -2,11 +2,11 @@
 
 # Run server in development
 dev:
-	go run ./cmd/server/main.go
+	go run ./cmd/api/main.go
 
 # Build binary
 build:
-	CGO_ENABLED=0 go build -o bin/server ./cmd/server/main.go
+	CGO_ENABLED=0 go build -o bin/server ./cmd/api/main.go
 
 # Build and run
 run: build
