@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/google/uuid"
 	"github.com/syarifmhidayatullah/portfolio/internal/model"
 	"github.com/syarifmhidayatullah/portfolio/internal/repository"
@@ -52,7 +54,11 @@ func (s *messageService) Submit(input ContactInput) error {
 	}
 
 	// Send email notification (best-effort, don't fail the request)
-	go s.emailSvc.SendContactNotification(*msg)
+	go func() {
+		if err := s.emailSvc.SendContactNotification(*msg); err != nil {
+			log.Printf("[EMAIL ERROR] failed to send contact notification: %v", err)
+		}
+	}()
 
 	return nil
 }
