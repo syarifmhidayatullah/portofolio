@@ -47,12 +47,14 @@ func (s *emailService) SendContactNotification(msg model.ContactMessage) error {
 
 func (s *emailService) sendViaSMTP(to, subject, body string) error {
 	if s.cfg.SMTPUser == "" {
-		log.Println("email: SMTP not configured, skipping")
+		log.Println("[EMAIL] SMTP not configured, skipping")
 		return nil
 	}
 
-	auth := smtp.PlainAuth("", s.cfg.SMTPUser, s.cfg.SMTPPassword, s.cfg.SMTPHost)
 	addr := fmt.Sprintf("%s:%s", s.cfg.SMTPHost, s.cfg.SMTPPort)
+	log.Printf("[EMAIL] sending via SMTP to=%s from=%s addr=%s user=%s", to, s.cfg.SMTPFrom, addr, s.cfg.SMTPUser)
+
+	auth := smtp.PlainAuth("", s.cfg.SMTPUser, s.cfg.SMTPPassword, s.cfg.SMTPHost)
 
 	msg := strings.Join([]string{
 		"From: " + s.cfg.SMTPFrom,
@@ -64,7 +66,12 @@ func (s *emailService) sendViaSMTP(to, subject, body string) error {
 		body,
 	}, "\r\n")
 
-	return smtp.SendMail(addr, auth, s.cfg.SMTPFrom, []string{to}, []byte(msg))
+	if err := smtp.SendMail(addr, auth, s.cfg.SMTPFrom, []string{to}, []byte(msg)); err != nil {
+		log.Printf("[EMAIL] SMTP send failed: %v", err)
+		return err
+	}
+	log.Printf("[EMAIL] sent successfully to %s", to)
+	return nil
 }
 
 func (s *emailService) sendViaResend(to, subject, body string) error {
