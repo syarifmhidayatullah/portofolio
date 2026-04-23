@@ -29,9 +29,9 @@
 
     {{$p := .project}}
     {{if $p}}
-    <form method="POST" action="/admin/projects/{{$p.ID}}" class="flex flex-col gap-5">
+    <form method="POST" action="/admin/projects/{{$p.ID}}" enctype="multipart/form-data" class="flex flex-col gap-5">
     {{else}}
-    <form method="POST" action="/admin/projects" class="flex flex-col gap-5">
+    <form method="POST" action="/admin/projects" enctype="multipart/form-data" class="flex flex-col gap-5">
     {{end}}
 
       <div>
@@ -73,12 +73,45 @@
         </div>
       </div>
 
-      <div>
-        <label class="block text-xs text-zinc-400 mb-1.5">Image URL</label>
-        <input type="url" name="image_url"
-          value="{{if $p}}{{$p.ImageURL}}{{end}}"
-          placeholder="https://..."
-          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+      <!-- Image upload -->
+      <div x-data="{
+        preview: '{{if $p}}{{$p.ImageURL}}{{end}}',
+        onFile(e) {
+          const f = e.target.files[0];
+          if (!f) return;
+          this.preview = URL.createObjectURL(f);
+        }
+      }">
+        <label class="block text-xs text-zinc-400 mb-1.5">Project Image</label>
+
+        <!-- Current / preview -->
+        <template x-if="preview">
+          <div class="mb-3 relative w-full aspect-video rounded-lg overflow-hidden border border-zinc-700 bg-zinc-900">
+            <img :src="preview" alt="preview" class="w-full h-full object-cover" />
+            <button type="button" @click="preview=''; $refs.fileInput.value=''; $refs.urlInput.value=''"
+              class="absolute top-2 right-2 bg-zinc-900/80 hover:bg-red-500/80 text-zinc-300 hover:text-white rounded-full w-7 h-7 flex items-center justify-center transition-colors text-xs">✕</button>
+          </div>
+        </template>
+
+        <!-- Drop zone / file picker -->
+        <label class="flex flex-col items-center gap-2 w-full border-2 border-dashed border-zinc-700 hover:border-emerald-500 rounded-lg px-4 py-6 cursor-pointer transition-colors" :class="preview ? 'py-3' : 'py-6'">
+          <svg class="w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span class="text-xs text-zinc-500" x-text="preview ? 'Ganti gambar...' : 'Klik untuk upload gambar'"></span>
+          <span class="text-xs text-zinc-600">JPG, PNG, WebP, GIF · Maks 5MB</span>
+          <input x-ref="fileInput" type="file" name="image_file" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" @change="onFile($event)" />
+        </label>
+
+        <!-- Fallback: URL manual -->
+        <div class="mt-3">
+          <label class="block text-xs text-zinc-600 mb-1">Atau gunakan URL gambar</label>
+          <input x-ref="urlInput" type="url" name="image_url"
+            value="{{if $p}}{{$p.ImageURL}}{{end}}"
+            placeholder="https://..."
+            @input="if($event.target.value) preview=$event.target.value"
+            class="w-full bg-zinc-900 border border-zinc-800 focus:border-zinc-600 rounded-lg px-4 py-2 text-sm text-zinc-400 placeholder-zinc-700 outline-none transition-colors" />
+        </div>
       </div>
 
       <div class="grid sm:grid-cols-2 gap-4">
@@ -109,6 +142,7 @@
   </main>
 </div>
 
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
 {{end}}
