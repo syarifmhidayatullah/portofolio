@@ -36,11 +36,20 @@ func (h *AdminPostHandler) New(c *gin.Context) {
 }
 
 func (h *AdminPostHandler) Create(c *gin.Context) {
+	coverImage, err := saveUploadedImage(c, "cover_file", "cover_image", "")
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "admin_post_form.html", gin.H{
+			"title": "New Post",
+			"error": err.Error(),
+		})
+		return
+	}
+
 	input := service.CreatePostInput{
 		Title:      c.PostForm("title"),
 		Content:    c.PostForm("content"),
 		Excerpt:    c.PostForm("excerpt"),
-		CoverImage: c.PostForm("cover_image"),
+		CoverImage: coverImage,
 		Published:  c.PostForm("published") == "on",
 	}
 
@@ -53,7 +62,7 @@ func (h *AdminPostHandler) Create(c *gin.Context) {
 		return
 	}
 
-	_, err := h.postSvc.Create(input)
+	_, err = h.postSvc.Create(input)
 	if err != nil {
 		c.HTML(http.StatusInternalServerError, "admin_post_form.html", gin.H{
 			"title": "New Post",
@@ -92,18 +101,28 @@ func (h *AdminPostHandler) Update(c *gin.Context) {
 		return
 	}
 
-	input := service.CreatePostInput{
-		Title:      c.PostForm("title"),
-		Content:    c.PostForm("content"),
-		Excerpt:    c.PostForm("excerpt"),
-		CoverImage: c.PostForm("cover_image"),
-		Published:  c.PostForm("published") == "on",
-	}
-
 	post, err := h.postSvc.GetByID(id)
 	if err != nil {
 		c.Redirect(http.StatusFound, "/admin/posts")
 		return
+	}
+
+	coverImage, err := saveUploadedImage(c, "cover_file", "cover_image", post.CoverImage)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "admin_post_form.html", gin.H{
+			"title": "Edit Post",
+			"error": err.Error(),
+			"post":  post,
+		})
+		return
+	}
+
+	input := service.CreatePostInput{
+		Title:      c.PostForm("title"),
+		Content:    c.PostForm("content"),
+		Excerpt:    c.PostForm("excerpt"),
+		CoverImage: coverImage,
+		Published:  c.PostForm("published") == "on",
 	}
 
 	if _, err := h.postSvc.Update(id, input); err != nil {
