@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <script>
   tailwind.config = {
     theme: {
@@ -48,6 +48,33 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
     }
+  }
+</style>
+<style>
+  /* Code block overrides for dark prose */
+  article pre {
+    background: #18181b !important;
+    border: 1px solid #27272a;
+    border-radius: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    position: relative;
+  }
+  article pre code {
+    background: transparent !important;
+    color: #d4d4d8;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.875rem;
+    padding: 0;
+    border-radius: 0;
+  }
+  article :not(pre) > code {
+    background: #27272a !important;
+    color: #6ee7b7;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
   }
 </style>
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>

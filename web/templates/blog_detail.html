@@ -55,7 +55,7 @@
       </svg>
       <span x-text="copied ? 'Copied!' : 'Copy link'"></span>
     </button>
-    <a :href="'https://twitter.com/intent/tweet?text=' + encodeURIComponent('{{.post.Title}}') + '&url=' + encodeURIComponent(window.location.href)"
+    <a :href="'https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + '&url=' + encodeURIComponent(window.location.href)"
       target="_blank" rel="noopener noreferrer"
       class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
       <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,6 @@
 
 {{template "footer" .}}
 
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
   // Inject copy button into every code block after DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
