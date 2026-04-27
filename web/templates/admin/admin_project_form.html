@@ -13,7 +13,10 @@
 {{template "admin_sidebar" .}}
 
 <div class="flex-1 flex flex-col min-h-screen overflow-auto">
-  <header class="border-b border-zinc-800 px-8 py-4 flex items-center gap-4">
+  <header class="border-b border-zinc-800 px-4 md:px-8 py-4 flex items-center gap-3">
+    <button onclick="window.dispatchEvent(new CustomEvent('toggle-sidebar'))" class="md:hidden p-1.5 -ml-1 text-zinc-400 hover:text-zinc-100 transition-colors" aria-label="Menu">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
     <a href="/admin/projects" class="text-zinc-500 hover:text-zinc-300 transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -22,7 +25,7 @@
     <h1 class="text-lg font-semibold text-zinc-100">{{.title}}</h1>
   </header>
 
-  <main class="flex-1 px-8 py-8 max-w-2xl">
+  <main class="flex-1 px-4 md:px-8 py-6 md:py-8 max-w-2xl">
     {{if .error}}
     <div class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{{.error}}</div>
     {{end}}
