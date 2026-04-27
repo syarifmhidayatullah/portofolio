@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{.title}} — Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
   <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
   <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -149,10 +149,13 @@
 </div>
 
 <script>
+  // Clear stale autosave so previous post content never leaks into this form
+  localStorage.removeItem('smde_post-editor')
+
   const easyMDE = new EasyMDE({
     element: document.getElementById('editor'),
     spellChecker: false,
-    autosave: { enabled: true, uniqueId: 'post-editor' },
+    autosave: { enabled: false },
     toolbar: [
       'bold', 'italic', 'heading', '|',
       'quote', 'unordered-list', 'ordered-list', '|',
@@ -160,6 +163,11 @@
       'preview', 'side-by-side', 'fullscreen', '|',
       'guide'
     ],
+  })
+
+  // Sync EasyMDE value back to textarea before form submit
+  document.querySelector('form').addEventListener('submit', () => {
+    easyMDE.codemirror.save()
   })
 </script>
 </body>
