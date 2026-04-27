@@ -1,4 +1,11 @@
 {{define "head"}}
+<script>
+  // Apply saved theme immediately to prevent flash of wrong theme
+  ;(function() {
+    var t = localStorage.getItem('theme') || 'dark'
+    document.documentElement.setAttribute('data-theme', t)
+  })()
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{{.title}} — Syarif Hidayatullah</title>
@@ -51,7 +58,33 @@
   }
 </style>
 <style>
-  /* Code block overrides for dark prose */
+  /* ===== Light mode theme overrides ===== */
+  [data-theme="light"] body { background-color:#f8fafc !important; color:#111827 !important; }
+  [data-theme="light"] .bg-zinc-950 { background-color:#f8fafc !important; }
+  [data-theme="light"] .bg-zinc-900 { background-color:#ffffff !important; }
+  [data-theme="light"] .bg-zinc-800, [data-theme="light"] .bg-zinc-800\/80 { background-color:#f1f5f9 !important; }
+  [data-theme="light"] .bg-zinc-900\/40, [data-theme="light"] .bg-zinc-900\/50 { background-color:rgba(241,245,249,0.5) !important; }
+  [data-theme="light"] .text-zinc-50, [data-theme="light"] .text-zinc-100 { color:#0f172a !important; }
+  [data-theme="light"] .text-zinc-200 { color:#1e293b !important; }
+  [data-theme="light"] .text-zinc-300 { color:#334155 !important; }
+  [data-theme="light"] .text-zinc-400 { color:#475569 !important; }
+  [data-theme="light"] .text-zinc-500 { color:#64748b !important; }
+  [data-theme="light"] .text-zinc-600 { color:#94a3b8 !important; }
+  [data-theme="light"] .text-zinc-700 { color:#cbd5e1 !important; }
+  [data-theme="light"] .border-zinc-800 { border-color:#e2e8f0 !important; }
+  [data-theme="light"] .border-zinc-800\/50 { border-color:rgba(226,232,240,0.5) !important; }
+  [data-theme="light"] .border-zinc-700 { border-color:#cbd5e1 !important; }
+  [data-theme="light"] .divide-zinc-800>*+* { border-color:#e2e8f0 !important; }
+  [data-theme="light"] .bg-zinc-950\/80, [data-theme="light"] .bg-zinc-950\/90 { background-color:rgba(248,250,252,0.92) !important; }
+  [data-theme="light"] .hover\:bg-zinc-800:hover { background-color:#f1f5f9 !important; }
+  [data-theme="light"] .hover\:bg-zinc-800\/50:hover { background-color:rgba(241,245,249,0.5) !important; }
+  [data-theme="light"] .ring-zinc-950 { --tw-ring-color:#f8fafc !important; }
+  [data-theme="light"] .bg-zinc-900\/50 { background-color:rgba(255,255,255,0.7) !important; }
+  [data-theme="light"] article pre { background:#f1f5f9 !important; border-color:#e2e8f0; }
+  [data-theme="light"] article pre code { color:#1e293b; }
+  [data-theme="light"] article :not(pre) > code { background:#f1f5f9 !important; color:#0f766e; }
+
+  /* ===== Code block overrides for dark prose ===== */
   article pre {
     background: #18181b !important;
     border: 1px solid #27272a;
