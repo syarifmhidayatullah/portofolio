@@ -27,7 +27,14 @@
     </div>
     <h1 class="text-3xl md:text-4xl font-semibold text-zinc-50 leading-tight mb-4">{{.post.Title}}</h1>
     {{if .post.Excerpt}}
-    <p class="text-zinc-400 text-lg leading-relaxed border-l-2 border-emerald-500 pl-4">{{.post.Excerpt}}</p>
+    <p class="text-zinc-400 text-lg leading-relaxed border-l-2 border-emerald-500 pl-4 mb-4">{{.post.Excerpt}}</p>
+    {{end}}
+    {{if .post.Tags}}
+    <div class="flex flex-wrap gap-2">
+      {{range .post.Tags}}
+      <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded-full">{{.}}</span>
+      {{end}}
+    </div>
     {{end}}
   </header>
 
@@ -36,6 +43,35 @@
     <img src="{{.post.CoverImage}}" alt="{{.post.Title}}" class="w-full h-64 object-cover" />
   </div>
   {{end}}
+
+  <!-- Share bar -->
+  <div x-data="{ copied: false }" class="flex items-center gap-3 mb-10 pb-8 border-b border-zinc-800">
+    <span class="text-xs text-zinc-500 font-mono mr-1">Share:</span>
+    <button
+      @click="navigator.clipboard.writeText(window.location.href); copied = true; setTimeout(() => copied = false, 2000)"
+      class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+      </svg>
+      <span x-text="copied ? 'Copied!' : 'Copy link'"></span>
+    </button>
+    <a :href="'https://twitter.com/intent/tweet?text=' + encodeURIComponent('{{.post.Title}}') + '&url=' + encodeURIComponent(window.location.href)"
+      target="_blank" rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
+      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.732-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+      X / Twitter
+    </a>
+    <a :href="'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href)"
+      target="_blank" rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
+      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+      </svg>
+      LinkedIn
+    </a>
+  </div>
 
   <!-- Post content (rendered markdown) -->
   <article class="prose prose-invert prose-emerald max-w-none
@@ -54,6 +90,30 @@
 </main>
 
 {{template "footer" .}}
+
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+  // Inject copy button into every code block after DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('article pre').forEach(pre => {
+      const btn = document.createElement('button')
+      btn.textContent = 'Copy'
+      btn.style.cssText = 'position:absolute;top:0.6rem;right:0.6rem;font-size:0.7rem;font-family:monospace;padding:0.25rem 0.6rem;background:#3f3f46;color:#a1a1aa;border:1px solid #52525b;border-radius:0.375rem;cursor:pointer;transition:all 0.15s;'
+      btn.onmouseenter = () => { btn.style.background = '#52525b'; btn.style.color = '#f4f4f5' }
+      btn.onmouseleave = () => { btn.style.background = '#3f3f46'; btn.style.color = '#a1a1aa' }
+      btn.onclick = () => {
+        const code = pre.querySelector('code')
+        navigator.clipboard.writeText(code ? code.textContent : pre.textContent).then(() => {
+          btn.textContent = 'Copied!'
+          btn.style.color = '#34d399'
+          setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = '#a1a1aa' }, 2000)
+        })
+      }
+      pre.style.position = 'relative'
+      pre.appendChild(btn)
+    })
+  })
+</script>
 </body>
 </html>
 {{end}}

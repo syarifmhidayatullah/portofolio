@@ -77,6 +77,14 @@
           class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
       </div>
 
+      <div>
+        <label class="block text-xs text-zinc-400 mb-1.5">Tags <span class="text-zinc-600">(comma-separated)</span></label>
+        <input type="text" name="tags"
+          value="{{if .tagsRaw}}{{.tagsRaw}}{{end}}"
+          placeholder="Go, Backend, Architecture"
+          class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors font-mono" />
+      </div>
+
       <!-- Cover image upload -->
       <div x-data="{
         preview: '{{if $post}}{{$post.CoverImage}}{{end}}',

@@ -2,6 +2,7 @@ package admin
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -50,6 +51,7 @@ func (h *AdminPostHandler) Create(c *gin.Context) {
 		Content:    c.PostForm("content"),
 		Excerpt:    c.PostForm("excerpt"),
 		CoverImage: coverImage,
+		Tags:       c.PostForm("tags"),
 		Published:  c.PostForm("published") == "on",
 	}
 
@@ -89,8 +91,9 @@ func (h *AdminPostHandler) Edit(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "admin_post_form.html", gin.H{
-		"title": "Edit Post",
-		"post":  post,
+		"title":   "Edit Post",
+		"post":    post,
+		"tagsRaw": strings.Join(post.Tags, ", "),
 	})
 }
 
@@ -122,6 +125,7 @@ func (h *AdminPostHandler) Update(c *gin.Context) {
 		Content:    c.PostForm("content"),
 		Excerpt:    c.PostForm("excerpt"),
 		CoverImage: coverImage,
+		Tags:       c.PostForm("tags"),
 		Published:  c.PostForm("published") == "on",
 	}
 

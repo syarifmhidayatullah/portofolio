@@ -16,6 +16,7 @@ type Post struct {
 	Excerpt     string
 	Content     string         `gorm:"type:text;not null"`
 	CoverImage  string
+	Tags        []string       `gorm:"serializer:json"`
 	Published   bool           `gorm:"default:false"`
 	PublishedAt *time.Time
 	CreatedAt   time.Time

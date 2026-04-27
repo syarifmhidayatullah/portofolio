@@ -33,6 +33,7 @@ type CreatePostInput struct {
 	Content    string
 	Excerpt    string
 	CoverImage string
+	Tags       string // comma-separated raw input
 	Published  bool
 }
 
@@ -88,6 +89,7 @@ func (s *postService) Create(input CreatePostInput) (*model.Post, error) {
 		Excerpt:    excerpt,
 		Content:    input.Content,
 		CoverImage: input.CoverImage,
+		Tags:       parseTags(input.Tags),
 		Published:  input.Published,
 	}
 
@@ -108,6 +110,7 @@ func (s *postService) Update(id uuid.UUID, input CreatePostInput) (*model.Post, 
 	post.Title = input.Title
 	post.Content = input.Content
 	post.CoverImage = input.CoverImage
+	post.Tags = parseTags(input.Tags)
 
 	excerpt := input.Excerpt
 	if excerpt == "" {
@@ -171,6 +174,17 @@ func truncate(s string, max int) string {
 		return s
 	}
 	return s[:max] + "..."
+}
+
+func parseTags(raw string) []string {
+	var result []string
+	for _, t := range strings.Split(raw, ",") {
+		t = strings.TrimSpace(t)
+		if t != "" {
+			result = append(result, t)
+		}
+	}
+	return result
 }
 
 func stripMarkdown(s string) string {

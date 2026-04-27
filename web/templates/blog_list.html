@@ -30,7 +30,14 @@
           <span class="text-xs text-zinc-600 font-mono">{{readingTime .Content}} min read</span>
         </div>
         <h2 class="text-lg font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-2 leading-snug">{{.Title}}</h2>
-        <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2">{{.Excerpt}}</p>
+        <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-2">{{.Excerpt}}</p>
+        {{if .Tags}}
+        <div class="flex flex-wrap gap-1.5">
+          {{range .Tags}}
+          <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded-full">{{.}}</span>
+          {{end}}
+        </div>
+        {{end}}
       </div>
       <svg class="hidden md:block w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
