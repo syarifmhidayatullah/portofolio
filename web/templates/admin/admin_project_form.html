@@ -109,7 +109,7 @@
         <!-- Fallback: URL manual -->
         <div class="mt-3">
           <label class="block text-xs text-zinc-600 mb-1">Atau gunakan URL gambar</label>
-          <input x-ref="urlInput" type="url" name="image_url"
+          <input x-ref="urlInput" type="text" name="image_url"
             value="{{if $p}}{{$p.ImageURL}}{{end}}"
             placeholder="https://..."
             @input="if($event.target.value) preview=$event.target.value"
