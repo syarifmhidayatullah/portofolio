@@ -12,11 +12,11 @@
 
     <!-- Desktop nav -->
     <ul class="hidden md:flex items-center gap-8">
-      <li><a href="/" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Home</a></li>
-      <li><a href="/projects" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Projects</a></li>
-      <li><a href="/blog" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Blog</a></li>
+      <li><a href="/" class="text-sm transition-colors {{if eq .activeNav "home"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Home</a></li>
+      <li><a href="/projects" class="text-sm transition-colors {{if eq .activeNav "projects"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Projects</a></li>
+      <li><a href="/blog" class="text-sm transition-colors {{if eq .activeNav "blog"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Blog</a></li>
       <li>
-        <a href="/#contact" class="text-sm px-4 py-1.5 rounded-full border border-zinc-700 text-zinc-300 hover:border-emerald-500 hover:text-emerald-400 transition-all">
+        <a href="/#contact" class="text-sm px-4 py-1.5 rounded-full border transition-all {{if eq .activeNav "contact"}}border-emerald-500 text-emerald-400{{else}}border-zinc-700 text-zinc-300 hover:border-emerald-500 hover:text-emerald-400{{end}}">
           Contact
         </a>
       </li>
@@ -50,10 +50,10 @@
     @click.away="open = false"
   >
     <ul class="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-4">
-      <li><a href="/" @click="open = false" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Home</a></li>
-      <li><a href="/projects" @click="open = false" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Projects</a></li>
-      <li><a href="/blog" @click="open = false" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Blog</a></li>
-      <li><a href="/#contact" @click="open = false" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">Contact</a></li>
+      <li><a href="/" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "home"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Home</a></li>
+      <li><a href="/projects" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "projects"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Projects</a></li>
+      <li><a href="/blog" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "blog"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Blog</a></li>
+      <li><a href="/#contact" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "contact"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Contact</a></li>
     </ul>
   </div>
 </header>

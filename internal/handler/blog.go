@@ -23,8 +23,10 @@ func (h *BlogHandler) List(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "blog_list.html", gin.H{
-		"title": "Blog",
-		"posts": posts,
+		"title":         "Blog",
+		"activeNav":     "blog",
+		"ogDescription": "Thoughts on software engineering, architecture, and the craft of building things.",
+		"posts":         posts,
 	})
 }
 
@@ -37,8 +39,12 @@ func (h *BlogHandler) Detail(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "blog_detail.html", gin.H{
-		"title":       post.Title,
-		"post":        post,
-		"renderedHTML": renderedHTML,
+		"title":         post.Title,
+		"activeNav":     "blog",
+		"ogType":        "article",
+		"ogDescription": post.Excerpt,
+		"ogImage":       post.CoverImage,
+		"post":          post,
+		"renderedHTML":  renderedHTML,
 	})
 }

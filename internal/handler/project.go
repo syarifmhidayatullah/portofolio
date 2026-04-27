@@ -23,7 +23,9 @@ func (h *ProjectHandler) List(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "projects.html", gin.H{
-		"title":    "Projects",
-		"projects": projects,
+		"title":         "Projects",
+		"activeNav":     "projects",
+		"ogDescription": "A collection of things I've built — from production systems to side experiments.",
+		"projects":      projects,
 	})
 }

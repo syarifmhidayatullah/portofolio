@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"log"
+	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -136,6 +137,9 @@ func loadTemplates() *template.Template {
 	funcMap := template.FuncMap{
 		"safeHTML": func(s string) template.HTML {
 			return template.HTML(s)
+		},
+		"currentYear": func() int {
+			return time.Now().Year()
 		},
 		"joinStrings": func(ss []string, sep string) string {
 			result := ""

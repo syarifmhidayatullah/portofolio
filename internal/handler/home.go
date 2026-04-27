@@ -25,10 +25,12 @@ func (h *HomeHandler) Index(c *gin.Context) {
 	experiences, _ := h.experienceSvc.GetAll()
 
 	c.HTML(http.StatusOK, "home.html", gin.H{
-		"title":       "Home",
-		"posts":       posts,
-		"projects":    featured,
-		"profile":     profile,
-		"experiences": experiences,
+		"title":         "Home",
+		"activeNav":     "home",
+		"ogDescription": "Software Engineer specializing in backend systems and distributed architecture. Building reliable, scalable APIs using Go, PostgreSQL, and cloud-native technologies.",
+		"posts":         posts,
+		"projects":      featured,
+		"profile":       profile,
+		"experiences":   experiences,
 	})
 }

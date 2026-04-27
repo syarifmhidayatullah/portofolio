@@ -2,10 +2,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{{.title}} — Syarif Hidayatullah</title>
-<meta name="description" content="Software Engineer — Building elegant backend systems and developer tools." />
+<meta name="description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}Software Engineer — Building elegant backend systems and developer tools.{{end}}" />
+
+<!-- Open Graph -->
 <meta property="og:title" content="{{.title}} — Syarif Hidayatullah" />
-<meta property="og:description" content="Software Engineer — Building elegant backend systems and developer tools." />
-<meta property="og:type" content="website" />
+<meta property="og:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}Software Engineer — Building elegant backend systems and developer tools.{{end}}" />
+<meta property="og:type" content="{{if .ogType}}{{.ogType}}{{else}}website{{end}}" />
+{{if .ogImage}}<meta property="og:image" content="{{.ogImage}}" />{{end}}
+{{if .ogURL}}<meta property="og:url" content="{{.ogURL}}" />{{end}}
+<meta property="og:site_name" content="Syarif Hidayatullah" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{.title}} — Syarif Hidayatullah" />
+<meta name="twitter:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}Software Engineer — Building elegant backend systems and developer tools.{{end}}" />
+{{if .ogImage}}<meta name="twitter:image" content="{{.ogImage}}" />{{end}}
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
