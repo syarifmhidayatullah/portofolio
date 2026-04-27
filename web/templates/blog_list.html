@@ -16,32 +16,41 @@
   {{if .posts}}
   <div class="flex flex-col divide-y divide-zinc-800">
     {{range .posts}}
-    <a href="/blog/{{.Slug}}" class="group py-8 flex items-start gap-6 hover:bg-zinc-900/40 -mx-4 px-4 rounded-xl transition-colors">
+    <a href="/blog/{{.Slug}}" class="group block py-6 hover:bg-zinc-900/40 -mx-4 px-4 rounded-xl transition-colors">
       {{if .CoverImage}}
-      <div class="hidden sm:block w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-800">
+      <!-- Mobile: full-width banner; sm+: hidden (thumbnail shown in row below) -->
+      <div class="sm:hidden w-full h-40 rounded-lg overflow-hidden bg-zinc-800 mb-4">
         <img src="{{.CoverImage}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
       </div>
       {{end}}
-      <div class="flex-1 min-w-0">
-        <h2 class="text-lg font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-1.5 leading-snug">{{.Title}}</h2>
-        <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-2">{{.Excerpt}}</p>
-        <div class="flex flex-wrap items-center gap-2">
-          {{if .PublishedAt}}
-          <span class="text-xs text-zinc-600 font-mono">{{.PublishedAt.Format "Jan 2, 2006"}}</span>
-          <span class="text-zinc-700">·</span>
-          {{end}}
-          <span class="text-xs text-zinc-600 font-mono">{{readingTime .Content}} min read</span>
-          {{if .Tags}}
-          <span class="text-zinc-700">·</span>
-          {{range .Tags}}
-          <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded-full">{{.}}</span>
-          {{end}}
-          {{end}}
+      <div class="flex items-start gap-5">
+        {{if .CoverImage}}
+        <!-- Desktop: thumbnail on the left -->
+        <div class="hidden sm:block w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-800">
+          <img src="{{.CoverImage}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
         </div>
+        {{end}}
+        <div class="flex-1 min-w-0">
+          <h2 class="text-lg font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-1.5 leading-snug">{{.Title}}</h2>
+          <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-2">{{.Excerpt}}</p>
+          <div class="flex flex-wrap items-center gap-2">
+            {{if .PublishedAt}}
+            <span class="text-xs text-zinc-600 font-mono">{{.PublishedAt.Format "Jan 2, 2006"}}</span>
+            <span class="text-zinc-700">·</span>
+            {{end}}
+            <span class="text-xs text-zinc-600 font-mono">{{readingTime .Content}} min read</span>
+            {{if .Tags}}
+            <span class="text-zinc-700">·</span>
+            {{range .Tags}}
+            <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded-full">{{.}}</span>
+            {{end}}
+            {{end}}
+          </div>
+        </div>
+        <svg class="hidden md:block w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
       </div>
-      <svg class="hidden md:block w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-      </svg>
     </a>
     {{end}}
   </div>
