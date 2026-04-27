@@ -80,6 +80,32 @@
   [data-theme="light"] .hover\:bg-zinc-800\/50:hover { background-color:rgba(241,245,249,0.5) !important; }
   [data-theme="light"] .ring-zinc-950 { --tw-ring-color:#f8fafc !important; }
   [data-theme="light"] .bg-zinc-900\/50 { background-color:rgba(255,255,255,0.7) !important; }
+
+  /* Fix dark gradient backgrounds (avatar, project placeholders) */
+  [data-theme="light"] .from-zinc-800 {
+    --tw-gradient-from: #e2e8f0 !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(226 232 240 / 0)) !important;
+  }
+  [data-theme="light"] .to-zinc-900 {
+    --tw-gradient-to: #f1f5f9 !important;
+  }
+  /* Avatar initials text in light mode */
+  [data-theme="light"] .from-zinc-800 .text-zinc-500,
+  [data-theme="light"] .from-zinc-800 .text-zinc-700 { color: #94a3b8 !important; }
+  /* Hover & active states */
+  [data-theme="light"] .hover\:bg-zinc-900\/40:hover { background-color:rgba(241,245,249,0.6) !important; }
+  [data-theme="light"] .hover\:bg-zinc-900\/50:hover { background-color:rgba(241,245,249,0.7) !important; }
+  /* Mobile menu background */
+  [data-theme="light"] .md\:hidden.border-t { background-color:#f8fafc !important; }
+  /* Card borders on hover */
+  [data-theme="light"] .hover\:border-zinc-700:hover { border-color:#94a3b8 !important; }
+  /* Navbar transparent state */
+  [data-theme="light"] header.bg-transparent { background-color: transparent !important; }
+  /* Backdrop blur navbar */
+  [data-theme="light"] .backdrop-blur-sm { --tw-backdrop-blur: blur(8px); background-color:rgba(248,250,252,0.92) !important; }
+  /* Section borders */
+  [data-theme="light"] .border-zinc-800\/50 { border-color:rgba(203,213,225,0.5) !important; }
+
   [data-theme="light"] article pre { background:#f1f5f9 !important; border-color:#e2e8f0; }
   [data-theme="light"] article pre code { color:#1e293b; }
   [data-theme="light"] article :not(pre) > code { background:#f1f5f9 !important; color:#0f766e; }
