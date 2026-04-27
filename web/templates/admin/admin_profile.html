@@ -1,0 +1,239 @@
+{{define "admin_profile.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex">
+
+{{template "admin_sidebar" .}}
+
+<div class="flex-1 flex flex-col min-h-screen overflow-auto">
+  <header class="border-b border-zinc-800 px-8 py-4">
+    <h1 class="text-lg font-semibold text-zinc-100">Profile & Content</h1>
+    <p class="text-xs text-zinc-500 mt-0.5">Foto profil, CV, bio, dan pengalaman kerja</p>
+  </header>
+
+  <main class="flex-1 px-8 py-8 max-w-3xl space-y-10">
+
+    {{if .error}}
+    <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{{.error}}</div>
+    {{end}}
+    {{if .success}}
+    <div class="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm">{{.success}}</div>
+    {{end}}
+
+    {{$profile := .profile}}
+
+    <!-- ===== SECTION 1: Avatar + CV ===== -->
+    <section>
+      <h2 class="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-5">Foto & CV</h2>
+      <form method="POST" action="/admin/profile" enctype="multipart/form-data">
+        <input type="hidden" name="_section" value="profile" />
+
+        <div class="grid sm:grid-cols-2 gap-6 mb-6">
+          <!-- Avatar upload -->
+          <div x-data="{ preview: '{{if $profile}}{{$profile.AvatarURL}}{{end}}', onFile(e) { const f=e.target.files[0]; if(f) this.preview=URL.createObjectURL(f); } }">
+            <label class="block text-xs text-zinc-400 mb-2">Foto Profil <span class="text-zinc-600">(JPG/PNG/WebP · maks 5MB)</span></label>
+            <!-- Preview -->
+            <div class="mb-3">
+              <template x-if="preview">
+                <img :src="preview" alt="avatar" class="w-24 h-24 rounded-full object-cover border-2 border-zinc-700" />
+              </template>
+              <template x-if="!preview">
+                <div class="w-24 h-24 rounded-full bg-zinc-800 border-2 border-dashed border-zinc-700 flex items-center justify-center text-zinc-500 font-mono text-lg">SH</div>
+              </template>
+            </div>
+            <label class="inline-flex items-center gap-2 cursor-pointer bg-zinc-900 border border-zinc-700 hover:border-emerald-500 text-zinc-300 text-xs px-3 py-2 rounded-lg transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              Upload Foto
+              <input type="file" name="avatar_file" accept="image/jpeg,image/png,image/webp" class="hidden" @change="onFile($event)" />
+            </label>
+          </div>
+
+          <!-- CV upload -->
+          <div x-data="{ fileName: '{{if $profile}}{{if $profile.CVURL}}cv.pdf sudah ada{{end}}{{end}}', onFile(e) { const f=e.target.files[0]; if(f) this.fileName=f.name; } }">
+            <label class="block text-xs text-zinc-400 mb-2">CV / Resume <span class="text-zinc-600">(PDF · maks 10MB)</span></label>
+            <div class="mb-3">
+              <template x-if="fileName">
+                <p class="text-xs text-emerald-400 font-mono" x-text="fileName"></p>
+              </template>
+              <template x-if="!fileName">
+                <p class="text-xs text-zinc-600">Belum ada CV</p>
+              </template>
+            </div>
+            <label class="inline-flex items-center gap-2 cursor-pointer bg-zinc-900 border border-zinc-700 hover:border-emerald-500 text-zinc-300 text-xs px-3 py-2 rounded-lg transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              Upload CV (PDF)
+              <input type="file" name="cv_file" accept="application/pdf" class="hidden" @change="onFile($event)" />
+            </label>
+          </div>
+        </div>
+
+        <!-- ===== About bio ===== -->
+        <h2 class="text-sm font-semibold text-zinc-300 uppercase tracking-widest mb-4 pt-4 border-t border-zinc-800">About Me</h2>
+
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1.5">Bio Paragraf 1</label>
+            <textarea name="bio1" rows="3" placeholder="Ceritakan tentang dirimu..."
+              class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none">{{if $profile}}{{$profile.Bio1}}{{end}}</textarea>
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1.5">Bio Paragraf 2</label>
+            <textarea name="bio2" rows="3" placeholder="Lebih lanjut tentang interest atau hobi..."
+              class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none">{{if $profile}}{{$profile.Bio2}}{{end}}</textarea>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Years of Experience</label>
+              <input type="number" name="stats_years" min="0" max="50"
+                value="{{if $profile}}{{$profile.StatsYears}}{{else}}0{{end}}"
+                class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none transition-colors" />
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Projects Shipped</label>
+              <input type="number" name="stats_projects" min="0" max="500"
+                value="{{if $profile}}{{$profile.StatsProjects}}{{else}}0{{end}}"
+                class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none transition-colors" />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
+          Simpan Profile
+        </button>
+      </form>
+    </section>
+
+    <!-- ===== SECTION 2: Experience List ===== -->
+    <section class="border-t border-zinc-800 pt-10">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-sm font-semibold text-zinc-300 uppercase tracking-widest">Work Experience</h2>
+      </div>
+
+      <!-- Existing entries -->
+      {{if .experiences}}
+      <div class="space-y-3 mb-8">
+        {{range .experiences}}
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-start gap-4">
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-baseline gap-2 mb-1">
+              <span class="font-medium text-zinc-100 text-sm">{{.Role}}</span>
+              {{if .IsCurrent}}<span class="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded">Current</span>{{end}}
+            </div>
+            <p class="text-xs text-zinc-400">{{.Company}}
+              {{if .PeriodStart}} · {{.PeriodStart}} — {{if .PeriodEnd}}{{.PeriodEnd}}{{else}}Present{{end}}{{end}}
+            </p>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <a href="/admin/profile/experience/{{.ID}}/edit"
+              class="text-xs text-zinc-500 hover:text-zinc-200 transition-colors px-2 py-1 rounded hover:bg-zinc-800">Edit</a>
+            <form method="POST" action="/admin/profile/experience/{{.ID}}/delete"
+              onsubmit="return confirm('Hapus experience ini?')">
+              <button type="submit" class="text-xs text-zinc-600 hover:text-red-400 transition-colors px-2 py-1 rounded hover:bg-zinc-800">Hapus</button>
+            </form>
+          </div>
+        </div>
+        {{end}}
+      </div>
+      {{end}}
+
+      <!-- Add / Edit experience form -->
+      {{$exp := .editExperience}}
+      <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-zinc-300 mb-4">{{if $exp}}Edit Experience{{else}}Tambah Experience{{end}}</h3>
+        {{if $exp}}
+        <form method="POST" action="/admin/profile/experience/{{$exp.ID}}" class="space-y-4">
+        {{else}}
+        <form method="POST" action="/admin/profile/experience" class="space-y-4">
+        {{end}}
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Role / Jabatan <span class="text-red-500">*</span></label>
+              <input type="text" name="role" required
+                value="{{if $exp}}{{$exp.Role}}{{end}}"
+                placeholder="Software Engineer"
+                class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Company <span class="text-red-500">*</span></label>
+              <input type="text" name="company" required
+                value="{{if $exp}}{{$exp.Company}}{{end}}"
+                placeholder="PT Tokopedia"
+                class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Mulai</label>
+              <input type="text" name="period_start"
+                value="{{if $exp}}{{$exp.PeriodStart}}{{end}}"
+                placeholder="2022"
+                class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors font-mono" />
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Selesai <span class="text-zinc-600">(kosong = Present)</span></label>
+              <input type="text" name="period_end"
+                value="{{if $exp}}{{$exp.PeriodEnd}}{{end}}"
+                placeholder="2024"
+                class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors font-mono" />
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1.5">Sort Order</label>
+              <input type="number" name="sort_order" min="0"
+                value="{{if $exp}}{{$exp.SortOrder}}{{else}}0{{end}}"
+                class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none transition-colors" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1.5">Deskripsi</label>
+            <textarea name="description" rows="3" placeholder="Apa yang kamu kerjakan di sini..."
+              class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none">{{if $exp}}{{$exp.Description}}{{end}}</textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1.5">Tech Stack <span class="text-zinc-600">(comma-separated)</span></label>
+            <input type="text" name="tech_stack"
+              value="{{if .techStackRaw}}{{.techStackRaw}}{{end}}"
+              placeholder="Go, gRPC, Kubernetes, Kafka"
+              class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors font-mono" />
+          </div>
+
+          <div class="flex items-center gap-6">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="is_current"
+                {{if $exp}}{{if $exp.IsCurrent}}checked{{end}}{{end}}
+                class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 accent-emerald-500 cursor-pointer" />
+              <span class="text-sm text-zinc-300">Posisi saat ini</span>
+            </label>
+          </div>
+
+          <div class="flex items-center gap-3 pt-2 border-t border-zinc-800">
+            <button type="submit"
+              class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
+              {{if $exp}}Update Experience{{else}}Tambah Experience{{end}}
+            </button>
+            {{if $exp}}
+            <a href="/admin/profile" class="text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Batal</a>
+            {{end}}
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</body>
+</html>
+{{end}}

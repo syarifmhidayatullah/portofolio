@@ -35,6 +35,8 @@ func main() {
 		&model.Post{},
 		&model.Project{},
 		&model.ContactMessage{},
+		&model.SiteProfile{},
+		&model.Experience{},
 	); err != nil {
 		log.Fatalf("failed to migrate: %v", err)
 	}
@@ -47,15 +49,19 @@ func main() {
 	postRepo := repository.NewPostRepository(db)
 	projectRepo := repository.NewProjectRepository(db)
 	messageRepo := repository.NewMessageRepository(db)
+	profileRepo := repository.NewSiteProfileRepository(db)
+	experienceRepo := repository.NewExperienceRepository(db)
 
 	// Services
 	emailSvc := service.NewEmailService(cfg)
 	postSvc := service.NewPostService(postRepo)
 	projectSvc := service.NewProjectService(projectRepo)
 	messageSvc := service.NewMessageService(messageRepo, emailSvc)
+	profileSvc := service.NewSiteProfileService(profileRepo)
+	experienceSvc := service.NewExperienceService(experienceRepo)
 
 	// Handlers
-	homeH := handler.NewHomeHandler(postSvc, projectSvc)
+	homeH := handler.NewHomeHandler(postSvc, projectSvc, profileSvc, experienceSvc)
 	blogH := handler.NewBlogHandler(postSvc)
 	projectH := handler.NewProjectHandler(projectSvc)
 	contactH := handler.NewContactHandler(messageSvc)
@@ -65,6 +71,7 @@ func main() {
 	adminPostH := adminHandler.NewPostHandler(postSvc)
 	adminProjectH := adminHandler.NewProjectHandler(projectSvc)
 	adminMessageH := adminHandler.NewMessageHandler(messageSvc)
+	adminProfileH := adminHandler.NewProfileHandler(profileSvc, experienceSvc)
 
 	// Router
 	r := gin.Default()
@@ -111,6 +118,13 @@ func main() {
 	adm.GET("/messages", adminMessageH.List)
 	adm.POST("/messages/:id/read", adminMessageH.MarkRead)
 	adm.POST("/messages/:id/delete", adminMessageH.Delete)
+
+	adm.GET("/profile", adminProfileH.Page)
+	adm.POST("/profile", adminProfileH.SaveProfile)
+	adm.POST("/profile/experience", adminProfileH.CreateExperience)
+	adm.GET("/profile/experience/:id/edit", adminProfileH.EditExperiencePage)
+	adm.POST("/profile/experience/:id", adminProfileH.UpdateExperience)
+	adm.POST("/profile/experience/:id/delete", adminProfileH.DeleteExperience)
 
 	log.Printf("Server starting on %s", cfg.Port)
 	if err := r.Run(cfg.Port); err != nil {

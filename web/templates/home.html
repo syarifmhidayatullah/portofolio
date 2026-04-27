@@ -37,13 +37,15 @@
           <a href="/#contact" class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium text-sm rounded-lg transition-all">
             Get in touch
           </a>
-          <a href="/static/uploads/cv.pdf" download="Syarif_Hidayatullah_CV.pdf"
+          {{if .profile}}{{if .profile.CVURL}}
+          <a href="{{.profile.CVURL}}" download="Syarif_Hidayatullah_CV.pdf"
             class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-500/5 text-zinc-300 hover:text-emerald-400 font-medium text-sm rounded-lg transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
             </svg>
             Download CV
           </a>
+          {{end}}{{end}}
         </div>
 
         <!-- Tech stack -->
@@ -69,13 +71,15 @@
           <div class="absolute -inset-1 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-500"></div>
           <!-- Border ring -->
           <div class="relative w-44 h-44 md:w-52 md:h-52 rounded-full ring-2 ring-emerald-500/30 overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-900">
+            {{if .profile}}{{if .profile.AvatarURL}}
             <img
-              src="/static/uploads/avatar.jpg"
+              src="{{.profile.AvatarURL}}"
               alt="Syarif Hidayatullah"
               class="w-full h-full object-cover"
               onerror="this.style.display='none'"
             />
-            <!-- Initials fallback (hidden when image loads) -->
+            {{end}}{{end}}
+            <!-- Initials fallback -->
             <div class="absolute inset-0 flex items-center justify-center">
               <span class="text-4xl font-semibold text-zinc-500 select-none font-mono">SH</span>
             </div>
@@ -110,6 +114,8 @@
 </section>
 
 <!-- About Me + Experience -->
+{{$profile := .profile}}
+{{$experiences := .experiences}}
 <section class="py-20 border-t border-zinc-800/50">
   <div class="max-w-5xl mx-auto px-6">
     <div class="grid md:grid-cols-5 gap-12 md:gap-16">
@@ -119,26 +125,23 @@
         <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">About</p>
         <h2 class="text-3xl font-semibold text-zinc-100 mb-5">A bit about me</h2>
         <div class="space-y-4 text-zinc-400 text-sm leading-relaxed">
-          <p>
-            I'm a Software Engineer based in Indonesia with a passion for building
-            robust backend systems that scale. I enjoy working on the full lifecycle
-            of a product — from architecture design to production deployment.
-          </p>
-          <p>
-            Outside of work, I write about engineering practices on this blog,
-            contribute to open-source, and occasionally build side projects
-            to scratch my own itches.
-          </p>
+          {{if $profile}}
+            {{if $profile.Bio1}}<p>{{$profile.Bio1}}</p>{{end}}
+            {{if $profile.Bio2}}<p>{{$profile.Bio2}}</p>{{end}}
+          {{end}}
+          {{if not $profile}}
+          <p>I'm a Software Engineer based in Indonesia with a passion for building robust backend systems that scale.</p>
+          {{end}}
         </div>
 
         <!-- Key stats -->
         <div class="grid grid-cols-2 gap-4 mt-8">
           <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-            <p class="text-2xl font-semibold text-zinc-100">5+</p>
+            <p class="text-2xl font-semibold text-zinc-100">{{if $profile}}{{if $profile.StatsYears}}{{$profile.StatsYears}}+{{else}}—{{end}}{{else}}—{{end}}</p>
             <p class="text-xs text-zinc-500 mt-1">Years of experience</p>
           </div>
           <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-            <p class="text-2xl font-semibold text-zinc-100">10+</p>
+            <p class="text-2xl font-semibold text-zinc-100">{{if $profile}}{{if $profile.StatsProjects}}{{$profile.StatsProjects}}+{{else}}—{{end}}{{else}}—{{end}}</p>
             <p class="text-xs text-zinc-500 mt-1">Projects shipped</p>
           </div>
         </div>
@@ -154,67 +157,30 @@
           <div class="absolute left-[7px] top-2 bottom-2 w-px bg-zinc-800"></div>
 
           <div class="space-y-8">
-
-            <!-- Job 1 -->
+            {{range $experiences}}
             <div class="relative pl-8">
-              <div class="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-4 ring-zinc-950"></div>
+              <div class="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-zinc-950 {{if .IsCurrent}}bg-emerald-500{{else}}bg-zinc-700{{end}}"></div>
               <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
-                <h3 class="font-semibold text-zinc-100">Software Engineer</h3>
-                <span class="text-xs font-mono text-zinc-500">2022 — Present</span>
+                <h3 class="font-semibold text-zinc-100">{{.Role}}</h3>
+                <span class="text-xs font-mono text-zinc-500">
+                  {{if .PeriodStart}}{{.PeriodStart}} — {{if .PeriodEnd}}{{.PeriodEnd}}{{else}}Present{{end}}{{end}}
+                </span>
               </div>
-              <p class="text-sm font-medium text-emerald-400 mb-2">PT Tokopedia (GoTo)</p>
-              <p class="text-sm text-zinc-400 leading-relaxed">
-                Building and maintaining high-traffic backend services handling millions of
-                transactions per day. Focus on distributed systems, service reliability,
-                and developer tooling.
-              </p>
+              <p class="text-sm font-medium {{if .IsCurrent}}text-emerald-400{{else}}text-zinc-400{{end}} mb-2">{{.Company}}</p>
+              {{if .Description}}<p class="text-sm text-zinc-400 leading-relaxed">{{.Description}}</p>{{end}}
+              {{if .TechStack}}
               <div class="flex flex-wrap gap-1.5 mt-3">
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Go</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">gRPC</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Kubernetes</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Kafka</span>
+                {{range .TechStack}}
+                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">{{.}}</span>
+                {{end}}
               </div>
+              {{end}}
             </div>
+            {{end}}
 
-            <!-- Job 2 -->
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full bg-zinc-700 ring-4 ring-zinc-950"></div>
-              <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
-                <h3 class="font-semibold text-zinc-100">Backend Engineer</h3>
-                <span class="text-xs font-mono text-zinc-500">2020 — 2022</span>
-              </div>
-              <p class="text-sm font-medium text-zinc-400 mb-2">HaloDoc</p>
-              <p class="text-sm text-zinc-400 leading-relaxed">
-                Developed core backend services for the healthcare platform including
-                appointment scheduling, teleconsultation, and pharmacy fulfillment systems.
-              </p>
-              <div class="flex flex-wrap gap-1.5 mt-3">
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Go</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">MySQL</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Redis</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Docker</span>
-              </div>
-            </div>
-
-            <!-- Job 3 -->
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full bg-zinc-700 ring-4 ring-zinc-950"></div>
-              <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
-                <h3 class="font-semibold text-zinc-100">Junior Backend Developer</h3>
-                <span class="text-xs font-mono text-zinc-500">2018 — 2020</span>
-              </div>
-              <p class="text-sm font-medium text-zinc-400 mb-2">Startup / Early Career</p>
-              <p class="text-sm text-zinc-400 leading-relaxed">
-                Built REST APIs and integrated third-party services for early-stage
-                product teams. Contributed to system design decisions and code reviews.
-              </p>
-              <div class="flex flex-wrap gap-1.5 mt-3">
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">Go</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">REST</span>
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">PostgreSQL</span>
-              </div>
-            </div>
-
+            {{if not $experiences}}
+            <p class="text-sm text-zinc-500 pl-8">Belum ada data experience. Tambahkan di <a href="/admin/profile" class="text-emerald-400 hover:underline">admin panel</a>.</p>
+            {{end}}
           </div>
         </div>
       </div>
