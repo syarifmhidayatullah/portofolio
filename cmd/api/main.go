@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/sessions"
@@ -140,6 +141,14 @@ func loadTemplates() *template.Template {
 		},
 		"currentYear": func() int {
 			return time.Now().Year()
+		},
+		"readingTime": func(content string) int {
+			words := len(strings.Fields(content))
+			mins := words / 200
+			if mins < 1 {
+				return 1
+			}
+			return mins
 		},
 		"joinStrings": func(ss []string, sep string) string {
 			result := ""

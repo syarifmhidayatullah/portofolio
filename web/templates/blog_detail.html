@@ -18,10 +18,14 @@
 
   <!-- Post header -->
   <header class="mb-12">
-    {{if .post.PublishedAt}}
-    <time class="text-xs font-mono text-zinc-500">{{.post.PublishedAt.Format "January 2, 2006"}}</time>
-    {{end}}
-    <h1 class="text-3xl md:text-4xl font-semibold text-zinc-50 leading-tight mt-3 mb-4">{{.post.Title}}</h1>
+    <div class="flex items-center gap-3 mb-3">
+      {{if .post.PublishedAt}}
+      <time class="text-xs font-mono text-zinc-500">{{.post.PublishedAt.Format "January 2, 2006"}}</time>
+      <span class="text-zinc-700">·</span>
+      {{end}}
+      <span class="text-xs font-mono text-zinc-500">{{readingTime .post.Content}} min read</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-semibold text-zinc-50 leading-tight mb-4">{{.post.Title}}</h1>
     {{if .post.Excerpt}}
     <p class="text-zinc-400 text-lg leading-relaxed border-l-2 border-emerald-500 pl-4">{{.post.Excerpt}}</p>
     {{end}}
