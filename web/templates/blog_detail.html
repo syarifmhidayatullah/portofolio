@@ -1,7 +1,16 @@
 {{define "blog_detail.html"}}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-<head>{{template "head" .}}</head>
+<head>
+  {{template "head" .}}
+  <!-- Syntax highlighting theme (switched with dark/light mode) -->
+  <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <style>
+    /* Let hljs handle code colors; keep only layout */
+    .hljs { background: transparent !important; padding: 0 !important; }
+  </style>
+</head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
 
 <!-- Scroll progress bar -->
@@ -100,8 +109,22 @@
 {{template "footer" .}}
 
 <script>
-  // Inject copy button into every code block after DOM is ready
+  const HLJS_DARK = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css'
+  const HLJS_LIGHT = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css'
+
+  function syncHljsTheme() {
+    const light = document.documentElement.getAttribute('data-theme') === 'light'
+    document.getElementById('hljs-theme').href = light ? HLJS_LIGHT : HLJS_DARK
+  }
+
+  // Watch for theme toggle
+  new MutationObserver(syncHljsTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
   document.addEventListener('DOMContentLoaded', () => {
+    syncHljsTheme()
+    hljs.highlightAll()
+
+    // Inject copy button into every code block after DOM is ready
     document.querySelectorAll('article pre').forEach(pre => {
       const btn = document.createElement('button')
       btn.textContent = 'Copy'
