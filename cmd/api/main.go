@@ -64,6 +64,7 @@ func main() {
 
 	// Handlers
 	homeH := handler.NewHomeHandler(postSvc, projectSvc, profileSvc, experienceSvc)
+	seoH := handler.NewSEOHandler(postSvc, projectSvc, cfg.AppURL)
 	blogH := handler.NewBlogHandler(postSvc)
 	projectH := handler.NewProjectHandler(projectSvc)
 	contactH := handler.NewContactHandler(messageSvc)
@@ -92,6 +93,8 @@ func main() {
 	r.GET("/blog/:slug", blogH.Detail)
 	r.GET("/projects", projectH.List)
 	r.POST("/contact", contactH.Submit)
+	r.GET("/robots.txt", seoH.Robots)
+	r.GET("/sitemap.xml", seoH.Sitemap)
 
 	// Admin auth (public)
 	r.GET("/admin/login", adminAuthH.LoginPage)
