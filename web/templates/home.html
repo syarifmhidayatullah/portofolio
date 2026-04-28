@@ -424,7 +424,7 @@
 <!-- Avatar lightbox — di body level supaya fixed inset-0 benar-benar fullscreen -->
 <div id="avatar-lightbox"
   onclick="if(event.target===this) this.style.display='none'"
-  style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); padding:1.5rem;"
+  style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.88); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding:1.5rem;"
   onkeydown="if(event.key==='Escape') this.style.display='none'">
   <div style="position:relative; max-width:22rem; width:100%;">
     <img src="{{.profile.AvatarURL}}" alt="Syarif Hidayatullah"
