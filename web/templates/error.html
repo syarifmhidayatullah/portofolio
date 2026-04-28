@@ -1,17 +1,81 @@
 {{define "error.html"}}
 <!DOCTYPE html>
-<html lang="en">
-<head>{{template "head" .}}</head>
+<html lang="en" class="scroll-smooth">
+<head>
+  {{template "head" .}}
+  <title>404 — Syarif Hidayatullah</title>
+</head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+
 {{template "navbar" .}}
-<main class="max-w-5xl mx-auto px-6 pt-40 pb-24 text-center">
-  <p class="text-6xl font-mono text-zinc-700 mb-4">404</p>
-  <h1 class="text-2xl font-semibold text-zinc-300 mb-3">Page not found</h1>
-  <p class="text-zinc-500 mb-8">{{if .error}}{{.error}}{{else}}The page you're looking for doesn't exist.{{end}}</p>
-  <a href="/" class="inline-flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors">
-    ← Go home
-  </a>
+
+<main class="min-h-screen flex items-center justify-center px-6">
+  <div class="max-w-lg w-full text-center">
+
+    <!-- Terminal window -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mb-8 text-left shadow-2xl">
+      <!-- Terminal title bar -->
+      <div class="flex items-center gap-2 px-4 py-3 border-b border-zinc-800 bg-zinc-900/80">
+        <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+        <span class="w-3 h-3 rounded-full bg-amber-500/70"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-500/70"></span>
+        <span class="ml-2 text-xs text-zinc-500 font-mono">bash — syarif.dev</span>
+      </div>
+      <!-- Terminal content -->
+      <div class="p-5 font-mono text-sm space-y-2">
+        <div class="flex gap-2">
+          <span class="text-emerald-400">→</span>
+          <span class="text-zinc-300">curl -I syarifhidayat.dev<span class="text-zinc-500">{{if .error}}/{{end}}</span></span>
+        </div>
+        <div class="text-zinc-500 pl-5">
+          <span class="text-red-400">HTTP/1.1 404 Not Found</span>
+        </div>
+        <div class="text-zinc-600 pl-5 text-xs">
+          {{if .error}}Error: {{.error}}{{else}}Error: The requested URL was not found on this server.{{end}}
+        </div>
+        <div class="flex gap-2 mt-3">
+          <span class="text-emerald-400">→</span>
+          <span class="text-zinc-400">
+            <span x-data="{ show: false }" x-init="setTimeout(() => show = true, 800)">
+              <span x-show="show" class="animate-pulse">█</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <h1 class="text-4xl font-semibold text-zinc-100 mb-3">Page not found</h1>
+    <p class="text-zinc-400 mb-8 leading-relaxed">
+      The page you're looking for doesn't exist or has been moved.<br>
+      Let's get you back on track.
+    </p>
+
+    <!-- Actions -->
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="/"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        Go home
+      </a>
+      <a href="/blog"
+        class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium text-sm rounded-lg transition-all">
+        Read the blog
+      </a>
+      <button onclick="history.back()"
+        class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium text-sm rounded-lg transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Go back
+      </button>
+    </div>
+
+  </div>
 </main>
+
 {{template "footer" .}}
 </body>
 </html>

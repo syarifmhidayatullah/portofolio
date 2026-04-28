@@ -149,6 +149,13 @@
   [data-theme="light"] article thead { border-color: #d1d5db !important; }
   [data-theme="light"] article em { color: #374151 !important; }
 
+  /* ===== Page load fade-in ===== */
+  @keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  body { animation: pageFadeIn 0.25s ease-out both; }
+
   /* ===== Code block overrides for dark prose ===== */
   article pre {
     background: #18181b !important;
