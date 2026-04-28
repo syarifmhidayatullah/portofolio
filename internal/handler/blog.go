@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/syarifmhidayatullah/portfolio/internal/model"
 	"github.com/syarifmhidayatullah/portfolio/internal/service"
 )
 
@@ -38,6 +39,29 @@ func (h *BlogHandler) Detail(c *gin.Context) {
 		return
 	}
 
+	// Related posts: same tag, exclude current, max 3
+	var related []model.Post
+	if len(post.Tags) > 0 {
+		all, _ := h.postSvc.GetAll(true)
+	outer:
+		for _, p := range all {
+			if p.ID == post.ID {
+				continue
+			}
+			for _, tag := range p.Tags {
+				for _, myTag := range post.Tags {
+					if tag == myTag {
+						related = append(related, p)
+						if len(related) == 3 {
+							break outer
+						}
+						break
+					}
+				}
+			}
+		}
+	}
+
 	c.HTML(http.StatusOK, "blog_detail.html", gin.H{
 		"title":         post.Title,
 		"activeNav":     "blog",
@@ -46,5 +70,6 @@ func (h *BlogHandler) Detail(c *gin.Context) {
 		"ogImage":       post.CoverImage,
 		"post":          post,
 		"renderedHTML":  renderedHTML,
+		"relatedPosts":  related,
 	})
 }

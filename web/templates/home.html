@@ -303,7 +303,11 @@
         loading: false,
         success: false,
         error: '',
+        maxChars: 1000,
+        get charCount() { return this.form.message.length },
+        get charNearLimit() { return this.charCount > this.maxChars * 0.85 },
         async submit() {
+          if (this.charCount > this.maxChars) return
           this.loading = true
           this.error = ''
           try {
@@ -328,20 +332,36 @@
       }"
       class="max-w-xl"
     >
-      <div x-show="success" class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm">
-        Message sent! I'll get back to you soon.
+      <!-- Success state -->
+      <div x-show="success" x-transition
+        class="mb-6 p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start gap-3">
+        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <div>
+          <p class="text-emerald-400 font-medium text-sm">Message sent!</p>
+          <p class="text-emerald-400/70 text-xs mt-0.5">I'll get back to you within 24 hours.</p>
+        </div>
       </div>
-      <div x-show="error" class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm" x-text="error"></div>
 
-      <form @submit.prevent="submit" class="flex flex-col gap-4">
+      <!-- Error state -->
+      <div x-show="error" x-transition
+        class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-2 text-red-400 text-sm">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span x-text="error"></span>
+      </div>
+
+      <form @submit.prevent="submit" class="flex flex-col gap-4" x-show="!success">
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs text-zinc-400 mb-1.5">Name</label>
+            <label class="block text-xs text-zinc-400 mb-1.5">Name <span class="text-red-500">*</span></label>
             <input x-model="form.name" type="text" required placeholder="John Doe"
               class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
           </div>
           <div>
-            <label class="block text-xs text-zinc-400 mb-1.5">Email</label>
+            <label class="block text-xs text-zinc-400 mb-1.5">Email <span class="text-red-500">*</span></label>
             <input x-model="form.email" type="email" required placeholder="john@example.com"
               class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
           </div>
@@ -354,18 +374,28 @@
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1.5">Message</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs text-zinc-400">Message <span class="text-red-500">*</span></label>
+            <span class="text-xs font-mono transition-colors"
+              :class="charCount > maxChars ? 'text-red-400' : charNearLimit ? 'text-amber-400' : 'text-zinc-600'"
+              x-text="charCount + ' / ' + maxChars"></span>
+          </div>
           <textarea x-model="form.message" required rows="5" placeholder="Tell me about your project..."
-            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none"></textarea>
+            :class="charCount > maxChars ? 'border-red-500/50 focus:border-red-500' : 'border-zinc-800 focus:border-emerald-500'"
+            class="w-full bg-zinc-900 border rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none"></textarea>
         </div>
 
         <button
           type="submit"
-          :disabled="loading"
-          class="self-start inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-zinc-900 font-medium text-sm rounded-lg transition-all"
+          :disabled="loading || charCount > maxChars"
+          class="self-start inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-zinc-900 font-semibold text-sm rounded-lg transition-all"
         >
-          <span x-show="!loading">Send Message</span>
-          <span x-show="loading">Sending...</span>
+          <!-- Spinner -->
+          <svg x-show="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+          </svg>
+          <span x-text="loading ? 'Sending...' : 'Send Message'"></span>
           <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
           </svg>

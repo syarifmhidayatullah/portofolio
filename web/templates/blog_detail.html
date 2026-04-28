@@ -90,8 +90,29 @@
     </a>
   </div>
 
+  <!-- Table of Contents (injected by JS if headings exist) -->
+  <div id="toc-container"
+    x-data="{ open: false }"
+    class="hidden mb-8 bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden">
+    <button @click="open = !open"
+      class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors">
+      <span class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h10M4 14h12M4 18h8"/>
+        </svg>
+        Table of Contents
+      </span>
+      <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 text-zinc-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+    <nav id="toc-nav" x-show="open" x-transition class="px-4 pb-4 border-t border-zinc-800 pt-3">
+      <!-- Injected by JS -->
+    </nav>
+  </div>
+
   <!-- Post content (rendered markdown) -->
-  <article class="prose prose-invert prose-emerald max-w-none
+  <article id="post-article" class="prose prose-invert prose-emerald max-w-none
     prose-headings:font-semibold prose-headings:text-zinc-100
     prose-p:text-zinc-300 prose-p:leading-relaxed
     prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
@@ -103,6 +124,28 @@
     prose-hr:border-zinc-800">
     {{safeHTML .renderedHTML}}
   </article>
+
+  {{if .relatedPosts}}
+  <!-- Related Posts -->
+  <aside class="mt-16 pt-10 border-t border-zinc-800">
+    <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-6">Related Posts</p>
+    <div class="grid sm:grid-cols-3 gap-4">
+    {{range .relatedPosts}}
+    <a href="/blog/{{.Slug}}" class="group bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl p-4 transition-all hover:-translate-y-0.5">
+      <h3 class="font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors text-sm leading-snug mb-2">{{.Title}}</h3>
+      <p class="text-zinc-500 text-xs leading-relaxed line-clamp-2">{{.Excerpt}}</p>
+      {{if .Tags}}
+      <div class="flex flex-wrap gap-1 mt-3">
+        {{range .Tags}}
+        <span class="px-1.5 py-0.5 bg-zinc-800 text-zinc-500 text-xs font-mono rounded">{{.}}</span>
+        {{end}}
+      </div>
+      {{end}}
+    </a>
+    {{end}}
+    </div>
+  </aside>
+  {{end}}
 
 </main>
 
@@ -123,6 +166,51 @@
   document.addEventListener('DOMContentLoaded', () => {
     syncHljsTheme()
     hljs.highlightAll()
+
+    // ── Table of Contents ──────────────────────────────
+    const headings = document.querySelectorAll('#post-article h2, #post-article h3')
+    if (headings.length >= 2) {
+      document.getElementById('toc-container').classList.remove('hidden')
+      const nav = document.getElementById('toc-nav')
+      headings.forEach((h, i) => {
+        if (!h.id) h.id = 'heading-' + i
+        const a = document.createElement('a')
+        a.href = '#' + h.id
+        a.textContent = h.textContent
+        a.dataset.id = h.id
+        a.className = h.tagName === 'H3'
+          ? 'block pl-4 py-0.5 text-xs text-zinc-500 hover:text-emerald-400 transition-colors border-l border-zinc-800'
+          : 'block py-1 text-sm text-zinc-400 hover:text-emerald-400 transition-colors'
+        a.onclick = e => { e.preventDefault(); document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' }) }
+        nav.appendChild(a)
+      })
+
+      // Scroll spy
+      const links = nav.querySelectorAll('a')
+      new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            links.forEach(l => {
+              const active = l.dataset.id === entry.target.id
+              l.classList.toggle('text-emerald-400', active)
+              l.classList.toggle('text-zinc-400', !active && l.tagName !== 'H3')
+            })
+          }
+        })
+      }, { rootMargin: '-20% 0px -70% 0px' }).observe
+      // observe all headings
+      ;[...headings].forEach(h => {
+        new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              links.forEach(l => l.classList.remove('text-emerald-400', 'font-medium'))
+              const active = nav.querySelector(`[data-id="${entry.target.id}"]`)
+              if (active) { active.classList.add('text-emerald-400', 'font-medium') }
+            }
+          })
+        }, { rootMargin: '-10% 0px -80% 0px' }).observe(h)
+      })
+    }
 
     // Inject copy button into every code block after DOM is ready
     document.querySelectorAll('article pre').forEach(pre => {
