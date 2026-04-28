@@ -95,6 +95,7 @@ func main() {
 	r.POST("/contact", contactH.Submit)
 	r.GET("/robots.txt", seoH.Robots)
 	r.GET("/sitemap.xml", seoH.Sitemap)
+	r.GET("/feed.xml", seoH.RSS)
 
 	// Admin auth (public)
 	r.GET("/admin/login", adminAuthH.LoginPage)

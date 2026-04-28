@@ -7,10 +7,20 @@
 {{template "navbar" .}}
 
 <main class="max-w-5xl mx-auto px-6 pt-32 pb-24">
-  <div class="mb-14">
-    <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Writing</p>
-    <h1 class="text-4xl font-semibold text-zinc-100">Blog</h1>
-    <p class="text-zinc-400 mt-3 max-w-lg">Thoughts on software engineering, architecture, and the craft of building things.</p>
+  <div class="mb-14 flex items-start justify-between gap-4">
+    <div>
+      <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Writing</p>
+      <h1 class="text-4xl font-semibold text-zinc-100">Blog</h1>
+      <p class="text-zinc-400 mt-3 max-w-lg">Thoughts on software engineering, architecture, and the craft of building things.</p>
+    </div>
+    <a href="/feed.xml" target="_blank" rel="noopener noreferrer"
+      class="flex-shrink-0 flex items-center gap-1.5 text-xs text-zinc-500 hover:text-orange-400 border border-zinc-800 hover:border-orange-400/50 px-3 py-1.5 rounded-lg transition-colors mt-2"
+      title="Subscribe via RSS">
+      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M6.18 15.64a2.18 2.18 0 012.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 012.18-2.18M4 4.44A15.56 15.56 0 0119.56 20h-2.83A12.73 12.73 0 004 7.27V4.44m0 5.66a9.9 9.9 0 019.9 9.9h-2.83A7.07 7.07 0 004 12.93V10.1z"/>
+      </svg>
+      RSS
+    </a>
   </div>
 
   {{if .posts}}

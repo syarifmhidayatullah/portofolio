@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"html"
 	"net/http"
 	"strings"
 	"time"
@@ -62,5 +63,40 @@ func (h *SEOHandler) Sitemap(c *gin.Context) {
 	sb.WriteString("</urlset>")
 
 	c.Header("Content-Type", "application/xml; charset=utf-8")
+	c.String(http.StatusOK, sb.String())
+}
+
+func (h *SEOHandler) RSS(c *gin.Context) {
+	posts, _ := h.postSvc.GetAll(true)
+
+	var sb strings.Builder
+	sb.WriteString(`<?xml version="1.0" encoding="UTF-8"?>`)
+	sb.WriteString("\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n<channel>\n")
+	sb.WriteString(fmt.Sprintf("  <title>Syarif Hidayatullah — Blog</title>\n"))
+	sb.WriteString(fmt.Sprintf("  <link>%s/blog</link>\n", h.appURL))
+	sb.WriteString("  <description>Thoughts on software engineering, architecture, and the craft of building things.</description>\n")
+	sb.WriteString("  <language>en</language>\n")
+	sb.WriteString(fmt.Sprintf("  <atom:link href=\"%s/feed.xml\" rel=\"self\" type=\"application/rss+xml\" />\n", h.appURL))
+	sb.WriteString(fmt.Sprintf("  <lastBuildDate>%s</lastBuildDate>\n", time.Now().Format(time.RFC1123Z)))
+
+	for _, p := range posts {
+		pubDate := time.Now().Format(time.RFC1123Z)
+		if p.PublishedAt != nil {
+			pubDate = p.PublishedAt.Format(time.RFC1123Z)
+		}
+		sb.WriteString("  <item>\n")
+		sb.WriteString(fmt.Sprintf("    <title>%s</title>\n", html.EscapeString(p.Title)))
+		sb.WriteString(fmt.Sprintf("    <link>%s/blog/%s</link>\n", h.appURL, p.Slug))
+		sb.WriteString(fmt.Sprintf("    <guid>%s/blog/%s</guid>\n", h.appURL, p.Slug))
+		sb.WriteString(fmt.Sprintf("    <pubDate>%s</pubDate>\n", pubDate))
+		if p.Excerpt != "" {
+			sb.WriteString(fmt.Sprintf("    <description>%s</description>\n", html.EscapeString(p.Excerpt)))
+		}
+		sb.WriteString("  </item>\n")
+	}
+
+	sb.WriteString("</channel>\n</rss>")
+
+	c.Header("Content-Type", "application/rss+xml; charset=utf-8")
 	c.String(http.StatusOK, sb.String())
 }
