@@ -29,6 +29,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<!-- Redesign fonts: Bricolage Grotesque (display), Space Grotesk (body), IBM Plex Mono (mono) -->
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ===== Neo-brutalist design tokens (redesign foundation) =====
+     Neutrals swap between dark (default) & light. Accent colors stay fixed.
+     Values lifted from the approved Claude Design export. */
+  :root {
+    --bg:#0d0d12; --surface:#16161d; --surface2:#1a1a22; --border:#23232c;
+    --navborder:#2a2a34; --ink:#f4f4f5; --muted:#a6a6b2; --faint:#5a5a66;
+    --red:#ff4d3d; --blue:#3d6bff; --yellow:#ffd23d; --green:#3dffa0;
+    --font-display:'Bricolage Grotesque', sans-serif;
+    --font-sans:'Space Grotesk', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  [data-theme="light"] {
+    --bg:#fff7f0; --surface:#ffffff; --surface2:#fdf2e9; --border:#eaded2;
+    --navborder:#e2d4c5; --ink:#171514; --muted:#5a534f; --faint:#a08e80;
+  }
+</style>
 <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <script>
   tailwind.config = {
