@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/smtp"
@@ -76,9 +77,11 @@ func (s *emailService) sendViaSMTP(to, subject, body string) error {
 
 func (s *emailService) sendViaResend(to, subject, body string) error {
 	if s.cfg.ResendAPIKey == "" {
-		log.Println("email: Resend API key not configured, skipping")
+		log.Println("[EMAIL] Resend API key not configured, skipping")
 		return nil
 	}
+
+	log.Printf("[EMAIL] sending via Resend to=%s from=%s subject=%q", to, s.cfg.SMTPFrom, subject)
 
 	payload := map[string]interface{}{
 		"from":    s.cfg.SMTPFrom,
@@ -101,12 +104,18 @@ func (s *emailService) sendViaResend(to, subject, body string) error {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
+		log.Printf("[EMAIL] Resend request failed: %v", err)
 		return err
 	}
 	defer resp.Body.Close()
 
+	respBody, _ := io.ReadAll(resp.Body)
+
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("resend API error: %s", resp.Status)
+		log.Printf("[EMAIL] Resend API error: status=%s body=%s", resp.Status, string(respBody))
+		return fmt.Errorf("resend API error: %s: %s", resp.Status, string(respBody))
 	}
+
+	log.Printf("[EMAIL] sent successfully via Resend to %s (response: %s)", to, string(respBody))
 	return nil
 }
