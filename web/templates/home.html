@@ -2,447 +2,312 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>{{template "head" .}}</head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+<body style="margin:0;">
+<style>
+  /* ===== Home (neo-brutalist) ===== */
+  .hm-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
+  .sec { padding:8px 0 52px; }
+  .sec-h { font-family:var(--font-display); font-size:32px; font-weight:700; letter-spacing:-.01em; margin:0 0 24px; color:var(--ink); }
+  .sec-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:22px; }
+  .sec-more { font-weight:600; color:var(--blue); font-size:15px; text-decoration:none; white-space:nowrap; }
 
-{{template "navbar" .}}
+  /* hero */
+  .hero { padding:52px 0 64px; display:grid; grid-template-columns:1.2fr .8fr; gap:44px; align-items:center; }
+  .badge { display:inline-flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--navborder); color:var(--green); font-family:var(--font-mono); font-weight:500; font-size:13px; padding:8px 16px; border-radius:30px; margin-bottom:24px; }
+  .badge .pdot { width:8px; height:8px; background:var(--green); border-radius:50%; }
+  .hero-title { font-family:var(--font-display); font-size:76px; line-height:.94; font-weight:800; letter-spacing:-.025em; margin:0 0 24px; color:var(--ink); }
+  .hero-lead { font-size:18px; line-height:1.6; color:var(--muted); max-width:460px; margin:0 0 32px; }
+  .btn-row { display:flex; gap:14px; margin-bottom:34px; flex-wrap:wrap; }
+  .btn-primary { background:var(--red); color:#fff; font-weight:700; padding:15px 28px; border-radius:40px; font-size:15px; box-shadow:5px 5px 0 #7a1a12; text-decoration:none; transition:transform .15s, box-shadow .15s; }
+  .btn-primary:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 #7a1a12; }
+  .btn-ghost { border:1.5px solid var(--navborder); color:var(--ink); font-weight:600; padding:15px 28px; border-radius:40px; font-size:15px; text-decoration:none; }
+  .btn-ghost:hover { border-color:var(--red); color:var(--red); }
+  .tags { display:flex; gap:10px; flex-wrap:wrap; }
+  .tag { font-weight:600; font-size:13px; padding:8px 15px; border-radius:30px; }
+  .tag-red { background:color-mix(in srgb,var(--red) 16%,transparent); color:var(--red); }
+  .tag-blue { background:color-mix(in srgb,var(--blue) 18%,transparent); color:var(--blue); }
+  .tag-yellow { background:color-mix(in srgb,var(--yellow) 24%,transparent); color:var(--yellow); }
+  .tag-green { background:color-mix(in srgb,var(--green) 18%,transparent); color:var(--green); }
 
-<!-- Hero -->
-<section class="min-h-screen flex items-center pt-20">
-  <div class="max-w-5xl mx-auto px-6 py-24 w-full">
-    <div class="flex flex-col-reverse md:flex-row items-center gap-12 md:gap-16">
+  /* hero photo */
+  .photo-wrap { position:relative; }
+  .photo-deco1 { position:absolute; inset:-14px -14px auto auto; width:96px; height:96px; background:var(--yellow); border-radius:50%; z-index:0; }
+  .photo-deco2 { position:absolute; left:-18px; bottom:38px; width:58px; height:58px; background:var(--blue); border-radius:16px; transform:rotate(12deg); z-index:0; }
+  .photo-card { position:relative; z-index:1; aspect-ratio:1/1; border:2px solid var(--navborder); border-radius:26px; overflow:hidden; background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 12px,var(--bg) 12px,var(--bg) 24px); display:flex; align-items:flex-end; justify-content:center; box-shadow:8px 8px 0 var(--red); }
+  .photo-card.clickable { cursor:pointer; }
+  .photo-card > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .photo-initials { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:64px; font-weight:800; color:var(--faint); }
+  .photo-socials { position:relative; z-index:2; padding:16px; display:flex; gap:10px; }
+  .soc { width:36px; height:36px; background:var(--bg); border:1.5px solid var(--navborder); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:var(--ink); text-decoration:none; font-family:var(--font-mono); }
+  .soc:hover { border-color:var(--red); color:var(--red); }
 
-      <!-- Text content -->
-      <div class="flex-1 min-w-0">
-        <span class="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1.5 rounded-full mb-6">
-          <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-          Available for opportunities
-        </span>
+  /* about + stats */
+  .about-card { background:var(--surface); border:1px solid var(--border); border-radius:28px; padding:44px; display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center; }
+  .about-h { font-family:var(--font-display); font-size:32px; font-weight:700; letter-spacing:-.01em; margin:0 0 14px; color:var(--ink); }
+  .about-p { color:var(--muted); font-size:16px; line-height:1.7; margin:0 0 10px; }
+  .stats { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .stat { border-radius:18px; padding:22px; }
+  .stat .num { font-family:var(--font-display); font-size:40px; font-weight:800; line-height:1; }
+  .stat .lab { font-size:14px; margin-top:4px; }
+  .stat-red { background:var(--red); color:#fff; } .stat-red .lab { opacity:.9; }
+  .stat-blue { background:var(--blue); color:#fff; } .stat-blue .lab { opacity:.9; }
+  .stat-yellow { background:var(--yellow); color:#0d0d12; } .stat-yellow .lab { opacity:.8; }
+  .stat-plain { background:var(--bg); border:1px solid var(--navborder); color:var(--ink); } .stat-plain .lab { color:var(--muted); }
 
-        <h1 class="text-5xl md:text-6xl font-semibold text-zinc-50 leading-tight tracking-tight mb-6">
-          Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Syarif</span>
-        </h1>
+  /* experience */
+  .exp-list { display:flex; flex-direction:column; gap:14px; }
+  .exp-row { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:22px 26px; display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:center; }
+  .exp-dot { width:14px; height:14px; border-radius:50%; background:var(--red); }
+  .exp-row:nth-child(4n+2) .exp-dot { background:var(--blue); }
+  .exp-row:nth-child(4n+3) .exp-dot { background:var(--yellow); }
+  .exp-row:nth-child(4n+4) .exp-dot { background:var(--green); }
+  .exp-role { font-weight:600; font-size:18px; color:var(--ink); }
+  .exp-desc { color:var(--muted); font-size:15px; margin-top:3px; }
+  .exp-period { font-family:var(--font-mono); font-weight:500; font-size:14px; color:var(--faint); white-space:nowrap; }
+  .exp-period.current { color:var(--blue); }
+  .exp-tech { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .exp-tech span { background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-size:12px; font-family:var(--font-mono); padding:3px 9px; border-radius:20px; }
 
-        <p class="text-lg text-zinc-400 leading-relaxed mb-8">
-          Software Engineer specializing in backend systems and distributed architecture.
-          I build reliable, scalable APIs and developer tools using Go, PostgreSQL, and cloud-native technologies.
-        </p>
+  /* projects */
+  .proj-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .proj-card { background:var(--surface); border:1px solid var(--border); border-radius:22px; overflow:hidden; transition:transform .15s; box-shadow:6px 6px 0 var(--red); }
+  .proj-card:hover { transform:translate(-2px,-2px); }
+  .proj-card:nth-child(3n+2) { box-shadow:6px 6px 0 var(--blue); }
+  .proj-card:nth-child(3n+3) { box-shadow:6px 6px 0 var(--green); }
+  .proj-shot { aspect-ratio:16/10; background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 12px,var(--bg) 12px,var(--bg) 24px); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--faint); overflow:hidden; }
+  .proj-shot img { width:100%; height:100%; object-fit:cover; }
+  .proj-body { padding:22px; }
+  .proj-title { font-weight:600; font-size:19px; color:var(--ink); }
+  .proj-desc { color:var(--muted); font-size:14px; margin:5px 0 12px; }
+  .proj-tags { display:flex; gap:6px; flex-wrap:wrap; }
+  .proj-tags span { font-size:12px; font-weight:600; padding:5px 11px; border-radius:20px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); }
+  .proj-links { display:flex; gap:14px; margin-top:14px; }
+  .proj-links a { font-family:var(--font-mono); font-size:12px; color:var(--faint); text-decoration:none; }
+  .proj-links a:hover { color:var(--red); }
 
-        <div class="flex flex-wrap gap-3 mb-12">
-          <a href="/projects" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all">
-            View Projects
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </a>
-          <a href="/#contact" class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium text-sm rounded-lg transition-all">
-            Get in touch
-          </a>
-          {{if .profile}}{{if .profile.CVURL}}
-          <a href="{{.profile.CVURL}}" download="Syarif_Hidayatullah_CV.pdf"
-            class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-500/5 text-zinc-300 hover:text-emerald-400 font-medium text-sm rounded-lg transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-            </svg>
-            Download CV
-          </a>
-          {{end}}{{end}}
-        </div>
+  /* blog */
+  .blog-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .blog-card { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--red); border-radius:18px; padding:24px; display:block; text-decoration:none; transition:transform .15s; }
+  .blog-card:hover { transform:translateY(-3px); }
+  .blog-card:nth-child(3n+2) { border-top-color:var(--blue); }
+  .blog-card:nth-child(3n+3) { border-top-color:var(--yellow); }
+  .blog-date { font-family:var(--font-mono); font-size:12px; margin-bottom:10px; color:var(--red); text-transform:uppercase; }
+  .blog-card:nth-child(3n+2) .blog-date { color:var(--blue); }
+  .blog-card:nth-child(3n+3) .blog-date { color:var(--yellow); }
+  .blog-title { font-weight:600; font-size:17px; line-height:1.3; color:var(--ink); }
 
-        <!-- Tech stack -->
-        <div>
-          <p class="text-xs text-zinc-500 uppercase tracking-widest mb-3 font-mono">Tech Stack</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Go</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">MySQL</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Redis</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Docker</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Kubernetes</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">gRPC</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">REST</span>
-            <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded">Linux</span>
-          </div>
-        </div>
-      </div>
+  /* contact */
+  .contact-card { background:linear-gradient(120deg,var(--red),var(--blue)); color:#fff; border-radius:28px; padding:44px; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  .contact-h { font-family:var(--font-display); font-size:44px; font-weight:800; line-height:1; margin:0 0 10px; }
+  .contact-sub { font-size:16px; opacity:.92; margin:0; line-height:1.6; }
+  .cf { display:flex; flex-direction:column; gap:10px; }
+  .cf-row { display:flex; gap:10px; }
+  .cf input, .cf textarea { background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); color:#fff; font-size:14px; font-family:inherit; outline:none; }
+  .cf input { flex:1; border-radius:30px; padding:13px 18px; min-width:0; }
+  .cf textarea { border-radius:18px; padding:13px 18px; height:88px; resize:none; }
+  .cf input::placeholder, .cf textarea::placeholder { color:rgba(255,255,255,.7); }
+  .cf-btn { background:#0d0d12; color:#fff; font-weight:700; padding:14px; border-radius:30px; text-align:center; font-size:15px; cursor:pointer; border:none; }
+  .cf-btn:disabled { opacity:.6; cursor:not-allowed; }
+  .cf-note { background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.4); border-radius:16px; padding:14px 18px; font-size:14px; font-weight:500; }
 
-      <!-- Profile photo -->
-      <div class="flex-shrink-0 flex flex-col items-center gap-4">
+  /* lightbox */
+  .lb { position:fixed; inset:0; background:rgba(5,5,8,.82); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:60; cursor:zoom-out; padding:24px; }
+  .lb img { width:min(520px,86vw); border-radius:20px; border:2px solid var(--navborder); box-shadow:0 25px 60px rgba(0,0,0,.6); }
 
-        <!-- Avatar -->
-        <div class="relative group {{if .profile}}{{if .profile.AvatarURL}}cursor-pointer{{end}}{{end}}"
-          {{if .profile}}{{if .profile.AvatarURL}}onclick="document.getElementById('avatar-lightbox').style.display='flex'"{{end}}{{end}}
-          title="{{if .profile}}{{if .profile.AvatarURL}}View photo{{end}}{{end}}">
-          <!-- Glow ring -->
-          <div class="absolute -inset-1 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-500"></div>
-          <!-- Border ring -->
-          <div class="relative w-44 h-44 md:w-52 md:h-52 rounded-full ring-2 ring-emerald-500/30 overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-900">
-            {{if .profile}}{{if .profile.AvatarURL}}
-            <img
-              src="{{.profile.AvatarURL}}"
-              alt="Syarif Hidayatullah"
-              class="w-full h-full object-cover absolute inset-0 z-10"
-              onerror="this.style.display='none'"
-            />
-            {{end}}{{end}}
-            <!-- Initials fallback -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-4xl font-semibold text-zinc-500 select-none font-mono">SH</span>
-            </div>
-            <!-- Hover overlay -->
-            {{if .profile}}{{if .profile.AvatarURL}}
-            <div class="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-200">
-              <svg class="w-7 h-7 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
-              </svg>
-            </div>
-            {{end}}{{end}}
-          </div>
-        </div>
+  @media (max-width:860px) {
+    .hero, .about-card, .contact-card, .proj-grid { grid-template-columns:1fr; }
+    .blog-grid { grid-template-columns:1fr; }
+    .hero-title { font-size:52px; }
+    .about-card, .contact-card { padding:32px; }
+    .photo-wrap { max-width:360px; margin:0 auto; }
+    .contact-h { font-size:34px; }
+  }
+  @media (max-width:760px) { .hm-shell { padding:0 20px; } }
+  @media (max-width:520px) {
+    .hero-title { font-size:42px; }
+    .cf-row { flex-direction:column; }
+    .exp-row { grid-template-columns:auto 1fr; }
+    .exp-period { grid-column:2; }
+  }
+</style>
 
+<div x-data="{ lb:false }" style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
+  {{template "navbar" .}}
 
-        <!-- Social links under avatar -->
-        <div class="flex items-center gap-4">
-          <a href="https://github.com/syarifmhidayatullah" target="_blank" rel="noopener noreferrer"
-            class="text-zinc-500 hover:text-zinc-200 transition-colors" aria-label="GitHub">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
-            </svg>
-          </a>
-          <a href="https://linkedin.com/in/syarifmhidayatullah" target="_blank" rel="noopener noreferrer"
-            class="text-zinc-500 hover:text-zinc-200 transition-colors" aria-label="LinkedIn">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </a>
-          <a href="mailto:syarif.hidayatull4h@gmail.com"
-            class="text-zinc-500 hover:text-zinc-200 transition-colors" aria-label="Email">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-          </a>
-        </div>
-      </div>
+  {{- /* shared vars wired from DB */ -}}
+  {{$avatar := ""}}{{$cv := ""}}{{$years := 0}}{{$projects := 0}}
+  {{if .profile}}{{$avatar = .profile.AvatarURL}}{{$cv = .profile.CVURL}}{{$years = .profile.StatsYears}}{{$projects = .profile.StatsProjects}}{{end}}
 
-    </div>
-  </div>
-</section>
+  <main class="hm-shell">
 
-<!-- About Me + Experience -->
-{{$profile := .profile}}
-{{$experiences := .experiences}}
-<section class="py-20 border-t border-zinc-800/50">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="grid md:grid-cols-5 gap-12 md:gap-16">
-
-      <!-- About Me -->
-      <div class="md:col-span-2">
-        <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">About</p>
-        <h2 class="text-3xl font-semibold text-zinc-100 mb-5">A bit about me</h2>
-        <div class="space-y-4 text-zinc-400 text-sm leading-relaxed">
-          {{if $profile}}
-            {{if $profile.Bio1}}<p>{{$profile.Bio1}}</p>{{end}}
-            {{if $profile.Bio2}}<p>{{$profile.Bio2}}</p>{{end}}
-          {{end}}
-          {{if not $profile}}
-          <p>I'm a Software Engineer based in Indonesia with a passion for building robust backend systems that scale.</p>
-          {{end}}
-        </div>
-
-        <!-- Key stats -->
-        <div class="grid grid-cols-2 gap-4 mt-8">
-          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-            <p class="text-2xl font-semibold text-zinc-100">{{if $profile}}{{if $profile.StatsYears}}{{$profile.StatsYears}}+{{else}}—{{end}}{{else}}—{{end}}</p>
-            <p class="text-xs text-zinc-500 mt-1">Years of experience</p>
-          </div>
-          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-            <p class="text-2xl font-semibold text-zinc-100">{{if $profile}}{{if $profile.StatsProjects}}{{$profile.StatsProjects}}+{{else}}—{{end}}{{else}}—{{end}}</p>
-            <p class="text-xs text-zinc-500 mt-1">Projects shipped</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Work Experience -->
-      <div class="md:col-span-3">
-        <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Career</p>
-        <h2 class="text-3xl font-semibold text-zinc-100 mb-8">Experience</h2>
-
-        <div class="relative">
-          <!-- Timeline line -->
-          <div class="absolute left-[7px] top-2 bottom-2 w-px bg-zinc-800"></div>
-
-          <div class="space-y-8">
-            {{range $experiences}}
-            <div class="relative pl-8">
-              <div class="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-zinc-950 {{if .IsCurrent}}bg-emerald-500{{else}}bg-zinc-700{{end}}"></div>
-              <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
-                <h3 class="font-semibold text-zinc-100">{{.Role}}</h3>
-                <span class="text-xs font-mono text-zinc-500">
-                  {{if .PeriodStart}}{{.PeriodStart}} — {{if .PeriodEnd}}{{.PeriodEnd}}{{else}}Present{{end}}{{end}}
-                </span>
-              </div>
-              <p class="text-sm font-medium {{if .IsCurrent}}text-emerald-400{{else}}text-zinc-400{{end}} mb-2">{{.Company}}</p>
-              {{if .Description}}<p class="text-sm text-zinc-400 leading-relaxed">{{.Description}}</p>{{end}}
-              {{if .TechStack}}
-              <div class="flex flex-wrap gap-1.5 mt-3">
-                {{range .TechStack}}
-                <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">{{.}}</span>
-                {{end}}
-              </div>
-              {{end}}
-            </div>
-            {{end}}
-
-            {{if not $experiences}}
-            <p class="text-sm text-zinc-500 pl-8">Belum ada data experience. Tambahkan di <a href="/admin/profile" class="text-emerald-400 hover:underline">admin panel</a>.</p>
-            {{end}}
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- Featured Projects -->
-{{if .projects}}
-<section class="py-20 border-t border-zinc-800/50">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="flex items-end justify-between mb-12">
+    <!-- hero -->
+    <section class="hero">
       <div>
-        <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Work</p>
-        <h2 class="text-3xl font-semibold text-zinc-100">Featured Projects</h2>
+        <div class="badge"><span class="pdot"></span>Available for work</div>
+        <h1 class="hero-title">Hi, I'm <span style="color:var(--red);">Syarif</span><br>backend<br><span style="color:var(--blue);">engineer.</span></h1>
+        <p class="hero-lead">I build reliable, scalable backend systems and developer tools — clean APIs with Go, PostgreSQL, and cloud-native tooling.</p>
+        <div class="btn-row">
+          <a class="btn-primary" href="/projects">View work →</a>
+          <a class="btn-ghost" href="/#contact">Get in touch</a>
+          {{if $cv}}<a class="btn-ghost" href="{{$cv}}" download>Download CV</a>{{end}}
+        </div>
+        <div class="tags">
+          <span class="tag tag-red">Go</span>
+          <span class="tag tag-blue">PostgreSQL</span>
+          <span class="tag tag-yellow">Redis</span>
+          <span class="tag tag-green">Docker</span>
+          <span class="tag tag-red">Kubernetes</span>
+          <span class="tag tag-blue">gRPC</span>
+          <span class="tag tag-yellow">REST</span>
+          <span class="tag tag-green">Linux</span>
+        </div>
       </div>
-      <a href="/projects" class="text-sm text-zinc-400 hover:text-emerald-400 transition-colors group flex items-center gap-1">
-        All projects
-        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-        </svg>
-      </a>
-    </div>
+      <div class="photo-wrap">
+        <div class="photo-deco1"></div>
+        <div class="photo-deco2"></div>
+        <div class="photo-card {{if $avatar}}clickable{{end}}" {{if $avatar}}@click="lb=true" title="View photo"{{end}}>
+          {{if $avatar}}<img src="{{$avatar}}" alt="Syarif Hidayatullah" onerror="this.style.display='none'">{{else}}<div class="photo-initials">SH</div>{{end}}
+          <div class="photo-socials">
+            <a class="soc" href="https://linkedin.com/in/syarifmhidayatullah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+            <a class="soc" href="https://github.com/syarifmhidayatullah" target="_blank" rel="noopener noreferrer" aria-label="GitHub">gh</a>
+            <a class="soc" href="mailto:syarif.hidayatull4h@gmail.com" aria-label="Email">@</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div class="grid md:grid-cols-2 gap-5">
-      {{range .projects}}
-      <div class="group relative bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl p-6 transition-all hover:-translate-y-0.5">
-        {{if .ImageURL}}
-        <div class="w-full h-40 rounded-lg overflow-hidden mb-5 bg-zinc-800">
-          <img src="{{.ImageURL}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+    <!-- about + stats -->
+    <section class="sec">
+      <div class="about-card">
+        <div>
+          <div class="about-h">Engineer who sweats the details <span style="color:var(--red);">★</span></div>
+          {{if .profile}}
+            {{if .profile.Bio1}}<p class="about-p">{{.profile.Bio1}}</p>{{end}}
+            {{if .profile.Bio2}}<p class="about-p">{{.profile.Bio2}}</p>{{end}}
+          {{end}}
+          {{if not .profile}}<p class="about-p">I'm a software engineer focused on building reliable, scalable backend systems and developer tools.</p>{{end}}
+        </div>
+        <div class="stats">
+          <div class="stat stat-red"><div class="num">{{if $years}}{{$years}}+{{else}}—{{end}}</div><div class="lab">Years exp</div></div>
+          <div class="stat stat-blue"><div class="num">{{if $projects}}{{$projects}}+{{else}}—{{end}}</div><div class="lab">Projects shipped</div></div>
+          <div class="stat stat-yellow"><div class="num">∞</div><div class="lab">Curiosity</div></div>
+          <div class="stat stat-plain"><div class="num">☕</div><div class="lab">Always brewing</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- experience -->
+    <section class="sec">
+      <h2 class="sec-h">Career journey</h2>
+      <div class="exp-list">
+        {{range .experiences}}
+        <div class="exp-row">
+          <span class="exp-dot"></span>
+          <div>
+            <div class="exp-role">{{.Role}} · {{.Company}}</div>
+            {{if .Description}}<div class="exp-desc">{{.Description}}</div>{{end}}
+            {{if .TechStack}}<div class="exp-tech">{{range .TechStack}}<span>{{.}}</span>{{end}}</div>{{end}}
+          </div>
+          <span class="exp-period {{if .IsCurrent}}current{{end}}">{{if .PeriodStart}}{{.PeriodStart}}—{{if .PeriodEnd}}{{.PeriodEnd}}{{else}}now{{end}}{{end}}</span>
         </div>
         {{end}}
-
-        <h3 class="font-semibold text-zinc-100 mb-2 group-hover:text-emerald-400 transition-colors">{{.Title}}</h3>
-        <p class="text-zinc-400 text-sm leading-relaxed mb-4">{{.Description}}</p>
-
-        <div class="flex flex-wrap gap-1.5 mb-5">
-          {{range .TechStack}}
-          <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded">{{.}}</span>
-          {{end}}
-        </div>
-
-        <div class="flex items-center gap-4">
-          {{if .LiveURL}}
-          <a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer"
-            class="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-emerald-400 transition-colors">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-            </svg>
-            Live Demo
-          </a>
-          {{end}}
-          {{if .GithubURL}}
-          <a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer"
-            class="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors">
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
-            </svg>
-            Source
-          </a>
-          {{end}}
-        </div>
-      </div>
-      {{end}}
-    </div>
-  </div>
-</section>
-{{end}}
-
-<!-- Recent Blog Posts -->
-{{if .posts}}
-<section class="py-20 border-t border-zinc-800/50">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="flex items-end justify-between mb-12">
-      <div>
-        <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Writing</p>
-        <h2 class="text-3xl font-semibold text-zinc-100">Recent Posts</h2>
-      </div>
-      <a href="/blog" class="text-sm text-zinc-400 hover:text-emerald-400 transition-colors group flex items-center gap-1">
-        All posts
-        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="flex flex-col divide-y divide-zinc-800">
-      {{range .posts}}
-      <a href="/blog/{{.Slug}}" class="group py-6 flex items-start justify-between gap-4 hover:bg-zinc-900/50 -mx-4 px-4 rounded-lg transition-colors">
-        <div>
-          <h3 class="font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-1">{{.Title}}</h3>
-          <p class="text-zinc-500 text-sm">{{.Excerpt}}</p>
-        </div>
-        {{if .PublishedAt}}
-        <span class="text-xs text-zinc-600 font-mono whitespace-nowrap mt-1">{{.PublishedAt.Format "Jan 2, 2006"}}</span>
+        {{if not .experiences}}
+        <p style="color:var(--faint); font-family:var(--font-mono); font-size:14px;">No experience added yet — add it in the <a href="/admin/profile" style="color:var(--blue);">admin panel</a>.</p>
         {{end}}
-      </a>
-      {{end}}
-    </div>
-  </div>
-</section>
-{{end}}
+      </div>
+    </section>
 
-<!-- Contact -->
-<section id="contact" class="py-20 border-t border-zinc-800/50">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="max-w-xl">
-      <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Contact</p>
-      <h2 class="text-3xl font-semibold text-zinc-100 mb-4">Let's work together</h2>
-      <p class="text-zinc-400 mb-10">
-        Have a project in mind or just want to chat about technology?
-        Drop me a message and I'll get back to you within 24 hours.
-      </p>
-    </div>
+    <!-- featured projects -->
+    {{if .projects}}
+    <section class="sec">
+      <div class="sec-head"><h2 class="sec-h" style="margin:0;">Featured projects</h2><a class="sec-more" href="/projects">All →</a></div>
+      <div class="proj-grid">
+        {{range .projects}}
+        <div class="proj-card">
+          <div class="proj-shot">{{if .ImageURL}}<img src="{{.ImageURL}}" alt="{{.Title}}">{{else}}project shot{{end}}</div>
+          <div class="proj-body">
+            <div class="proj-title">{{.Title}}</div>
+            {{if .Description}}<div class="proj-desc">{{.Description}}</div>{{end}}
+            {{if .TechStack}}<div class="proj-tags">{{range .TechStack}}<span>{{.}}</span>{{end}}</div>{{end}}
+            {{if or .LiveURL .GithubURL}}
+            <div class="proj-links">
+              {{if .LiveURL}}<a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer">Live ↗</a>{{end}}
+              {{if .GithubURL}}<a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer">Source ↗</a>{{end}}
+            </div>
+            {{end}}
+          </div>
+        </div>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
 
-    <div
-      x-data="{
-        form: { name: '', email: '', subject: '', message: '' },
-        loading: false,
-        success: false,
-        error: '',
-        maxChars: 1000,
-        get charCount() { return this.form.message.length },
-        get charNearLimit() { return this.charCount > this.maxChars * 0.85 },
-        async submit() {
-          if (this.charCount > this.maxChars) return
-          this.loading = true
-          this.error = ''
-          try {
-            const res = await fetch('/contact', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams(this.form).toString()
-            })
-            const data = await res.json()
-            if (res.ok) {
-              this.success = true
-              this.form = { name: '', email: '', subject: '', message: '' }
-            } else {
-              this.error = data.error || 'Something went wrong.'
-            }
-          } catch(e) {
-            this.error = 'Network error. Please try again.'
-          } finally {
-            this.loading = false
+    <!-- recent blog -->
+    {{if .posts}}
+    <section class="sec">
+      <div class="sec-head"><h2 class="sec-h" style="margin:0;">Recent writing</h2><a class="sec-more" href="/blog">All →</a></div>
+      <div class="blog-grid">
+        {{range .posts}}
+        <a class="blog-card" href="/blog/{{.Slug}}">
+          {{if .PublishedAt}}<div class="blog-date">{{.PublishedAt.Format "Jan 2006"}}</div>{{end}}
+          <div class="blog-title">{{.Title}}</div>
+        </a>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
+
+    <!-- contact -->
+    <section class="sec" id="contact" style="padding-bottom:64px;">
+      <div class="contact-card">
+        <div>
+          <h2 class="contact-h">Let's build something.</h2>
+          <p class="contact-sub">Got a project in mind? Send a message — I usually reply within 24 hours.</p>
+        </div>
+        <div x-data="{
+          form: { name:'', email:'', subject:'', message:'' },
+          loading:false, success:false, error:'',
+          async submit() {
+            this.loading = true; this.error = '';
+            try {
+              const res = await fetch('/contact', {
+                method:'POST',
+                headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+                body:new URLSearchParams(this.form).toString()
+              });
+              const data = await res.json();
+              if (res.ok) { this.success = true; this.form = { name:'', email:'', subject:'', message:'' }; }
+              else { this.error = data.error || 'Something went wrong.'; }
+            } catch(e) { this.error = 'Network error. Please try again.'; }
+            finally { this.loading = false; }
           }
-        }
-      }"
-      class="max-w-xl"
-    >
-      <!-- Success state -->
-      <div x-show="success" x-transition
-        class="mb-6 p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start gap-3">
-        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <div>
-          <p class="text-emerald-400 font-medium text-sm">Message sent!</p>
-          <p class="text-emerald-400/70 text-xs mt-0.5">I'll get back to you within 24 hours.</p>
+        }">
+          <template x-if="success"><div class="cf-note">✓ Message sent! I'll reply within 24 hours.</div></template>
+          <form @submit.prevent="submit" x-show="!success" class="cf">
+            <div class="cf-row">
+              <input x-model="form.name" type="text" required placeholder="Name">
+              <input x-model="form.email" type="email" required placeholder="Email">
+            </div>
+            <input x-model="form.subject" type="text" placeholder="Subject (optional)">
+            <textarea x-model="form.message" required placeholder="Message…"></textarea>
+            <div x-show="error" class="cf-note" x-text="error" style="display:none;"></div>
+            <button type="submit" class="cf-btn" :disabled="loading" x-text="loading ? 'Sending…' : 'Send message →'">Send message →</button>
+          </form>
         </div>
       </div>
+    </section>
 
-      <!-- Error state -->
-      <div x-show="error" x-transition
-        class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-2 text-red-400 text-sm">
-        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <span x-text="error"></span>
-      </div>
+  </main>
 
-      <form @submit.prevent="submit" class="flex flex-col gap-4" x-show="!success">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs text-zinc-400 mb-1.5">Name <span class="text-red-500">*</span></label>
-            <input x-model="form.name" type="text" required placeholder="John Doe"
-              class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
-          </div>
-          <div>
-            <label class="block text-xs text-zinc-400 mb-1.5">Email <span class="text-red-500">*</span></label>
-            <input x-model="form.email" type="email" required placeholder="john@example.com"
-              class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
-          </div>
-        </div>
+  {{template "footer" .}}
 
-        <div>
-          <label class="block text-xs text-zinc-400 mb-1.5">Subject</label>
-          <input x-model="form.subject" type="text" placeholder="Project inquiry"
-            class="w-full bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="text-xs text-zinc-400">Message <span class="text-red-500">*</span></label>
-            <span class="text-xs font-mono transition-colors"
-              :class="charCount > maxChars ? 'text-red-400' : charNearLimit ? 'text-amber-400' : 'text-zinc-600'"
-              x-text="charCount + ' / ' + maxChars"></span>
-          </div>
-          <textarea x-model="form.message" required rows="5" placeholder="Tell me about your project..."
-            :class="charCount > maxChars ? 'border-red-500/50 focus:border-red-500' : 'border-zinc-800 focus:border-emerald-500'"
-            class="w-full bg-zinc-900 border rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors resize-none"></textarea>
-        </div>
-
-        <button
-          type="submit"
-          :disabled="loading || charCount > maxChars"
-          class="self-start inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-zinc-900 font-semibold text-sm rounded-lg transition-all"
-        >
-          <!-- Spinner -->
-          <svg x-show="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-          </svg>
-          <span x-text="loading ? 'Sending...' : 'Send Message'"></span>
-          <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-          </svg>
-        </button>
-      </form>
-    </div>
+  {{if $avatar}}
+  <!-- avatar lightbox -->
+  <div class="lb" x-show="lb" @click="lb=false" @keydown.escape.window="lb=false" x-transition.opacity style="display:none;">
+    <img src="{{$avatar}}" alt="Syarif Hidayatullah">
   </div>
-</section>
-
-{{template "footer" .}}
-
-{{if .profile}}{{if .profile.AvatarURL}}
-<!-- Avatar lightbox — di body level supaya fixed inset-0 benar-benar fullscreen -->
-<div id="avatar-lightbox"
-  onclick="if(event.target===this) this.style.display='none'"
-  style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.88); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding:1.5rem;"
-  onkeydown="if(event.key==='Escape') this.style.display='none'">
-  <div style="position:relative; max-width:22rem; width:100%;">
-    <img src="{{.profile.AvatarURL}}" alt="Syarif Hidayatullah"
-      style="width:100%; border-radius:1rem; box-shadow:0 25px 50px rgba(0,0,0,0.5); border:1px solid rgba(16,185,129,0.3);" />
-    <button onclick="document.getElementById('avatar-lightbox').style.display='none'"
-      style="position:absolute; top:-0.75rem; right:-0.75rem; width:2rem; height:2rem; background:#27272a; border:1px solid #3f3f46; border-radius:9999px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#a1a1aa;">
-      <svg style="width:1rem;height:1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-    </button>
-  </div>
+  {{end}}
 </div>
-<script>
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.getElementById('avatar-lightbox').style.display = 'none'
-  })
-</script>
-{{end}}{{end}}
 
 </body>
 </html>
