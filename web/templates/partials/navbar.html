@@ -1,76 +1,59 @@
 {{define "navbar"}}
-<header
-  x-data="{ open: false, scrolled: false, dark: document.documentElement.getAttribute('data-theme') !== 'light' }"
-  x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 20)"
-  :class="scrolled ? 'border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm' : 'bg-transparent'"
-  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
->
-  <nav class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="/" class="font-mono text-sm text-emerald-400 font-medium tracking-tight hover:text-emerald-300 transition-colors">
-      syarifhidayat<span class="text-zinc-400">.</span>dev
-    </a>
+<style>
+  /* ===== Neo-brutalist navbar ===== */
+  .nb-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
+  .nb-nav { display:flex; align-items:center; justify-content:space-between; padding:24px 0; position:relative; }
+  .nb-brand { font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--ink); text-decoration:none; letter-spacing:-.02em; }
+  .nb-pill { display:flex; align-items:center; gap:8px; font-size:15px; background:var(--surface); border:1px solid var(--navborder); border-radius:40px; padding:6px 8px; }
+  .nb-link { padding:7px 14px; color:var(--muted); border-radius:30px; text-decoration:none; font-weight:500; font-family:var(--font-sans); transition:color .2s, background .2s; }
+  .nb-link:hover { color:var(--ink); }
+  .nb-link.active { background:var(--red); color:#fff; font-weight:600; }
+  .nb-toggle { width:34px; height:34px; background:var(--yellow); color:#0d0d12; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; border:none; font-size:15px; line-height:1; flex:none; }
+  .nb-burger { width:34px; height:34px; background:var(--surface2); border:1px solid var(--navborder); color:var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; line-height:1; flex:none; }
+  .nb-mobile-ctrls { display:none; }
+  .nb-mobile { position:absolute; top:74px; right:0; left:0; background:var(--surface); border:1px solid var(--navborder); border-radius:20px; padding:10px; z-index:60; box-shadow:0 12px 30px rgba(0,0,0,.35); }
+  .nb-mobile a { display:block; padding:12px 16px; color:var(--muted); text-decoration:none; font-weight:600; font-family:var(--font-sans); border-radius:12px; }
+  .nb-mobile a:hover { color:var(--ink); }
+  .nb-mobile a.active { background:var(--red); color:#fff; }
+  @media (max-width:760px) {
+    .nb-desktop-links { display:none; }
+    .nb-mobile-ctrls { display:flex; }
+    .nb-shell { padding:0 20px; }
+    .nb-brand { font-size:20px; }
+  }
+</style>
+<header x-data="{ open:false, dark: document.documentElement.getAttribute('data-theme') !== 'light' }" @keydown.escape.window="open=false">
+  <div class="nb-shell">
+    <nav class="nb-nav">
+      <a href="/" class="nb-brand">syarifhidayat<span style="color:var(--red);">.dev</span></a>
 
-    <!-- Desktop nav -->
-    <ul class="hidden md:flex items-center gap-8">
-      <li><a href="/" class="text-sm transition-colors {{if eq .activeNav "home"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Home</a></li>
-      <li><a href="/projects" class="text-sm transition-colors {{if eq .activeNav "projects"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Projects</a></li>
-      <li><a href="/blog" class="text-sm transition-colors {{if eq .activeNav "blog"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Blog</a></li>
-      <li>
-        <a href="/#contact" class="text-sm px-4 py-1.5 rounded-full border transition-all {{if eq .activeNav "contact"}}border-emerald-500 text-emerald-400{{else}}border-zinc-700 text-zinc-300 hover:border-emerald-500 hover:text-emerald-400{{end}}">
-          Contact
-        </a>
-      </li>
-    </ul>
+      <!-- desktop pill -->
+      <div class="nb-pill nb-desktop-links">
+        <a href="/" class="nb-link {{if eq .activeNav "home"}}active{{end}}">Home</a>
+        <a href="/projects" class="nb-link {{if eq .activeNav "projects"}}active{{end}}">Projects</a>
+        <a href="/blog" class="nb-link {{if eq .activeNav "blog"}}active{{end}}">Blog</a>
+        <a href="/#contact" class="nb-link {{if eq .activeNav "contact"}}active{{end}}">Contact</a>
+        <button type="button" class="nb-toggle" aria-label="Toggle theme"
+          @click="dark=!dark; document.documentElement.setAttribute('data-theme', dark?'dark':'light'); localStorage.setItem('theme', dark?'dark':'light')"
+          x-text="dark ? '☀' : '☾'">☀</button>
+      </div>
 
-    <!-- Dark/light toggle -->
-    <button
-      @click="dark = !dark; document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light'); localStorage.setItem('theme', dark ? 'dark' : 'light')"
-      class="p-2 text-zinc-400 hover:text-zinc-100 transition-colors rounded-lg"
-      :title="dark ? 'Switch to light mode' : 'Switch to dark mode'"
-      aria-label="Toggle theme">
-      <!-- Sun icon (show in dark mode) -->
-      <svg x-show="dark" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-      </svg>
-      <!-- Moon icon (show in light mode) -->
-      <svg x-show="!dark" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-      </svg>
-    </button>
+      <!-- mobile controls -->
+      <div class="nb-pill nb-mobile-ctrls">
+        <button type="button" class="nb-toggle" aria-label="Toggle theme"
+          @click="dark=!dark; document.documentElement.setAttribute('data-theme', dark?'dark':'light'); localStorage.setItem('theme', dark?'dark':'light')"
+          x-text="dark ? '☀' : '☾'">☀</button>
+        <button type="button" class="nb-burger" aria-label="Menu" @click="open=!open" x-text="open ? '✕' : '☰'">☰</button>
+      </div>
 
-    <!-- Mobile menu button -->
-    <button
-      @click="open = !open"
-      class="md:hidden p-2 text-zinc-400 hover:text-zinc-100 transition-colors"
-      aria-label="Toggle menu"
-    >
-      <svg x-show="!open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-      <svg x-show="open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-    </button>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div
-    x-show="open"
-    x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="opacity-0 -translate-y-2"
-    x-transition:enter-end="opacity-100 translate-y-0"
-    x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100 translate-y-0"
-    x-transition:leave-end="opacity-0 -translate-y-2"
-    class="md:hidden border-t border-zinc-800 bg-zinc-950"
-    @click.away="open = false"
-  >
-    <ul class="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-4">
-      <li><a href="/" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "home"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Home</a></li>
-      <li><a href="/projects" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "projects"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Projects</a></li>
-      <li><a href="/blog" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "blog"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Blog</a></li>
-      <li><a href="/#contact" @click="open = false" class="text-sm transition-colors {{if eq .activeNav "contact"}}text-emerald-400 font-medium{{else}}text-zinc-400 hover:text-zinc-100{{end}}">Contact</a></li>
-    </ul>
+      <!-- mobile dropdown -->
+      <div class="nb-mobile" x-show="open" x-transition.opacity @click.away="open=false" style="display:none;">
+        <a href="/" class="{{if eq .activeNav "home"}}active{{end}}" @click="open=false">Home</a>
+        <a href="/projects" class="{{if eq .activeNav "projects"}}active{{end}}" @click="open=false">Projects</a>
+        <a href="/blog" class="{{if eq .activeNav "blog"}}active{{end}}" @click="open=false">Blog</a>
+        <a href="/#contact" class="{{if eq .activeNav "contact"}}active{{end}}" @click="open=false">Contact</a>
+      </div>
+    </nav>
   </div>
 </header>
 {{end}}
