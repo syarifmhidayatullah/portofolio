@@ -2,76 +2,102 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>{{template "head" .}}</head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+<body style="margin:0;">
+<style>
+  /* ===== Blog list (neo-brutalist) ===== */
+  .bl-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
+  .bl-head { padding:56px 0 36px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .bl-eyebrow { font-family:var(--font-mono); font-size:13px; color:var(--blue); letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px; }
+  .bl-title { font-family:var(--font-display); font-size:64px; line-height:.96; font-weight:800; letter-spacing:-.025em; margin:0; color:var(--ink); }
+  .bl-rss { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:13px; color:var(--faint); text-decoration:none; border:1px solid var(--navborder); padding:8px 14px; border-radius:24px; }
+  .bl-rss:hover { color:var(--red); border-color:var(--red); }
 
-{{template "navbar" .}}
+  .bl-featured { display:block; text-decoration:none; margin-bottom:36px; }
+  .bl-fc { background:var(--surface); border:1px solid var(--border); border-radius:24px; overflow:hidden; display:grid; grid-template-columns:1.1fr .9fr; box-shadow:7px 7px 0 var(--red); transition:transform .15s; }
+  .bl-featured:hover .bl-fc { transform:translate(-2px,-2px); }
+  .bl-fc-body { padding:40px; }
+  .bl-badge { display:inline-block; background:color-mix(in srgb,var(--red) 18%,transparent); color:var(--red); font-size:12px; font-weight:600; padding:5px 12px; border-radius:20px; }
+  .bl-fc-title { font-family:var(--font-display); font-size:34px; font-weight:700; line-height:1.05; margin:18px 0 14px; color:var(--ink); }
+  .bl-fc-excerpt { color:var(--muted); font-size:16px; line-height:1.7; margin:0 0 22px; }
+  .bl-meta { display:flex; gap:14px; flex-wrap:wrap; font-family:var(--font-mono); font-size:13px; color:var(--faint); }
+  .bl-meta .tag { color:var(--green); }
+  .bl-fc-cover { background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--bg) 14px,var(--bg) 28px); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--faint); min-height:240px; overflow:hidden; }
+  .bl-fc-cover img { width:100%; height:100%; object-fit:cover; }
 
-<main class="max-w-5xl mx-auto px-6 pt-32 pb-24">
-  <div class="mb-14 flex items-start justify-between gap-4">
-    <div>
-      <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Writing</p>
-      <h1 class="text-4xl font-semibold text-zinc-100">Blog</h1>
-      <p class="text-zinc-400 mt-3 max-w-lg">Thoughts on software engineering, architecture, and the craft of building things.</p>
-    </div>
-    <a href="/feed.xml" target="_blank" rel="noopener noreferrer"
-      class="flex-shrink-0 flex items-center gap-1.5 text-xs text-zinc-500 hover:text-orange-400 border border-zinc-800 hover:border-orange-400/50 px-3 py-1.5 rounded-lg transition-colors mt-2"
-      title="Subscribe via RSS">
-      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M6.18 15.64a2.18 2.18 0 012.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 012.18-2.18M4 4.44A15.56 15.56 0 0119.56 20h-2.83A12.73 12.73 0 004 7.27V4.44m0 5.66a9.9 9.9 0 019.9 9.9h-2.83A7.07 7.07 0 004 12.93V10.1z"/>
-      </svg>
-      RSS
-    </a>
-  </div>
+  .bl-grid { padding-bottom:64px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+  .bl-card { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--red); border-radius:18px; padding:26px; display:flex; flex-direction:column; gap:12px; min-height:200px; text-decoration:none; transition:transform .15s; }
+  .bl-card:hover { transform:translateY(-3px); }
+  .bl-card:nth-child(3n+2) { border-top-color:var(--blue); }
+  .bl-card:nth-child(3n+3) { border-top-color:var(--yellow); }
+  .bl-card-date { font-family:var(--font-mono); font-size:12px; color:var(--red); text-transform:uppercase; }
+  .bl-card:nth-child(3n+2) .bl-card-date { color:var(--blue); }
+  .bl-card:nth-child(3n+3) .bl-card-date { color:var(--yellow); }
+  .bl-card-title { font-weight:600; font-size:19px; line-height:1.25; color:var(--ink); }
+  .bl-card-excerpt { color:var(--muted); font-size:14px; line-height:1.55; flex:1; }
+  .bl-card-tag { font-family:var(--font-mono); font-size:12px; color:var(--faint); }
+  .bl-empty { text-align:center; padding:80px 0; color:var(--faint); }
 
-  {{if .posts}}
-  <div class="flex flex-col divide-y divide-zinc-800">
-    {{range .posts}}
-    <a href="/blog/{{.Slug}}" class="group block py-6 hover:bg-zinc-900/40 -mx-4 px-4 rounded-xl transition-colors">
-      {{if .CoverImage}}
-      <!-- Mobile: full-width banner; sm+: hidden (thumbnail shown in row below) -->
-      <div class="sm:hidden w-full h-40 rounded-lg overflow-hidden bg-zinc-800 mb-4">
-        <img src="{{.CoverImage}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+  @media (max-width:860px) {
+    .bl-fc { grid-template-columns:1fr; }
+    .bl-fc-cover { min-height:180px; order:-1; }
+    .bl-grid { grid-template-columns:1fr; }
+    .bl-title { font-size:46px; }
+  }
+  @media (max-width:760px) { .bl-shell { padding:0 20px; } }
+  @media (max-width:520px) { .bl-title { font-size:38px; } .bl-fc-body { padding:28px; } }
+</style>
+
+<div style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
+  {{template "navbar" .}}
+
+  <main class="bl-shell">
+    <div class="bl-head">
+      <div>
+        <div class="bl-eyebrow">// notes &amp; experiments</div>
+        <h1 class="bl-title">The <span style="color:var(--red);">blog.</span></h1>
       </div>
-      {{end}}
-      <div class="flex items-start gap-5">
-        {{if .CoverImage}}
-        <!-- Desktop: thumbnail on the left -->
-        <div class="hidden sm:block w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-800">
-          <img src="{{.CoverImage}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-        </div>
-        {{end}}
-        <div class="flex-1 min-w-0">
-          <h2 class="text-lg font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors mb-1.5 leading-snug">{{.Title}}</h2>
-          <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-2">{{.Excerpt}}</p>
-          <div class="flex flex-wrap items-center gap-2">
-            {{if .PublishedAt}}
-            <span class="text-xs text-zinc-600 font-mono">{{.PublishedAt.Format "Jan 2, 2006"}}</span>
-            <span class="text-zinc-700">·</span>
-            {{end}}
-            <span class="text-xs text-zinc-600 font-mono">{{readingTime .Content}} min read</span>
-            {{if .Tags}}
-            <span class="text-zinc-700">·</span>
-            {{range .Tags}}
-            <span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-xs font-mono rounded-full">{{.}}</span>
-            {{end}}
-            {{end}}
+      <a class="bl-rss" href="/feed.xml" target="_blank" rel="noopener noreferrer">RSS · feed.xml</a>
+    </div>
+
+    {{if .posts}}
+    {{range $i, $p := .posts}}{{if eq $i 0}}
+    <!-- featured (latest) -->
+    <a class="bl-featured" href="/blog/{{$p.Slug}}">
+      <div class="bl-fc">
+        <div class="bl-fc-body">
+          <span class="bl-badge">Latest</span>
+          <div class="bl-fc-title">{{$p.Title}}</div>
+          {{if $p.Excerpt}}<p class="bl-fc-excerpt">{{$p.Excerpt}}</p>{{end}}
+          <div class="bl-meta">
+            {{if $p.PublishedAt}}<span>{{$p.PublishedAt.Format "Jan 2006"}}</span><span>·</span>{{end}}
+            <span>{{readingTime $p.Content}} min read</span>
+            {{if $p.Tags}}<span>·</span><span class="tag">#{{index $p.Tags 0}}</span>{{end}}
           </div>
         </div>
-        <svg class="hidden md:block w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-        </svg>
+        <div class="bl-fc-cover">{{if $p.CoverImage}}<img src="{{$p.CoverImage}}" alt="{{$p.Title}}">{{else}}cover image{{end}}</div>
       </div>
     </a>
-    {{end}}
-  </div>
-  {{else}}
-  <div class="text-center py-20">
-    <p class="text-zinc-500">No posts yet. Check back soon.</p>
-  </div>
-  {{end}}
-</main>
+    {{end}}{{end}}
 
-{{template "footer" .}}
+    <!-- rest -->
+    <div class="bl-grid">
+      {{range $i, $p := .posts}}{{if gt $i 0}}
+      <a class="bl-card" href="/blog/{{$p.Slug}}">
+        <div class="bl-card-date">{{if $p.PublishedAt}}{{$p.PublishedAt.Format "Jan 2006"}} · {{end}}{{readingTime $p.Content}} min</div>
+        <div class="bl-card-title">{{$p.Title}}</div>
+        {{if $p.Excerpt}}<div class="bl-card-excerpt">{{$p.Excerpt}}</div>{{end}}
+        {{if $p.Tags}}<div class="bl-card-tag">#{{index $p.Tags 0}}</div>{{end}}
+      </a>
+      {{end}}{{end}}
+    </div>
+    {{else}}
+    <div class="bl-empty">No posts yet. Check back soon.</div>
+    {{end}}
+  </main>
+
+  {{template "footer" .}}
+</div>
+
 </body>
 </html>
 {{end}}

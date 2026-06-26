@@ -3,174 +3,172 @@
 <html lang="en" class="scroll-smooth">
 <head>
   {{template "head" .}}
-  <!-- Syntax highlighting theme (switched with dark/light mode) -->
-  <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css">
+  <!-- Syntax highlighting (code blocks stay dark in both themes) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
-  <style>
-    /* Let hljs handle code colors; keep only layout */
-    .hljs { background: transparent !important; padding: 0 !important; }
-  </style>
+  <style>.hljs { background:transparent !important; padding:0 !important; }</style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+<body style="margin:0;">
+<style>
+  /* ===== Blog detail (neo-brutalist) ===== */
+  .bd-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
+  .bd-head { padding:48px 0 30px; max-width:760px; }
+  .bd-back { font-family:var(--font-mono); font-size:13px; color:var(--muted); text-decoration:none; }
+  .bd-back:hover { color:var(--red); }
+  .bd-tags { display:flex; gap:10px; margin:24px 0 18px; flex-wrap:wrap; }
+  .bd-tag { font-size:12px; font-weight:600; padding:5px 12px; border-radius:20px; background:color-mix(in srgb,var(--green) 18%,transparent); color:var(--green); }
+  .bd-tags .bd-tag:nth-child(3n+2) { background:color-mix(in srgb,var(--blue) 18%,transparent); color:var(--blue); }
+  .bd-tags .bd-tag:nth-child(3n+3) { background:color-mix(in srgb,var(--red) 18%,transparent); color:var(--red); }
+  .bd-title { font-family:var(--font-display); font-size:52px; line-height:1.02; font-weight:800; letter-spacing:-.02em; margin:0 0 18px; color:var(--ink); }
+  .bd-excerpt { font-size:19px; line-height:1.6; color:var(--muted); border-left:3px solid var(--red); padding-left:18px; margin:0 0 22px; }
+  .bd-meta { display:flex; align-items:center; gap:14px; flex-wrap:wrap; font-family:var(--font-mono); font-size:13px; color:var(--faint); }
+  .bd-avatar { width:34px; height:34px; border-radius:50%; background:var(--surface2); border:1px solid var(--navborder); display:flex; align-items:center; justify-content:center; color:var(--ink); font-weight:600; }
 
-<!-- Scroll progress bar -->
-<div
-  x-data="{ p: 0 }"
-  @scroll.window.passive="p = Math.min(100, (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100)"
-  class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-zinc-800/50">
-  <div :style="`width:${p}%`" class="h-full bg-emerald-400 transition-[width] duration-75"></div>
+  .bd-share { display:flex; align-items:center; gap:10px; margin-top:22px; flex-wrap:wrap; }
+  .bd-share-l { font-family:var(--font-mono); font-size:12px; color:var(--faint); }
+  .bd-share-b { font-family:var(--font-mono); font-size:12px; color:var(--muted); text-decoration:none; border:1px solid var(--navborder); padding:6px 13px; border-radius:20px; background:none; cursor:pointer; transition:all .15s; }
+  .bd-share-b:hover { color:var(--ink); border-color:var(--faint); }
+
+  .bd-cover { aspect-ratio:21/9; border:1px solid var(--border); border-radius:18px; overflow:hidden; background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--bg) 14px,var(--bg) 28px); margin-bottom:48px; }
+  .bd-cover img { width:100%; height:100%; object-fit:cover; }
+
+  .bd-grid { display:grid; grid-template-columns:1fr 240px; gap:56px; align-items:start; padding-bottom:48px; }
+
+  /* TOC aside */
+  .bd-toc { position:sticky; top:24px; display:flex; flex-direction:column; gap:24px; }
+  .bd-toc-label { font-family:var(--font-mono); font-size:12px; color:var(--faint); letter-spacing:.08em; text-transform:uppercase; margin-bottom:14px; }
+  .bd-toc-nav { display:flex; flex-direction:column; gap:10px; font-size:14px; border-left:1px solid var(--border); padding-left:18px; }
+  .bd-toc-nav a { color:var(--muted); text-decoration:none; transition:color .15s; line-height:1.4; }
+  .bd-toc-nav a:hover { color:var(--ink); }
+  .bd-toc-nav a.on { color:var(--red); font-weight:600; }
+  .bd-toc-nav a.lvl3 { padding-left:12px; font-size:13px; }
+  .bd-sub { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; }
+  .bd-sub-t { font-weight:600; font-size:15px; margin-bottom:6px; color:var(--ink); }
+  .bd-sub-d { color:var(--muted); font-size:13px; line-height:1.5; margin-bottom:14px; }
+  .bd-sub-btn { display:block; background:var(--blue); color:#fff; text-align:center; font-weight:600; font-size:13px; padding:10px; border-radius:24px; text-decoration:none; }
+
+  /* article (rendered markdown) */
+  .article { max-width:720px; font-size:17.5px; line-height:1.8; color:var(--ink); }
+  .article > *:first-child { margin-top:0; }
+  .article p { margin:0 0 22px; color:var(--muted); }
+  .article h1 { font-family:var(--font-display); font-size:34px; font-weight:800; margin:36px 0 16px; color:var(--ink); letter-spacing:-.01em; scroll-margin-top:80px; }
+  .article h2 { font-family:var(--font-display); font-size:28px; font-weight:700; margin:40px 0 16px; color:var(--ink); letter-spacing:-.01em; scroll-margin-top:80px; }
+  .article h3 { font-family:var(--font-display); font-size:22px; font-weight:700; margin:32px 0 12px; color:var(--ink); scroll-margin-top:80px; }
+  .article a { color:var(--blue); text-decoration:underline; text-underline-offset:2px; }
+  .article ul, .article ol { margin:0 0 22px; padding-left:24px; color:var(--muted); }
+  .article li { margin:6px 0; }
+  .article li::marker { color:var(--faint); }
+  .article img { max-width:100%; border-radius:14px; border:1px solid var(--border); margin:12px 0; }
+  .article hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
+  .article strong { color:var(--ink); font-weight:700; }
+  .article blockquote { border-left:3px solid var(--red); margin:28px 0; padding:4px 0 4px 22px; font-family:var(--font-display); font-size:22px; line-height:1.5; color:var(--ink); }
+  .article blockquote p { color:var(--ink); }
+  .article table { width:100%; border-collapse:collapse; margin:0 0 24px; font-size:15px; }
+  .article th, .article td { border:1px solid var(--border); padding:10px 14px; text-align:left; color:var(--muted); }
+  .article th { color:var(--ink); background:var(--surface); }
+  .article :not(pre) > code { background:var(--surface) !important; border:1px solid var(--border); border-radius:6px; padding:2px 7px; font-family:var(--font-mono); font-size:.86em; color:var(--red) !important; }
+  .article pre { background:#0a0a0e !important; border:1px solid var(--border); border-radius:14px; padding:22px 24px; overflow-x:auto; margin:0 0 28px; position:relative; }
+  .article pre code { background:transparent !important; font-family:var(--font-mono); font-size:14px; line-height:1.7; padding:0; color:#e4e4e7; }
+
+  /* related */
+  .bd-related { border-top:1px solid var(--border); padding:40px 0 64px; }
+  .bd-related-h { font-family:var(--font-mono); font-size:13px; color:var(--blue); letter-spacing:.1em; text-transform:uppercase; margin-bottom:22px; }
+  .bd-rel-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .bd-rel-card { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--red); border-radius:16px; padding:20px; text-decoration:none; transition:transform .15s; }
+  .bd-rel-card:hover { transform:translateY(-3px); }
+  .bd-rel-card:nth-child(3n+2) { border-top-color:var(--blue); }
+  .bd-rel-card:nth-child(3n+3) { border-top-color:var(--yellow); }
+  .bd-rel-title { font-weight:600; font-size:16px; line-height:1.3; color:var(--ink); margin-bottom:8px; }
+  .bd-rel-excerpt { color:var(--muted); font-size:13px; line-height:1.5; }
+
+  @media (max-width:900px) {
+    .bd-grid { grid-template-columns:1fr; }
+    .bd-toc { display:none; }
+    .bd-title { font-size:40px; }
+    .bd-rel-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:760px) { .bd-shell { padding:0 20px; } }
+  @media (max-width:520px) { .bd-title { font-size:32px; } .article { font-size:16.5px; } }
+</style>
+
+<!-- scroll progress -->
+<div x-data="{ p:0 }" @scroll.window.passive="p = Math.min(100, (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100)"
+  style="position:fixed; top:0; left:0; right:0; z-index:70; height:3px; background:transparent;">
+  <div :style="`width:${p}%`" style="height:100%; background:var(--red); transition:width .075s;"></div>
 </div>
 
-{{template "navbar" .}}
+<div style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
+  {{template "navbar" .}}
 
-<main class="max-w-3xl mx-auto px-6 pt-32 pb-24">
-
-  <!-- Back link -->
-  <a href="/blog" class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors mb-10 group">
-    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
-    </svg>
-    Back to blog
-  </a>
-
-  <!-- Post header -->
-  <header class="mb-12">
-    <div class="flex items-center gap-3 mb-3">
-      {{if .post.PublishedAt}}
-      <time class="text-xs font-mono text-zinc-500">{{.post.PublishedAt.Format "January 2, 2006"}}</time>
-      <span class="text-zinc-700">·</span>
-      {{end}}
-      <span class="text-xs font-mono text-zinc-500">{{readingTime .post.Content}} min read</span>
+  <main class="bd-shell">
+    <!-- header -->
+    <div class="bd-head">
+      <a class="bd-back" href="/blog">← All posts</a>
+      {{if .post.Tags}}<div class="bd-tags">{{range .post.Tags}}<span class="bd-tag">#{{.}}</span>{{end}}</div>{{end}}
+      <h1 class="bd-title">{{.post.Title}}</h1>
+      {{if .post.Excerpt}}<p class="bd-excerpt">{{.post.Excerpt}}</p>{{end}}
+      <div class="bd-meta">
+        <span class="bd-avatar">S</span>
+        <span>Syarif Hidayatullah</span>
+        {{if .post.PublishedAt}}<span>·</span><span>{{.post.PublishedAt.Format "2 Jan 2006"}}</span>{{end}}
+        <span>·</span><span>{{readingTime .post.Content}} min read</span>
+      </div>
+      <div class="bd-share" x-data="{ copied:false }">
+        <span class="bd-share-l">Share</span>
+        <button class="bd-share-b" @click="navigator.clipboard.writeText(window.location.href); copied=true; setTimeout(()=>copied=false,2000)" x-text="copied ? 'Copied!' : 'Copy link'">Copy link</button>
+        <a class="bd-share-b" :href="'https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + '&url=' + encodeURIComponent(window.location.href)" target="_blank" rel="noopener noreferrer">X</a>
+        <a class="bd-share-b" :href="'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href)" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
     </div>
-    <h1 class="text-3xl md:text-4xl font-semibold text-zinc-50 leading-tight mb-4">{{.post.Title}}</h1>
-    {{if .post.Excerpt}}
-    <p class="text-zinc-400 text-lg leading-relaxed border-l-2 border-emerald-500 pl-4 mb-4">{{.post.Excerpt}}</p>
+
+    {{if .post.CoverImage}}
+    <div class="bd-cover"><img src="{{.post.CoverImage}}" alt="{{.post.Title}}"></div>
     {{end}}
-    {{if .post.Tags}}
-    <div class="flex flex-wrap gap-2">
-      {{range .post.Tags}}
-      <span class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono rounded-full">{{.}}</span>
-      {{end}}
+
+    <!-- body + TOC -->
+    <div class="bd-grid">
+      <article class="article" id="post-article">{{safeHTML .renderedHTML}}</article>
+
+      <aside class="bd-toc">
+        <div id="toc-block" style="display:none;">
+          <div class="bd-toc-label">Contents</div>
+          <nav id="toc-nav" class="bd-toc-nav"></nav>
+        </div>
+        <div class="bd-sub">
+          <div class="bd-sub-t">Enjoyed this?</div>
+          <div class="bd-sub-d">Get new posts via RSS.</div>
+          <a class="bd-sub-btn" href="/feed.xml" target="_blank" rel="noopener noreferrer">Subscribe</a>
+        </div>
+      </aside>
     </div>
-    {{end}}
-  </header>
 
-  {{if .post.CoverImage}}
-  <div class="w-full rounded-xl overflow-hidden mb-12 bg-zinc-900">
-    <img src="{{.post.CoverImage}}" alt="{{.post.Title}}" class="w-full h-64 object-cover" />
-  </div>
-  {{end}}
-
-  <!-- Share bar -->
-  <div x-data="{ copied: false }" class="flex items-center gap-3 mb-10 pb-8 border-b border-zinc-800">
-    <span class="text-xs text-zinc-500 font-mono mr-1">Share:</span>
-    <button
-      @click="navigator.clipboard.writeText(window.location.href); copied = true; setTimeout(() => copied = false, 2000)"
-      class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-      </svg>
-      <span x-text="copied ? 'Copied!' : 'Copy link'"></span>
-    </button>
-    <a :href="'https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + '&url=' + encodeURIComponent(window.location.href)"
-      target="_blank" rel="noopener noreferrer"
-      class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
-      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.732-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-      </svg>
-      X / Twitter
-    </a>
-    <a :href="'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href)"
-      target="_blank" rel="noopener noreferrer"
-      class="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-600">
-      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-      </svg>
-      LinkedIn
-    </a>
-  </div>
-
-  <!-- Table of Contents (injected by JS if headings exist) -->
-  <div id="toc-container"
-    x-data="{ open: false }"
-    class="hidden mb-8 bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden">
-    <button @click="open = !open"
-      class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors">
-      <span class="flex items-center gap-2">
-        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h10M4 14h12M4 18h8"/>
-        </svg>
-        Table of Contents
-      </span>
-      <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 text-zinc-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-      </svg>
-    </button>
-    <nav id="toc-nav" x-show="open" x-transition class="px-4 pb-4 border-t border-zinc-800 pt-3">
-      <!-- Injected by JS -->
-    </nav>
-  </div>
-
-  <!-- Post content (rendered markdown) -->
-  <article id="post-article" class="prose prose-invert prose-emerald max-w-none
-    prose-headings:font-semibold prose-headings:text-zinc-100
-    prose-p:text-zinc-300 prose-p:leading-relaxed
-    prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
-    prose-code:text-emerald-300 prose-code:bg-zinc-900 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono
-    prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800
-    prose-blockquote:border-l-emerald-500 prose-blockquote:text-zinc-400
-    prose-strong:text-zinc-200
-    prose-img:rounded-lg
-    prose-hr:border-zinc-800">
-    {{safeHTML .renderedHTML}}
-  </article>
-
-  {{if .relatedPosts}}
-  <!-- Related Posts -->
-  <aside class="mt-16 pt-10 border-t border-zinc-800">
-    <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-6">Related Posts</p>
-    <div class="grid sm:grid-cols-3 gap-4">
-    {{range .relatedPosts}}
-    <a href="/blog/{{.Slug}}" class="group bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl p-4 transition-all hover:-translate-y-0.5">
-      <h3 class="font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors text-sm leading-snug mb-2">{{.Title}}</h3>
-      <p class="text-zinc-500 text-xs leading-relaxed line-clamp-2">{{.Excerpt}}</p>
-      {{if .Tags}}
-      <div class="flex flex-wrap gap-1 mt-3">
-        {{range .Tags}}
-        <span class="px-1.5 py-0.5 bg-zinc-800 text-zinc-500 text-xs font-mono rounded">{{.}}</span>
+    {{if .relatedPosts}}
+    <div class="bd-related">
+      <div class="bd-related-h">Related posts</div>
+      <div class="bd-rel-grid">
+        {{range .relatedPosts}}
+        <a class="bd-rel-card" href="/blog/{{.Slug}}">
+          <div class="bd-rel-title">{{.Title}}</div>
+          {{if .Excerpt}}<div class="bd-rel-excerpt">{{.Excerpt}}</div>{{end}}
+        </a>
         {{end}}
       </div>
-      {{end}}
-    </a>
-    {{end}}
     </div>
-  </aside>
-  {{end}}
+    {{end}}
+  </main>
 
-</main>
-
-{{template "footer" .}}
+  {{template "footer" .}}
+</div>
 
 <script>
-  const HLJS_DARK = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css'
-  const HLJS_LIGHT = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css'
-
-  function syncHljsTheme() {
-    const light = document.documentElement.getAttribute('data-theme') === 'light'
-    document.getElementById('hljs-theme').href = light ? HLJS_LIGHT : HLJS_DARK
-  }
-
-  // Watch for theme toggle
-  new MutationObserver(syncHljsTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-
   document.addEventListener('DOMContentLoaded', () => {
-    syncHljsTheme()
-    hljs.highlightAll()
+    // syntax highlight
+    if (window.hljs) hljs.highlightAll()
 
-    // ── Table of Contents ──────────────────────────────
+    // ── Table of Contents ──
     const headings = document.querySelectorAll('#post-article h2, #post-article h3')
     if (headings.length >= 2) {
-      document.getElementById('toc-container').classList.remove('hidden')
+      document.getElementById('toc-block').style.display = ''
       const nav = document.getElementById('toc-nav')
       headings.forEach((h, i) => {
         if (!h.id) h.id = 'heading-' + i
@@ -178,56 +176,35 @@
         a.href = '#' + h.id
         a.textContent = h.textContent
         a.dataset.id = h.id
-        a.className = h.tagName === 'H3'
-          ? 'block pl-4 py-0.5 text-xs text-zinc-500 hover:text-emerald-400 transition-colors border-l border-zinc-800'
-          : 'block py-1 text-sm text-zinc-400 hover:text-emerald-400 transition-colors'
-        a.onclick = e => { e.preventDefault(); document.getElementById(h.id).scrollIntoView({ behavior: 'smooth' }) }
+        if (h.tagName === 'H3') a.className = 'lvl3'
+        a.onclick = e => { e.preventDefault(); document.getElementById(h.id).scrollIntoView({ behavior:'smooth' }) }
         nav.appendChild(a)
       })
-
-      // Scroll spy
       const links = nav.querySelectorAll('a')
-      new IntersectionObserver(entries => {
+      const spy = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            links.forEach(l => {
-              const active = l.dataset.id === entry.target.id
-              l.classList.toggle('text-emerald-400', active)
-              l.classList.toggle('text-zinc-400', !active && l.tagName !== 'H3')
-            })
+            links.forEach(l => l.classList.toggle('on', l.dataset.id === entry.target.id))
           }
         })
-      }, { rootMargin: '-20% 0px -70% 0px' }).observe
-      // observe all headings
-      ;[...headings].forEach(h => {
-        new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              links.forEach(l => l.classList.remove('text-emerald-400', 'font-medium'))
-              const active = nav.querySelector(`[data-id="${entry.target.id}"]`)
-              if (active) { active.classList.add('text-emerald-400', 'font-medium') }
-            }
-          })
-        }, { rootMargin: '-10% 0px -80% 0px' }).observe(h)
-      })
+      }, { rootMargin: '-10% 0px -80% 0px' })
+      headings.forEach(h => spy.observe(h))
     }
 
-    // Inject copy button into every code block after DOM is ready
-    document.querySelectorAll('article pre').forEach(pre => {
+    // ── Copy buttons on code blocks ──
+    document.querySelectorAll('.article pre').forEach(pre => {
       const btn = document.createElement('button')
       btn.textContent = 'Copy'
-      btn.style.cssText = 'position:absolute;top:0.6rem;right:0.6rem;font-size:0.7rem;font-family:monospace;padding:0.25rem 0.6rem;background:#3f3f46;color:#a1a1aa;border:1px solid #52525b;border-radius:0.375rem;cursor:pointer;transition:all 0.15s;'
-      btn.onmouseenter = () => { btn.style.background = '#52525b'; btn.style.color = '#f4f4f5' }
-      btn.onmouseleave = () => { btn.style.background = '#3f3f46'; btn.style.color = '#a1a1aa' }
+      btn.style.cssText = 'position:absolute;top:.6rem;right:.6rem;font-size:.7rem;font-family:var(--font-mono),monospace;padding:.25rem .6rem;background:#1a1a22;color:#a6a6b2;border:1px solid #2a2a34;border-radius:8px;cursor:pointer;transition:all .15s;'
+      btn.onmouseenter = () => { btn.style.color = '#f4f4f5' }
+      btn.onmouseleave = () => { btn.style.color = '#a6a6b2' }
       btn.onclick = () => {
         const code = pre.querySelector('code')
         navigator.clipboard.writeText(code ? code.textContent : pre.textContent).then(() => {
-          btn.textContent = 'Copied!'
-          btn.style.color = '#34d399'
-          setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = '#a1a1aa' }, 2000)
+          btn.textContent = 'Copied!'; btn.style.color = '#3dffa0'
+          setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = '#a6a6b2' }, 2000)
         })
       }
-      pre.style.position = 'relative'
       pre.appendChild(btn)
     })
   })
