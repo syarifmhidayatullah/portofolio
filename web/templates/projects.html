@@ -2,120 +2,129 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>{{template "head" .}}</head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+<body style="margin:0;">
+<style>
+  /* ===== Projects (neo-brutalist) ===== */
+  .pp-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
+  .pp-head { padding:56px 0 40px; }
+  .pp-eyebrow { font-family:var(--font-mono); font-size:13px; color:var(--red); letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px; }
+  .pp-title { font-family:var(--font-display); font-size:64px; line-height:.96; font-weight:800; letter-spacing:-.025em; margin:0 0 18px; color:var(--ink); }
+  .pp-lead { font-size:18px; color:var(--muted); max-width:520px; margin:0; line-height:1.6; }
 
-{{template "navbar" .}}
+  .pp-filters { display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
+  .pp-chip { background:var(--surface); border:1px solid var(--navborder); color:var(--muted); font-weight:600; font-size:14px; font-family:var(--font-mono); padding:9px 18px; border-radius:30px; cursor:pointer; transition:all .15s; }
+  .pp-chip:hover { color:var(--ink); border-color:var(--faint); }
+  .pp-chip.pp-chip-on { background:var(--red); border-color:var(--red); color:#fff; }
 
-<main class="max-w-5xl mx-auto px-6 pt-32 pb-24">
-  <div class="mb-10">
-    <p class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2">Work</p>
-    <h1 class="text-4xl font-semibold text-zinc-100">Projects</h1>
-    <p class="text-zinc-400 mt-3 max-w-lg">A collection of things I've built — from production systems to side experiments.</p>
-  </div>
+  .pp-grid { padding:8px 0 40px; display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .pp-card { background:var(--surface); border:1px solid var(--border); border-radius:22px; overflow:hidden; transition:transform .15s; box-shadow:6px 6px 0 var(--red); }
+  .pp-card:hover { transform:translate(-2px,-2px); }
+  .pp-card:nth-child(3n+2) { box-shadow:6px 6px 0 var(--blue); }
+  .pp-card:nth-child(3n+3) { box-shadow:6px 6px 0 var(--green); }
+  .pp-shot { aspect-ratio:16/9; background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 12px,var(--bg) 12px,var(--bg) 24px); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--faint); position:relative; overflow:hidden; }
+  .pp-shot img { width:100%; height:100%; object-fit:cover; }
+  .pp-badge { position:absolute; top:14px; left:14px; background:color-mix(in srgb,var(--yellow) 22%,transparent); color:var(--yellow); font-size:11px; font-weight:600; padding:5px 11px; border-radius:20px; z-index:1; }
+  .pp-body { padding:24px; }
+  .pp-title-row { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .pp-name { font-weight:600; font-size:21px; color:var(--ink); }
+  .pp-year { font-family:var(--font-mono); font-size:12px; color:var(--faint); white-space:nowrap; }
+  .pp-desc { color:var(--muted); font-size:15px; margin:7px 0 14px; line-height:1.55; }
+  .pp-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .pp-tag { font-family:var(--font-mono); font-size:12px; padding:4px 10px; border-radius:20px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); cursor:pointer; transition:all .15s; }
+  .pp-tag:hover { color:var(--ink); }
+  .pp-tag.pp-tag-on { background:color-mix(in srgb,var(--red) 16%,transparent); border-color:var(--red); color:var(--red); }
+  .pp-links { display:flex; gap:16px; padding-top:12px; border-top:1px solid var(--border); }
+  .pp-links a { font-family:var(--font-mono); font-size:13px; color:var(--faint); text-decoration:none; }
+  .pp-links a:hover { color:var(--red); }
+  .pp-empty { text-align:center; padding:64px 0; color:var(--faint); }
+  .pp-empty button { background:none; border:none; color:var(--blue); cursor:pointer; font-size:14px; }
 
-  {{if .projects}}
-  <div x-data="{ activeFilter: '' }">
+  @media (max-width:860px) {
+    .pp-grid { grid-template-columns:1fr; }
+    .pp-title { font-size:46px; }
+  }
+  @media (max-width:760px) { .pp-shell { padding:0 20px; } }
+  @media (max-width:520px) { .pp-title { font-size:38px; } }
+</style>
 
-    <!-- Filter chips -->
-    {{if .allTechs}}
-    <div class="flex flex-wrap gap-2 mb-8">
-      <button @click="activeFilter = ''"
-        :class="activeFilter === '' ? 'bg-emerald-500 text-zinc-900' : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-600'"
-        class="text-xs font-semibold px-3 py-1.5 rounded-full transition-all whitespace-nowrap">
-        All
-      </button>
-      {{range .allTechs}}
-      <button @click="activeFilter = activeFilter === '{{.}}' ? '' : '{{.}}'"
-        :class="activeFilter === '{{.}}' ? 'bg-emerald-500 text-zinc-900' : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-600'"
-        class="text-xs font-mono px-3 py-1.5 rounded-full transition-all whitespace-nowrap">
-        {{.}}
-      </button>
-      {{end}}
+<div style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
+  {{template "navbar" .}}
+
+  <main class="pp-shell">
+    <!-- header -->
+    <div class="pp-head">
+      <div class="pp-eyebrow">// {{len .projects}} projects, all real</div>
+      <h1 class="pp-title">Things I've<br><span style="color:var(--blue);">shipped.</span></h1>
+      <p class="pp-lead">From internal dashboards to public products — a selection of things I've built from idea to production.</p>
     </div>
-    {{end}}
 
-    <!-- Project grid -->
-    <div class="grid md:grid-cols-2 gap-5">
-      {{range .projects}}
-      <div
-        x-show="!activeFilter || $el.dataset.tech.split(',').map(t=>t.trim()).includes(activeFilter)"
-        x-transition:enter="transition duration-200"
-        x-transition:enter-start="opacity-0 scale-95"
-        x-transition:enter-end="opacity-100 scale-100"
-        data-tech="{{joinStrings .TechStack ","}}"
-        class="group relative bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl overflow-hidden transition-all hover:-translate-y-0.5">
-        {{if .ImageURL}}
-        <div class="w-full h-44 overflow-hidden bg-zinc-800">
-          <img src="{{.ImageURL}}" alt="{{.Title}}" class="w-full h-full object-cover opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" />
-        </div>
-        {{else}}
-        <div class="w-full h-44 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
-          <span class="text-4xl font-semibold text-zinc-700">{{slice .Title 0 1}}</span>
-        </div>
+    {{if .projects}}
+    <div x-data="{ activeFilter: '' }">
+
+      <!-- filter chips -->
+      {{if .allTechs}}
+      <div class="pp-filters">
+        <span class="pp-chip" :class="activeFilter === '' ? 'pp-chip-on' : ''" @click="activeFilter = ''">All</span>
+        {{range .allTechs}}
+        <span class="pp-chip" :class="activeFilter === '{{.}}' ? 'pp-chip-on' : ''"
+          @click="activeFilter = activeFilter === '{{.}}' ? '' : '{{.}}'">{{.}}</span>
         {{end}}
-
-        <div class="p-6">
-          <div class="flex items-start justify-between mb-2">
-            <h3 class="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors">{{.Title}}</h3>
-            {{if .Featured}}
-            <span class="text-xs font-mono text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">Featured</span>
-            {{end}}
-          </div>
-
-          <p class="text-zinc-400 text-sm leading-relaxed mb-4">{{.Description}}</p>
-
-          <div class="flex flex-wrap gap-1.5 mb-5">
-            {{range .TechStack}}
-            <button @click="activeFilter = '{{.}}'"
-              class="px-2 py-0.5 text-xs font-mono rounded transition-colors cursor-pointer"
-              :class="activeFilter === '{{.}}' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-zinc-800/80 text-zinc-400 hover:bg-zinc-700'">
-              {{.}}
-            </button>
-            {{end}}
-          </div>
-
-          <div class="flex items-center gap-4 pt-4 border-t border-zinc-800">
-            {{if .LiveURL}}
-            <a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer"
-              class="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-emerald-400 transition-colors font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-              </svg>
-              Live Demo
-            </a>
-            {{end}}
-            {{if .GithubURL}}
-            <a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer"
-              class="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
-              </svg>
-              Source
-            </a>
-            {{end}}
-          </div>
-        </div>
       </div>
       {{end}}
+
+      <!-- grid -->
+      <div class="pp-grid">
+        {{range .projects}}
+        <div class="pp-card"
+          data-tech="{{joinStrings .TechStack ","}}"
+          x-show="!activeFilter || $el.dataset.tech.split(',').map(t=>t.trim()).includes(activeFilter)"
+          x-transition:enter="transition duration-200"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100">
+          <div class="pp-shot">
+            {{if .Featured}}<span class="pp-badge">★ Featured</span>{{end}}
+            {{if .ImageURL}}<img src="{{.ImageURL}}" alt="{{.Title}}">{{else}}project shot{{end}}
+          </div>
+          <div class="pp-body">
+            <div class="pp-title-row">
+              <div class="pp-name">{{.Title}}</div>
+              <span class="pp-year">{{.CreatedAt.Format "2006"}}</span>
+            </div>
+            {{if .Description}}<div class="pp-desc">{{.Description}}</div>{{end}}
+            {{if .TechStack}}
+            <div class="pp-tags">
+              {{range .TechStack}}
+              <span class="pp-tag" :class="activeFilter === '{{.}}' ? 'pp-tag-on' : ''" @click="activeFilter = '{{.}}'">{{.}}</span>
+              {{end}}
+            </div>
+            {{end}}
+            {{if or .LiveURL .GithubURL}}
+            <div class="pp-links">
+              {{if .LiveURL}}<a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>{{end}}
+              {{if .GithubURL}}<a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer">Source ↗</a>{{end}}
+            </div>
+            {{end}}
+          </div>
+        </div>
+        {{end}}
+      </div>
+
+      <!-- empty filter result -->
+      <div class="pp-empty"
+        x-show="activeFilter !== '' && [...document.querySelectorAll('.pp-card[data-tech]')].every(el => !el.dataset.tech.split(',').map(t=>t.trim()).includes(activeFilter))"
+        style="display:none;">
+        <p>No projects tagged <span style="color:var(--ink); font-family:var(--font-mono);" x-text="activeFilter"></span>.</p>
+        <button @click="activeFilter = ''">Show all projects</button>
+      </div>
     </div>
+    {{else}}
+    <div class="pp-empty"><p>No projects yet. Check back soon.</p></div>
+    {{end}}
+  </main>
 
-    <!-- Empty state when filter has no results -->
-    <div x-show="activeFilter !== '' && $el.previousElementSibling.querySelectorAll('[data-tech]').length > 0 && [...$el.previousElementSibling.querySelectorAll('[data-tech]')].every(el => !el.dataset.tech.split(',').map(t=>t.trim()).includes(activeFilter))"
-      class="text-center py-16">
-      <p class="text-zinc-500 text-sm mb-3">No projects with <span class="text-zinc-300 font-mono" x-text="activeFilter"></span></p>
-      <button @click="activeFilter = ''" class="text-xs text-emerald-400 hover:underline">Show all projects</button>
-    </div>
-  </div>
+  {{template "footer" .}}
+</div>
 
-  {{else}}
-  <div class="text-center py-20">
-    <p class="text-zinc-500">No projects yet. Check back soon.</p>
-  </div>
-  {{end}}
-</main>
-
-{{template "footer" .}}
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
 {{end}}
