@@ -12,7 +12,7 @@ Monolith Go dengan server-side rendering — tidak ada frontend framework terpis
 | Backend | Go 1.23 + Gin framework |
 | ORM | GORM v2 |
 | Database | PostgreSQL |
-| Frontend | Alpine.js (CDN) + Tailwind CSS (CDN) |
+| Frontend | Alpine.js (CDN) + custom CSS (neo-brutalist design tokens, no Tailwind) |
 | Templates | Go `html/template` |
 | Markdown | goldmark |
 | Auth | Session-based (gin-contrib/sessions + bcrypt) |
@@ -33,11 +33,11 @@ internal/
 migrations/001_init.sql     # PostgreSQL DDL (referensi, AutoMigrate yang dipakai)
 web/
   templates/
-    partials/               # head.html, navbar.html, footer.html, admin_sidebar.html
+    partials/               # head.html, navbar.html, footer.html, admin_head.html, admin_sidebar.html
     *.html                  # Public pages: home, blog_list, blog_detail, projects, error
     admin/*.html            # Admin pages: login, dashboard, posts, projects, messages
   static/
-    css/input.css           # Tailwind source (belum di-build, sekarang pakai CDN)
+    css/input.css           # (legacy Tailwind source, tidak dipakai lagi)
 ```
 
 ## Database Config
@@ -71,7 +71,7 @@ make dev
 CGO_ENABLED=0 go run ./cmd/server/main.go
 ```
 
-> Semua template menggunakan **Tailwind CDN** — tidak butuh Node.js atau build step.
+> Styling pakai **CSS variables / design tokens** (neo-brutalist), bukan Tailwind. Token publik di `partials/head.html` (dark default + `[data-theme="light"]`), token admin (selalu dark) di `partials/admin_head.html`. Tidak butuh Node.js atau build step. Font: Bricolage Grotesque (display), Space Grotesk (body), IBM Plex Mono (mono).
 
 ## Routes
 

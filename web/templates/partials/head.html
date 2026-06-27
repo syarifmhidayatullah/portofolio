@@ -26,15 +26,14 @@
 <meta name="twitter:title" content="{{.title}} — Syarif Hidayatullah" />
 <meta name="twitter:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}Software Engineer — Building elegant backend systems and developer tools.{{end}}" />
 {{if .ogImage}}<meta name="twitter:image" content="{{.ogImage}}" />{{end}}
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<!-- Redesign fonts: Bricolage Grotesque (display), Space Grotesk (body), IBM Plex Mono (mono) -->
+<!-- Design fonts: Bricolage Grotesque (display), Space Grotesk (body), IBM Plex Mono (mono) -->
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-  /* ===== Neo-brutalist design tokens (redesign foundation) =====
-     Neutrals swap between dark (default) & light. Accent colors stay fixed.
-     Values lifted from the approved Claude Design export. */
+  /* ===== Neo-brutalist design tokens =====
+     Neutrals swap between dark (default) & light. Accent colors stay fixed. */
   :root {
     --bg:#0d0d12; --surface:#16161d; --surface2:#1a1a22; --border:#23232c;
     --navborder:#2a2a34; --ink:#f4f4f5; --muted:#a6a6b2; --faint:#5a5a66;
@@ -47,158 +46,13 @@
     --bg:#fff7f0; --surface:#ffffff; --surface2:#fdf2e9; --border:#eaded2;
     --navborder:#e2d4c5; --ink:#171514; --muted:#5a534f; --faint:#a08e80;
   }
-</style>
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Inter', 'system-ui', 'sans-serif'],
-          mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        },
-      }
-    },
-    plugins: [],
-  }
-</script>
-<style type="text/tailwindcss">
-  @layer utilities {
-    .line-clamp-2 {
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-    .line-clamp-3 {
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-    }
-  }
-</style>
-<style>
-  /* ===== Light mode theme overrides ===== */
-  [data-theme="light"] body { background-color:#f8fafc !important; color:#111827 !important; }
-  [data-theme="light"] .bg-zinc-950 { background-color:#f8fafc !important; }
-  [data-theme="light"] .bg-zinc-900 { background-color:#ffffff !important; }
-  [data-theme="light"] .bg-zinc-800, [data-theme="light"] .bg-zinc-800\/80 { background-color:#f1f5f9 !important; }
-  [data-theme="light"] .bg-zinc-900\/40, [data-theme="light"] .bg-zinc-900\/50 { background-color:rgba(241,245,249,0.5) !important; }
-  [data-theme="light"] .text-zinc-50, [data-theme="light"] .text-zinc-100 { color:#0f172a !important; }
-  [data-theme="light"] .text-zinc-200 { color:#1e293b !important; }
-  [data-theme="light"] .text-zinc-300 { color:#334155 !important; }
-  [data-theme="light"] .text-zinc-400 { color:#475569 !important; }
-  [data-theme="light"] .text-zinc-500 { color:#64748b !important; }
-  [data-theme="light"] .text-zinc-600 { color:#94a3b8 !important; }
-  [data-theme="light"] .text-zinc-700 { color:#cbd5e1 !important; }
-  [data-theme="light"] .border-zinc-800 { border-color:#e2e8f0 !important; }
-  [data-theme="light"] .border-zinc-800\/50 { border-color:rgba(226,232,240,0.5) !important; }
-  [data-theme="light"] .border-zinc-700 { border-color:#cbd5e1 !important; }
-  [data-theme="light"] .divide-zinc-800>*+* { border-color:#e2e8f0 !important; }
-  [data-theme="light"] .bg-zinc-950\/80, [data-theme="light"] .bg-zinc-950\/90 { background-color:rgba(248,250,252,0.92) !important; }
-  [data-theme="light"] .hover\:bg-zinc-800:hover { background-color:#f1f5f9 !important; }
-  [data-theme="light"] .hover\:bg-zinc-800\/50:hover { background-color:rgba(241,245,249,0.5) !important; }
-  [data-theme="light"] .ring-zinc-950 { --tw-ring-color:#f8fafc !important; }
-  [data-theme="light"] .bg-zinc-900\/50 { background-color:rgba(255,255,255,0.7) !important; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; }
 
-  /* Emerald: lebih pekat di light mode untuk kontras yang proper */
-  [data-theme="light"] .text-emerald-400 { color:#059669 !important; }
-  [data-theme="light"] .text-emerald-300 { color:#047857 !important; }
-  [data-theme="light"] .hover\:text-emerald-400:hover { color:#059669 !important; }
-  [data-theme="light"] .hover\:text-emerald-300:hover { color:#047857 !important; }
-  [data-theme="light"] .group:hover .group-hover\:text-emerald-400 { color:#059669 !important; }
-  [data-theme="light"] .border-emerald-500 { border-color:#059669 !important; }
-  [data-theme="light"] .border-emerald-400\/20 { border-color:rgba(5,150,105,0.25) !important; }
-  [data-theme="light"] .bg-emerald-400\/10 { background-color:rgba(5,150,105,0.08) !important; }
-  [data-theme="light"] .bg-emerald-500\/10 { background-color:rgba(5,150,105,0.08) !important; }
-  [data-theme="light"] .bg-emerald-500\/20 { background-color:rgba(5,150,105,0.12) !important; }
-  [data-theme="light"] .hover\:border-emerald-500:hover { border-color:#059669 !important; }
-  [data-theme="light"] .hover\:border-emerald-500\/50:hover { border-color:rgba(5,150,105,0.5) !important; }
-  [data-theme="light"] .hover\:bg-emerald-500\/5:hover { background-color:rgba(5,150,105,0.06) !important; }
-  [data-theme="light"] .ring-emerald-500\/30 { --tw-ring-color:rgba(5,150,105,0.3) !important; }
-  [data-theme="light"] .from-emerald-400 { --tw-gradient-from:#059669 !important; }
-  [data-theme="light"] .shadow-emerald-200 { --tw-shadow-color:#a7f3d0 !important; }
-  /* Prose link emerald */
-  [data-theme="light"] article a { color:#059669 !important; }
-
-  /* Fix dark gradient backgrounds (avatar, project placeholders) */
-  [data-theme="light"] .from-zinc-800 {
-    --tw-gradient-from: #e2e8f0 !important;
-    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(226 232 240 / 0)) !important;
-  }
-  [data-theme="light"] .to-zinc-900 {
-    --tw-gradient-to: #f1f5f9 !important;
-  }
-  /* Avatar initials text in light mode */
-  [data-theme="light"] .from-zinc-800 .text-zinc-500,
-  [data-theme="light"] .from-zinc-800 .text-zinc-700 { color: #94a3b8 !important; }
-  /* Hover & active states */
-  [data-theme="light"] .hover\:bg-zinc-900\/40:hover { background-color:rgba(241,245,249,0.6) !important; }
-  [data-theme="light"] .hover\:bg-zinc-900\/50:hover { background-color:rgba(241,245,249,0.7) !important; }
-  /* Mobile menu background */
-  [data-theme="light"] .md\:hidden.border-t { background-color:#f8fafc !important; }
-  /* Card borders on hover */
-  [data-theme="light"] .hover\:border-zinc-700:hover { border-color:#94a3b8 !important; }
-  /* Navbar transparent state */
-  [data-theme="light"] header.bg-transparent { background-color: transparent !important; }
-  /* Backdrop blur navbar */
-  [data-theme="light"] .backdrop-blur-sm { --tw-backdrop-blur: blur(8px); background-color:rgba(248,250,252,0.92) !important; }
-  /* Section borders */
-  [data-theme="light"] .border-zinc-800\/50 { border-color:rgba(203,213,225,0.5) !important; }
-
-  [data-theme="light"] article :not(pre) > code { background:#f0fdf4 !important; color:#065f46 !important; }
-  /* prose element overrides for light mode — target elements directly */
-  [data-theme="light"] article p,
-  [data-theme="light"] article li,
-  [data-theme="light"] article td,
-  [data-theme="light"] article th { color: #374151 !important; }
-  [data-theme="light"] article h1,
-  [data-theme="light"] article h2,
-  [data-theme="light"] article h3,
-  [data-theme="light"] article h4,
-  [data-theme="light"] article h5,
-  [data-theme="light"] article h6 { color: #111827 !important; }
-  [data-theme="light"] article strong,
-  [data-theme="light"] article b { color: #111827 !important; }
-  [data-theme="light"] article a { color: #059669 !important; }
-  [data-theme="light"] article blockquote { color: #4b5563 !important; border-color: #10b981 !important; }
-  [data-theme="light"] article hr { border-color: #e5e7eb !important; }
-  [data-theme="light"] article table { border-color: #e5e7eb !important; }
-  [data-theme="light"] article thead { border-color: #d1d5db !important; }
-  [data-theme="light"] article em { color: #374151 !important; }
-
-  /* ===== Page load fade-in ===== */
-  @keyframes pageFadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  body { animation: pageFadeIn 0.25s ease-out both; }
-
-  /* ===== Code block overrides for dark prose ===== */
-  article pre {
-    background: #18181b !important;
-    border: 1px solid #27272a;
-    border-radius: 0.5rem;
-    padding: 1.25rem 1.5rem;
-    overflow-x: auto;
-    position: relative;
-  }
-  article pre code {
-    background: transparent !important;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 0.875rem;
-    padding: 0;
-    border-radius: 0;
-  }
-  article :not(pre) > code {
-    background: #27272a !important;
-    color: #6ee7b7;
-    padding: 0.15rem 0.4rem;
-    border-radius: 0.25rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8em;
-  }
+  /* page load fade-in */
+  @keyframes pageFadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  body { animation: pageFadeIn .25s ease-out both; }
 </style>
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 {{end}}
