@@ -2,115 +2,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {{template "admin_head" .}}
   <title>Dashboard — Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex">
-
-{{template "admin_sidebar" .}}
-
-<div class="flex-1 flex flex-col min-h-screen overflow-auto">
-  <!-- Top bar -->
-  <header class="border-b border-zinc-800 px-4 md:px-8 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <button onclick="window.dispatchEvent(new CustomEvent('toggle-sidebar'))" class="md:hidden p-1.5 -ml-1 text-zinc-400 hover:text-zinc-100 transition-colors" aria-label="Menu">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
-      <h1 class="text-lg font-semibold text-zinc-100">Dashboard</h1>
-    </div>
-    <a href="/" target="_blank" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1.5">
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-      </svg>
-      View site
-    </a>
-  </header>
-
-  <main class="flex-1 px-4 md:px-8 py-6 md:py-8">
-    <!-- Stats -->
-    <div class="grid sm:grid-cols-3 gap-4 mb-10">
-      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-        <p class="text-xs text-zinc-500 uppercase tracking-widest font-mono mb-2">Posts</p>
-        <p class="text-3xl font-semibold text-zinc-100">{{.postCount}}</p>
-        <a href="/admin/posts" class="text-xs text-emerald-400 hover:text-emerald-300 mt-2 inline-block">Manage →</a>
-      </div>
-      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-        <p class="text-xs text-zinc-500 uppercase tracking-widest font-mono mb-2">Projects</p>
-        <p class="text-3xl font-semibold text-zinc-100">{{.projectCount}}</p>
-        <a href="/admin/projects" class="text-xs text-emerald-400 hover:text-emerald-300 mt-2 inline-block">Manage →</a>
-      </div>
-      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-        <p class="text-xs text-zinc-500 uppercase tracking-widest font-mono mb-2">Unread Messages</p>
-        <p class="text-3xl font-semibold {{if gt .unreadCount 0}}text-amber-400{{else}}text-zinc-100{{end}}">{{.unreadCount}}</p>
-        <a href="/admin/messages" class="text-xs text-emerald-400 hover:text-emerald-300 mt-2 inline-block">View inbox →</a>
-      </div>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- Recent Posts -->
-      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-        <div class="flex items-center justify-between mb-5">
-          <h2 class="font-medium text-zinc-100">Recent Posts</h2>
-          <a href="/admin/posts/new" class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">+ New</a>
+<body class="ad-body">
+<div class="ad-layout">
+  {{template "admin_sidebar" .}}
+  <main class="ad-main">
+    <div class="ad-topbar">
+      <div class="ad-topbar-l">
+        <button class="ad-burger" onclick="window.dispatchEvent(new CustomEvent('toggle-sidebar'))" aria-label="Menu">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="ad-topbar-title">Dashboard</div>
+          <div class="ad-topbar-sub">welcome back</div>
         </div>
-        {{if .recentPosts}}
-        <ul class="space-y-3">
+      </div>
+      <div class="ad-topbar-actions">
+        <a class="ad-btn" href="/admin/posts/new">+ New post</a>
+        <span class="ad-avatar">S</span>
+      </div>
+    </div>
+
+    <div class="ad-content">
+      <!-- stats -->
+      <div class="ad-stats">
+        <div class="ad-stat">
+          <div class="ad-stat-top"><span class="ad-stat-label">Total posts</span><span class="ad-sq" style="background:var(--red);"></span></div>
+          <div class="ad-stat-num">{{.postCount}}</div>
+          <a class="ad-stat-link" href="/admin/posts">Manage →</a>
+        </div>
+        <div class="ad-stat">
+          <div class="ad-stat-top"><span class="ad-stat-label">Projects</span><span class="ad-sq" style="background:var(--blue);"></span></div>
+          <div class="ad-stat-num">{{.projectCount}}</div>
+          <a class="ad-stat-link" href="/admin/projects">Manage →</a>
+        </div>
+        <div class="ad-stat">
+          <div class="ad-stat-top"><span class="ad-stat-label">Unread messages</span><span class="ad-sq" style="background:var(--yellow);"></span></div>
+          <div class="ad-stat-num" style="{{if gt .unreadCount 0}}color:var(--yellow);{{end}}">{{.unreadCount}}</div>
+          <a class="ad-stat-link" href="/admin/messages">View inbox →</a>
+        </div>
+      </div>
+
+      <!-- panels -->
+      <div class="ad-panels">
+        <div class="ad-card">
+          <div class="ad-panel-head"><div class="ad-panel-title">Recent posts</div><a class="ad-panel-link" href="/admin/posts">Manage →</a></div>
+          {{if .recentPosts}}
           {{range .recentPosts}}
-          <li class="flex items-center justify-between gap-3">
-            <div class="min-w-0">
-              <a href="/admin/posts/{{.ID}}/edit" class="text-sm text-zinc-300 hover:text-zinc-100 truncate block transition-colors">{{.Title}}</a>
-              <span class="text-xs text-zinc-600">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
+          <div class="ad-list-row">
+            <a href="/admin/posts/{{.ID}}/edit" style="font-size:15px; color:var(--ink); text-decoration:none;">{{.Title}}</a>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:7px;">
+              {{if .Published}}<span class="ad-badge-live">Live</span>{{else}}<span class="ad-badge-draft">Draft</span>{{end}}
+              <span class="ad-mono">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
             </div>
-            {{if .Published}}
-            <span class="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full flex-shrink-0">Live</span>
-            {{else}}
-            <span class="text-xs font-mono text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded-full flex-shrink-0">Draft</span>
-            {{end}}
-          </li>
+          </div>
           {{end}}
-        </ul>
-        {{else}}
-        <p class="text-sm text-zinc-600">No posts yet.</p>
-        {{end}}
-      </div>
-
-      <!-- Recent Messages -->
-      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-        <div class="flex items-center justify-between mb-5">
-          <h2 class="font-medium text-zinc-100">Recent Messages</h2>
-          <a href="/admin/messages" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">View all →</a>
+          {{else}}<p style="color:var(--faint); font-size:14px;">No posts yet.</p>{{end}}
         </div>
-        {{if .recentMessages}}
-        <ul class="space-y-3">
+
+        <div class="ad-card">
+          <div class="ad-panel-head"><div class="ad-panel-title">Inbox</div><a class="ad-panel-link" href="/admin/messages">All →</a></div>
+          {{if .recentMessages}}
           {{range .recentMessages}}
-          <li class="flex items-start gap-3">
-            <div class="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0 text-xs font-medium text-zinc-400">
-              {{slice .Name 0 1}}
+          <div class="ad-list-row" style="display:flex; gap:12px; align-items:flex-start;">
+            <span class="ad-dot-unread" style="margin-top:6px; {{if .IsRead}}background:var(--faint);{{end}}"></span>
+            <div style="min-width:0;">
+              <div style="font-size:14px; font-weight:600; color:var(--ink);">{{.Name}}</div>
+              <div style="font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:280px;">{{.Message}}</div>
             </div>
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center justify-between gap-2">
-                <span class="text-sm text-zinc-300 font-medium truncate">{{.Name}}</span>
-                {{if not .IsRead}}
-                <span class="w-2 h-2 bg-emerald-400 rounded-full flex-shrink-0"></span>
-                {{end}}
-              </div>
-              <p class="text-xs text-zinc-500 truncate">{{.Message}}</p>
-            </div>
-          </li>
+          </div>
           {{end}}
-        </ul>
-        {{else}}
-        <p class="text-sm text-zinc-600">No messages yet.</p>
-        {{end}}
+          {{else}}<p style="color:var(--faint); font-size:14px;">No messages yet.</p>{{end}}
+        </div>
       </div>
     </div>
   </main>
 </div>
-
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
 {{end}}
