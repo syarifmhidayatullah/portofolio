@@ -4,67 +4,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <title>Admin Login — Syarif Hidayatullah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0a0a0e; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:32px; font-family:'Space Grotesk',sans-serif; color:#f4f4f5; position:relative; overflow:hidden; }
+    .lg-blob1 { position:absolute; top:-80px; right:-60px; width:280px; height:280px; background:#3d6bff; border-radius:50%; filter:blur(10px); opacity:.18; }
+    .lg-blob2 { position:absolute; bottom:-90px; left:-50px; width:240px; height:240px; background:#ff4d3d; border-radius:32px; transform:rotate(18deg); filter:blur(8px); opacity:.16; }
+    .lg-wrap { position:relative; z-index:1; width:100%; max-width:400px; }
+    .lg-brand { text-align:center; margin-bottom:28px; }
+    .lg-logo { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26px; color:#f4f4f5; text-decoration:none; }
+    .lg-sub { font-family:'IBM Plex Mono',monospace; font-size:12px; color:#5a5a66; margin-top:4px; }
+    .lg-card { background:#13131a; border:1px solid #23232c; border-radius:22px; padding:34px; box-shadow:8px 8px 0 #ff4d3d; }
+    .lg-h { font-family:'Bricolage Grotesque',sans-serif; font-size:28px; font-weight:700; margin:0 0 6px; }
+    .lg-lead { color:#a6a6b2; font-size:14px; margin:0 0 26px; }
+    .lg-form { display:flex; flex-direction:column; gap:16px; }
+    .lg-label { font-size:13px; color:#a6a6b2; display:block; margin-bottom:7px; }
+    .lg-input { width:100%; background:#0a0a0e; border:1px solid #2a2a34; border-radius:11px; padding:13px 15px; color:#f4f4f5; font-size:14px; font-family:inherit; outline:none; transition:border .15s; }
+    .lg-input:focus { border-color:#ff4d3d; }
+    .lg-btn { background:#ff4d3d; color:#fff; font-weight:700; font-size:15px; padding:14px; border-radius:11px; text-align:center; margin-top:4px; border:none; cursor:pointer; font-family:inherit; }
+    .lg-btn:hover { background:#ff3d2b; }
+    .lg-err { background:rgba(255,77,61,.12); border:1px solid rgba(255,77,61,.4); color:#ff8a80; border-radius:11px; padding:12px 15px; font-size:14px; margin-bottom:20px; }
+    .lg-back { display:block; text-align:center; margin-top:22px; font-family:'IBM Plex Mono',monospace; font-size:13px; color:#5a5a66; text-decoration:none; }
+    .lg-back:hover { color:#a6a6b2; }
+  </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen flex items-center justify-center px-4">
+<body>
+  <div class="lg-blob1"></div>
+  <div class="lg-blob2"></div>
 
-  <div class="w-full max-w-sm">
-    <!-- Logo -->
-    <div class="text-center mb-8">
-      <span class="font-mono text-emerald-400 font-medium text-lg">syarif<span class="text-zinc-500">.</span>dev</span>
-      <p class="text-zinc-500 text-sm mt-1">Admin Access</p>
+  <div class="lg-wrap">
+    <div class="lg-brand">
+      <a class="lg-logo" href="/">syarifhidayat<span style="color:#ff4d3d;">.dev</span></a>
+      <div class="lg-sub">admin panel</div>
     </div>
 
-    <!-- Card -->
-    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-      <h1 class="text-xl font-semibold text-zinc-100 mb-6">Sign in</h1>
+    <div class="lg-card">
+      <h1 class="lg-h">Sign in</h1>
+      <p class="lg-lead">Admins only.</p>
 
-      {{if .error}}
-      <div class="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
-        {{.error}}
-      </div>
-      {{end}}
+      {{if .error}}<div class="lg-err">{{.error}}</div>{{end}}
 
-      <form method="POST" action="/admin/login" class="flex flex-col gap-4">
-        <div>
-          <label class="block text-xs text-zinc-400 mb-1.5">Email</label>
-          <input
-            type="email"
-            name="email"
-            required
-            autofocus
-            placeholder="admin@example.com"
-            class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
-          />
-        </div>
-
-        <div>
-          <label class="block text-xs text-zinc-400 mb-1.5">Password</label>
-          <input
-            type="password"
-            name="password"
-            required
-            placeholder="••••••••"
-            class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-lg px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors"
-          />
-        </div>
-
-        <button
-          type="submit"
-          class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-medium text-sm rounded-lg transition-all mt-2"
-        >
-          Sign in
-        </button>
+      <form method="POST" action="/admin/login" class="lg-form">
+        <label>
+          <span class="lg-label">Email</span>
+          <input class="lg-input" type="email" name="email" required autofocus placeholder="you@email.com" />
+        </label>
+        <label>
+          <span class="lg-label">Password</span>
+          <input class="lg-input" type="password" name="password" required placeholder="••••••••" />
+        </label>
+        <button class="lg-btn" type="submit">Sign in →</button>
       </form>
     </div>
 
-    <p class="text-center mt-6">
-      <a href="/" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">← Back to site</a>
-    </p>
+    <a class="lg-back" href="/">← back to site</a>
   </div>
-
 </body>
 </html>
 {{end}}
