@@ -3,9 +3,10 @@
 <html lang="en" class="scroll-smooth">
 <head>
   {{template "head" .}}
-  <!-- Syntax highlighting (code blocks stay dark in both themes) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <!-- Syntax highlighting (code blocks stay dark in both themes) — loaded async so it never render-blocks first paint -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css"></noscript>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
   <style>.hljs { background:transparent !important; padding:0 !important; }</style>
 </head>
 <body style="margin:0;">
