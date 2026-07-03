@@ -124,6 +124,10 @@
   .exp-row:nth-child(4n+4) .exp-dot { background:var(--green); }
   .exp-role { font-weight:600; font-size:18px; color:var(--ink); }
   .exp-desc { color:var(--muted); font-size:15px; margin-top:3px; }
+  .exp-lead { margin:0; }
+  .exp-points { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  .exp-points li { position:relative; padding-left:18px; line-height:1.5; }
+  .exp-points li::before { content:"▸"; position:absolute; left:0; top:0; color:var(--red); font-size:13px; }
   .exp-period { font-family:var(--font-mono); font-weight:500; font-size:14px; color:var(--faint); white-space:nowrap; }
   .exp-period.current { color:var(--blue); }
   .exp-tech { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }

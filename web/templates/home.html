@@ -78,7 +78,7 @@
           <span class="exp-dot"></span>
           <div>
             <div class="exp-role">{{.Role}} · {{.Company}}</div>
-            {{if .Description}}<div class="exp-desc">{{.Description}}</div>{{end}}
+            {{if .Description}}<div class="exp-desc">{{bulletize .Description}}</div>{{end}}
             {{if .TechStack}}<div class="exp-tech">{{range .TechStack}}<span>{{.}}</span>{{end}}</div>{{end}}
           </div>
           <span class="exp-period {{if .IsCurrent}}current{{end}}">{{if .PeriodStart}}{{.PeriodStart}}—{{if .PeriodEnd}}{{.PeriodEnd}}{{else}}now{{end}}{{end}}</span>

@@ -164,6 +164,39 @@ func loadTemplates() *template.Template {
 			}
 			return result
 		},
+		// bulletize turns a "• "-delimited description into a short lead
+		// paragraph + a real <ul> list. Splitting the monolithic paragraph
+		// improves readability and makes the block less "article-like" so
+		// Chrome mobile is less likely to auto-trigger Reading Mode.
+		"bulletize": func(s string) template.HTML {
+			s = strings.TrimSpace(s)
+			if s == "" {
+				return ""
+			}
+			parts := strings.Split(s, "•")
+			var b strings.Builder
+			if lead := strings.TrimSpace(parts[0]); lead != "" {
+				b.WriteString(`<p class="exp-lead">`)
+				b.WriteString(template.HTMLEscapeString(lead))
+				b.WriteString(`</p>`)
+			}
+			var items []string
+			for _, p := range parts[1:] {
+				if p = strings.TrimSpace(p); p != "" {
+					items = append(items, p)
+				}
+			}
+			if len(items) > 0 {
+				b.WriteString(`<ul class="exp-points">`)
+				for _, it := range items {
+					b.WriteString(`<li>`)
+					b.WriteString(template.HTMLEscapeString(it))
+					b.WriteString(`</li>`)
+				}
+				b.WriteString(`</ul>`)
+			}
+			return template.HTML(b.String())
+		},
 	}
 
 	tmpl := template.Must(
