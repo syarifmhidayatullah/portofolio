@@ -1,51 +1,8 @@
 {{define "blog_list.html"}}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>{{template "head" .}}</head>
 <body style="margin:0;">
-<style>
-  /* ===== Blog list (neo-brutalist) ===== */
-  .bl-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
-  .bl-head { padding:56px 0 36px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; }
-  .bl-eyebrow { font-family:var(--font-mono); font-size:13px; color:var(--blue); letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px; }
-  .bl-title { font-family:var(--font-display); font-size:64px; line-height:.96; font-weight:800; letter-spacing:-.025em; margin:0; color:var(--ink); }
-  .bl-rss { display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:13px; color:var(--faint); text-decoration:none; border:1px solid var(--navborder); padding:8px 14px; border-radius:24px; }
-  .bl-rss:hover { color:var(--red); border-color:var(--red); }
-
-  .bl-featured { display:block; text-decoration:none; margin-bottom:36px; }
-  .bl-fc { background:var(--surface); border:1px solid var(--border); border-radius:24px; overflow:hidden; display:grid; grid-template-columns:1.1fr .9fr; box-shadow:7px 7px 0 var(--red); transition:transform .15s; }
-  .bl-featured:hover .bl-fc { transform:translate(-2px,-2px); }
-  .bl-fc-body { padding:40px; }
-  .bl-badge { display:inline-block; background:color-mix(in srgb,var(--red) 18%,transparent); color:var(--red); font-size:12px; font-weight:600; padding:5px 12px; border-radius:20px; }
-  .bl-fc-title { font-family:var(--font-display); font-size:34px; font-weight:700; line-height:1.05; margin:18px 0 14px; color:var(--ink); }
-  .bl-fc-excerpt { color:var(--muted); font-size:16px; line-height:1.7; margin:0 0 22px; }
-  .bl-meta { display:flex; gap:14px; flex-wrap:wrap; font-family:var(--font-mono); font-size:13px; color:var(--faint); }
-  .bl-meta .tag { color:var(--green); }
-  .bl-fc-cover { background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--bg) 14px,var(--bg) 28px); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--faint); min-height:240px; overflow:hidden; }
-  .bl-fc-cover img { width:100%; height:100%; object-fit:cover; }
-
-  .bl-grid { padding-bottom:64px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
-  .bl-card { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--red); border-radius:18px; padding:26px; display:flex; flex-direction:column; gap:12px; min-height:200px; text-decoration:none; transition:transform .15s; }
-  .bl-card:hover { transform:translateY(-3px); }
-  .bl-card:nth-child(3n+2) { border-top-color:var(--blue); }
-  .bl-card:nth-child(3n+3) { border-top-color:var(--yellow); }
-  .bl-card-date { font-family:var(--font-mono); font-size:12px; color:var(--red); text-transform:uppercase; }
-  .bl-card:nth-child(3n+2) .bl-card-date { color:var(--blue); }
-  .bl-card:nth-child(3n+3) .bl-card-date { color:var(--yellow); }
-  .bl-card-title { font-weight:600; font-size:19px; line-height:1.25; color:var(--ink); }
-  .bl-card-excerpt { color:var(--muted); font-size:14px; line-height:1.55; flex:1; }
-  .bl-card-tag { font-family:var(--font-mono); font-size:12px; color:var(--faint); }
-  .bl-empty { text-align:center; padding:80px 0; color:var(--faint); }
-
-  @media (max-width:860px) {
-    .bl-fc { grid-template-columns:1fr; }
-    .bl-fc-cover { min-height:180px; order:-1; }
-    .bl-grid { grid-template-columns:1fr; }
-    .bl-title { font-size:46px; }
-  }
-  @media (max-width:760px) { .bl-shell { padding:0 20px; } }
-  @media (max-width:520px) { .bl-title { font-size:38px; } .bl-fc-body { padding:28px; } }
-</style>
 
 <div style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
   {{template "navbar" .}}

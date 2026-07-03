@@ -27,34 +27,13 @@
 <meta name="twitter:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}Software Engineer — Building elegant backend systems and developer tools.{{end}}" />
 {{if .ogImage}}<meta name="twitter:image" content="{{.ogImage}}" />{{end}}
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<!-- Design fonts: Bricolage Grotesque (display), Space Grotesk (body), IBM Plex Mono (mono) -->
-<!-- Loaded async so the font request never render-blocks the first paint (prevents unstyled/reader-mode flash on cold load) -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" /></noscript>
-<style>
-  /* ===== Neo-brutalist design tokens =====
-     Neutrals swap between dark (default) & light. Accent colors stay fixed. */
-  :root {
-    --bg:#0d0d12; --surface:#16161d; --surface2:#1a1a22; --border:#23232c;
-    --navborder:#2a2a34; --ink:#f4f4f5; --muted:#a6a6b2; --faint:#5a5a66;
-    --red:#ff4d3d; --blue:#3d6bff; --yellow:#ffd23d; --green:#3dffa0;
-    --font-display:'Bricolage Grotesque', sans-serif;
-    --font-sans:'Space Grotesk', sans-serif;
-    --font-mono:'IBM Plex Mono', monospace;
-  }
-  [data-theme="light"] {
-    --bg:#fff7f0; --surface:#ffffff; --surface2:#fdf2e9; --border:#eaded2;
-    --navborder:#e2d4c5; --ink:#171514; --muted:#5a534f; --faint:#a08e80;
-  }
-  * { box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body { margin:0; }
+<meta name="theme-color" content="#0d0d12" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#fff7f0" media="(prefers-color-scheme: light)" />
 
-  /* page load fade-in */
-  @keyframes pageFadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
-  body { animation: pageFadeIn .25s ease-out both; }
-</style>
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<!-- Self-hosted, same-origin assets: fonts + consolidated CSS (render-blocking critical CSS, cached, no FOUC). -->
+<link rel="preload" as="font" type="font/woff2" href="/static/fonts/bricolage-grotesque-latin.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="/static/fonts/space-grotesk-latin.woff2" crossorigin />
+<link rel="stylesheet" href="/static/css/fonts.css" />
+<link rel="stylesheet" href="/static/css/app.css" />
+<script defer src="/static/js/alpine-3.14.9.min.js"></script>
 {{end}}

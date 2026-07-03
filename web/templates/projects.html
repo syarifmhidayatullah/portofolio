@@ -1,51 +1,8 @@
 {{define "projects.html"}}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>{{template "head" .}}</head>
 <body style="margin:0;">
-<style>
-  /* ===== Projects (neo-brutalist) ===== */
-  .pp-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
-  .pp-head { padding:56px 0 40px; }
-  .pp-eyebrow { font-family:var(--font-mono); font-size:13px; color:var(--red); letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px; }
-  .pp-title { font-family:var(--font-display); font-size:64px; line-height:.96; font-weight:800; letter-spacing:-.025em; margin:0 0 18px; color:var(--ink); }
-  .pp-lead { font-size:18px; color:var(--muted); max-width:520px; margin:0; line-height:1.6; }
-
-  .pp-filters { display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
-  .pp-chip { background:var(--surface); border:1px solid var(--navborder); color:var(--muted); font-weight:600; font-size:14px; font-family:var(--font-mono); padding:9px 18px; border-radius:30px; cursor:pointer; transition:all .15s; }
-  .pp-chip:hover { color:var(--ink); border-color:var(--faint); }
-  .pp-chip.pp-chip-on { background:var(--red); border-color:var(--red); color:#fff; }
-
-  .pp-grid { padding:8px 0 40px; display:grid; grid-template-columns:1fr 1fr; gap:22px; }
-  .pp-card { background:var(--surface); border:1px solid var(--border); border-radius:22px; overflow:hidden; transition:transform .15s; box-shadow:6px 6px 0 var(--red); }
-  .pp-card:hover { transform:translate(-2px,-2px); }
-  .pp-card:nth-child(3n+2) { box-shadow:6px 6px 0 var(--blue); }
-  .pp-card:nth-child(3n+3) { box-shadow:6px 6px 0 var(--green); }
-  .pp-shot { aspect-ratio:16/9; background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 12px,var(--bg) 12px,var(--bg) 24px); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--faint); position:relative; overflow:hidden; }
-  .pp-shot img { width:100%; height:100%; object-fit:cover; }
-  .pp-badge { position:absolute; top:14px; left:14px; background:color-mix(in srgb,var(--yellow) 22%,transparent); color:var(--yellow); font-size:11px; font-weight:600; padding:5px 11px; border-radius:20px; z-index:1; }
-  .pp-body { padding:24px; }
-  .pp-title-row { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
-  .pp-name { font-weight:600; font-size:21px; color:var(--ink); }
-  .pp-year { font-family:var(--font-mono); font-size:12px; color:var(--faint); white-space:nowrap; }
-  .pp-desc { color:var(--muted); font-size:15px; margin:7px 0 14px; line-height:1.55; }
-  .pp-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
-  .pp-tag { font-family:var(--font-mono); font-size:12px; padding:4px 10px; border-radius:20px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); cursor:pointer; transition:all .15s; }
-  .pp-tag:hover { color:var(--ink); }
-  .pp-tag.pp-tag-on { background:color-mix(in srgb,var(--red) 16%,transparent); border-color:var(--red); color:var(--red); }
-  .pp-links { display:flex; gap:16px; padding-top:12px; border-top:1px solid var(--border); }
-  .pp-links a { font-family:var(--font-mono); font-size:13px; color:var(--faint); text-decoration:none; }
-  .pp-links a:hover { color:var(--red); }
-  .pp-empty { text-align:center; padding:64px 0; color:var(--faint); }
-  .pp-empty button { background:none; border:none; color:var(--blue); cursor:pointer; font-size:14px; }
-
-  @media (max-width:860px) {
-    .pp-grid { grid-template-columns:1fr; }
-    .pp-title { font-size:46px; }
-  }
-  @media (max-width:760px) { .pp-shell { padding:0 20px; } }
-  @media (max-width:520px) { .pp-title { font-size:38px; } }
-</style>
 
 <div style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
   {{template "navbar" .}}

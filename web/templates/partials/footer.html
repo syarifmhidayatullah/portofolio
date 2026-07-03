@@ -1,15 +1,4 @@
 {{define "footer"}}
-<style>
-  /* ===== Neo-brutalist footer ===== */
-  .ft-shell { max-width:1180px; margin:0 auto; padding:0 32px; }
-  .ft-bar { padding:24px 0; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:13px; color:var(--faint); flex-wrap:wrap; gap:10px; }
-  .ft-bar a { color:var(--faint); text-decoration:none; transition:color .2s; }
-  .ft-bar a:hover { color:var(--red); }
-  .ft-links { display:flex; gap:16px; }
-  .ft-top { position:fixed; bottom:22px; right:20px; z-index:50; width:42px; height:42px; border-radius:12px; background:var(--red); color:#fff; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:4px 4px 0 #7a1a12; font-size:18px; line-height:1; }
-  @media (max-width:760px) { .ft-shell { padding:0 20px; } }
-</style>
-
 <!-- Back to top -->
 <button x-data="{ show:false }" @scroll.window.passive="show = window.scrollY > 320" x-show="show" x-transition
   @click="window.scrollTo({ top:0, behavior:'smooth' })" class="ft-top" aria-label="Back to top" style="display:none;">↑</button>
