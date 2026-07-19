@@ -30,6 +30,15 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("failed to get sql.DB: %v", err)
+	}
+	// database/sql defaults to unlimited open connections — cap it so idle
+	// memory doesn't grow unbounded on low-traffic Railway deploys
+	sqlDB.SetMaxOpenConns(5)
+	sqlDB.SetMaxIdleConns(2)
+	sqlDB.SetConnMaxLifetime(30 * time.Minute)
 
 	// Auto migrate
 	if err := db.AutoMigrate(
