@@ -27,7 +27,7 @@ func (h *HomeHandler) Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "home.html", gin.H{
 		"title":         "Home",
 		"activeNav":     "home",
-		"ogDescription": "Software Engineer specializing in backend systems and distributed architecture. Building reliable, scalable APIs using Go, PostgreSQL, and cloud-native technologies.",
+		"ogDescription": "Backend engineer and product builder. 11+ years building logistics, marketplace and fintech systems in Go — and small products end to end on the side.",
 		"posts":         posts,
 		"projects":      featured,
 		"profile":       profile,

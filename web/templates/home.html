@@ -2,140 +2,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>{{template "head" .}}</head>
-<body style="margin:0;">
+<body>
 
-<div x-data="{ lb:false }" style="background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100vh; transition:background .3s, color .3s;">
+<div class="page" x-data="{ lb:false }">
   {{template "navbar" .}}
 
   {{- /* shared vars wired from DB */ -}}
   {{$avatar := ""}}{{$cv := ""}}{{$years := 0}}{{$projects := 0}}
   {{if .profile}}{{$avatar = .profile.AvatarURL}}{{$cv = .profile.CVURL}}{{$years = .profile.StatsYears}}{{$projects = .profile.StatsProjects}}{{end}}
 
-  <main class="hm-shell">
+  <main>
 
     <!-- hero -->
-    <section class="hero">
-      <div>
-        <div class="badge"><span class="pdot"></span>Available for work</div>
-        <h1 class="hero-title">Hi, I'm <span style="color:var(--red);">Syarif</span><br>backend<br><span style="color:var(--blue);">engineer.</span></h1>
-        <p class="hero-lead">I build reliable, scalable backend systems and developer tools — clean APIs with Go, PostgreSQL, and cloud-native tooling.</p>
+    <section class="wrap hero">
+      <div class="hero-text">
+        <p class="eyebrow">Syarif Hidayatullah</p>
+        <h1 class="hero-title">Backend engineer.<br><span class="accent">Product builder.</span></h1>
+        <p class="hero-lead">{{if $years}}{{$years}}+ years{{else}}Years{{end}} building logistics, marketplace and fintech systems in Go — from COD disbursements moving IDR&nbsp;1B a day to monolith-to-microservices migrations. After hours, I build small products end to end, from the API to the app on your phone.</p>
         <div class="btn-row">
-          <a class="btn-primary" href="/projects">View work →</a>
-          <a class="btn-ghost" href="/#contact">Get in touch</a>
-          {{if $cv}}<a class="btn-ghost" href="{{$cv}}" download>Download CV</a>{{end}}
-        </div>
-        <div class="tags">
-          <span class="tag tag-red">Go</span>
-          <span class="tag tag-blue">PostgreSQL</span>
-          <span class="tag tag-yellow">Redis</span>
-          <span class="tag tag-green">Docker</span>
-          <span class="tag tag-red">Kubernetes</span>
-          <span class="tag tag-blue">gRPC</span>
-          <span class="tag tag-yellow">REST</span>
-          <span class="tag tag-green">Linux</span>
+          <a class="btn btn-primary" href="/projects">See my work <span aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="/#contact">Get in touch</a>
+          {{if $cv}}<a class="btn btn-ghost" href="{{$cv}}" download>Download CV</a>{{end}}
         </div>
       </div>
-      <div class="photo-wrap">
-        <div class="photo-deco1"></div>
-        <div class="photo-deco2"></div>
-        <div class="photo-card {{if $avatar}}clickable{{end}}" {{if $avatar}}@click="lb=true" title="View photo"{{end}}>
-          {{if $avatar}}<img src="{{$avatar}}" alt="Syarif Hidayatullah" onerror="this.style.display='none'">{{else}}<div class="photo-initials">SH</div>{{end}}
-          <div class="photo-socials">
-            <a class="soc" href="https://linkedin.com/in/syarifmhidayatullah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
-            <a class="soc" href="https://github.com/syarifmhidayatullah" target="_blank" rel="noopener noreferrer" aria-label="GitHub">gh</a>
-            <a class="soc" href="mailto:syarif.hidayatull4h@gmail.com" aria-label="Email">@</a>
-          </div>
+
+      <figure class="hero-photo">
+        <div class="portrait {{if $avatar}}clickable{{end}}" {{if $avatar}}@click="lb=true" title="View photo"{{end}}>
+          {{if $avatar}}<img src="{{$avatar}}" alt="Syarif Hidayatullah" onerror="this.remove()">{{end}}
+          <span class="portrait-initials" aria-hidden="true">SH</span>
         </div>
-      </div>
+        <figcaption class="now-chip"><span class="dot"></span>Now building <a href="#now">aac-app</a></figcaption>
+      </figure>
     </section>
 
-    <!-- about + stats -->
-    <section class="sec">
-      <div class="about-card">
-        <div>
-          <div class="about-h">Engineer who sweats the details <span style="color:var(--red);">★</span></div>
-          {{if .profile}}
-            {{if .profile.Bio1}}<p class="about-p">{{.profile.Bio1}}</p>{{end}}
-            {{if .profile.Bio2}}<p class="about-p">{{.profile.Bio2}}</p>{{end}}
-          {{end}}
-          {{if not .profile}}<p class="about-p">I'm a software engineer focused on building reliable, scalable backend systems and developer tools.</p>{{end}}
+    <!-- metrics -->
+    <section class="wrap">
+      <dl class="metrics">
+        <div class="metric"><dt>{{if $years}}{{$years}}+{{else}}10+{{end}}</dt><dd>years building backend systems</dd></div>
+        <div class="metric"><dt>IDR 1B</dt><dd>disbursed daily through a COD system I built</dd></div>
+        <div class="metric"><dt>{{if $projects}}{{$projects}}+{{else}}3+{{end}}</dt><dd>side products shipped, solo</dd></div>
+        <div class="metric"><dt>Go</dt><dd>gRPC · PostgreSQL · Redis · GCP · Flutter</dd></div>
+      </dl>
+    </section>
+
+    <!-- now building -->
+    <section class="wrap sec" id="now">
+      <div class="sec-label"><span class="sec-num">01</span>Now building</div>
+      <article class="now-card">
+        <div class="now-body">
+          <p class="now-kicker">An AAC app I'm building for my child</p>
+          <h2 class="now-title">aac-app</h2>
+          <p class="now-desc">Some kids can't rely on speech to say what they need. AAC — Augmentative &amp; Alternative Communication — apps let them tap picture symbols that speak out loud. Good ones in Bahasa Indonesia are hard to find, and the popular ones are expensive. So I'm building one: symbol boards, Indonesian text-to-speech, fully offline on iPad. It will be free.</p>
+          <dl class="now-meta">
+            <div><dt>Status</dt><dd><span class="dot dot-amber"></span>Testing at home</dd></div>
+            <div><dt>Stack</dt><dd>Flutter · Go · SQLite</dd></div>
+          </dl>
+          <div class="link-row">
+            <a href="https://github.com/syarifmhidayatullah/aac-app" target="_blank" rel="noopener noreferrer">Source ↗</a>
+            <a href="https://linkedin.com/in/syarifmhidayatullah" target="_blank" rel="noopener noreferrer">Follow the build ↗</a>
+          </div>
         </div>
-        <div class="stats">
-          <div class="stat stat-red"><div class="num">{{if $years}}{{$years}}+{{else}}—{{end}}</div><div class="lab">Years exp</div></div>
-          <div class="stat stat-blue"><div class="num">{{if $projects}}{{$projects}}+{{else}}—{{end}}</div><div class="lab">Projects shipped</div></div>
-          <div class="stat stat-yellow"><div class="num">∞</div><div class="lab">Curiosity</div></div>
-          <div class="stat stat-plain"><div class="num">☕</div><div class="lab">Always brewing</div></div>
+
+        <!-- illustrative board (Fitzgerald-key colours, as used in AAC) -->
+        <div class="aac-demo" aria-hidden="true">
+          <div class="aac-strip"><span>aku</span><span>mau</span><span>minum</span><b>▶</b></div>
+          <div class="aac-grid">
+            <span class="t-pron"><i>🙋</i>aku</span>
+            <span class="t-verb"><i>👉</i>mau</span>
+            <span class="t-verb"><i>🥤</i>minum</span>
+            <span class="t-verb"><i>🍚</i>makan</span>
+            <span class="t-verb"><i>⚽</i>main</span>
+            <span class="t-verb"><i>😴</i>tidur</span>
+            <span class="t-pron"><i>👩</i>ibu</span>
+            <span class="t-pron"><i>👨</i>ayah</span>
+            <span class="t-desc"><i>🤕</i>sakit</span>
+            <span class="t-neg"><i>✋</i>tidak</span>
+            <span class="t-soc"><i>🔁</i>lagi</span>
+            <span class="t-soc"><i>✅</i>selesai</span>
+          </div>
         </div>
+      </article>
+    </section>
+
+    <!-- about -->
+    <section class="wrap sec">
+      <div class="sec-label"><span class="sec-num">02</span>About</div>
+      <div class="about">
+        {{if .profile}}
+          {{if .profile.Bio1}}<p class="about-lead">{{.profile.Bio1}}</p>{{end}}
+          {{if .profile.Bio2}}<p>{{.profile.Bio2}}</p>{{end}}
+        {{else}}
+          <p class="about-lead">I'm a backend engineer focused on building reliable, scalable systems — and the products on top of them.</p>
+        {{end}}
       </div>
     </section>
 
     <!-- experience -->
-    <section class="sec">
-      <h2 class="sec-h">Career journey</h2>
-      <div class="exp-list">
+    <section class="wrap sec">
+      <div class="sec-label"><span class="sec-num">03</span>Experience</div>
+      <ol class="exp-list">
         {{range .experiences}}
-        <div class="exp-row">
-          <span class="exp-dot"></span>
-          <div>
-            <div class="exp-role">{{.Role}} · {{.Company}}</div>
-            {{if .Description}}<div class="exp-desc">{{bulletize .Description}}</div>{{end}}
-            {{if .TechStack}}<div class="exp-tech">{{range .TechStack}}<span>{{.}}</span>{{end}}</div>{{end}}
+        <li class="exp-item" x-data="{ open:false }" :class="open && 'is-open'">
+          <div class="exp-period">{{if .PeriodStart}}{{.PeriodStart}} — {{if .PeriodEnd}}{{.PeriodEnd}}{{else}}Now{{end}}{{end}}</div>
+          <div class="exp-main">
+            <h3 class="exp-role">{{.Role}}</h3>
+            <div class="exp-company">{{.Company}}{{if .IsCurrent}} <span class="pill">Current</span>{{end}}</div>
+            {{if .Description}}<div class="exp-desc">{{bulletize .Description}}</div>
+            <button type="button" class="exp-more" @click="open=!open" x-text="open ? 'Show less' : 'Show all contributions'">Show all contributions</button>{{end}}
+            {{if .TechStack}}<ul class="chips">{{range .TechStack}}<li>{{.}}</li>{{end}}</ul>{{end}}
           </div>
-          <span class="exp-period {{if .IsCurrent}}current{{end}}">{{if .PeriodStart}}{{.PeriodStart}}—{{if .PeriodEnd}}{{.PeriodEnd}}{{else}}now{{end}}{{end}}</span>
-        </div>
+        </li>
         {{end}}
-        {{if not .experiences}}
-        <p style="color:var(--faint); font-family:var(--font-mono); font-size:14px;">No experience added yet — add it in the <a href="/admin/profile" style="color:var(--blue);">admin panel</a>.</p>
-        {{end}}
-      </div>
+      </ol>
+      {{if not .experiences}}
+      <p class="muted">No experience added yet — add it in the <a href="/admin/profile">admin panel</a>.</p>
+      {{end}}
     </section>
 
     <!-- featured projects -->
     {{if .projects}}
-    <section class="sec">
-      <div class="sec-head"><h2 class="sec-h" style="margin:0;">Featured projects</h2><a class="sec-more" href="/projects">All →</a></div>
-      <div class="proj-grid">
-        {{range .projects}}
-        <div class="proj-card">
-          <div class="proj-shot">{{if .ImageURL}}<img src="{{.ImageURL}}" alt="{{.Title}}">{{else}}project shot{{end}}</div>
-          <div class="proj-body">
-            <div class="proj-title">{{.Title}}</div>
-            {{if .Description}}<div class="proj-desc">{{.Description}}</div>{{end}}
-            {{if .TechStack}}<div class="proj-tags">{{range .TechStack}}<span>{{.}}</span>{{end}}</div>{{end}}
-            {{if or .LiveURL .GithubURL}}
-            <div class="proj-links">
-              {{if .LiveURL}}<a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer">Live ↗</a>{{end}}
-              {{if .GithubURL}}<a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer">Source ↗</a>{{end}}
-            </div>
-            {{end}}
-          </div>
+    <section class="wrap sec">
+      <div class="sec-label"><span class="sec-num">04</span>Projects</div>
+      <div>
+        <div class="pj-grid">
+          {{range .projects}}{{template "project-card" .}}{{end}}
         </div>
-        {{end}}
+        <a class="more-link" href="/projects">All projects →</a>
       </div>
     </section>
     {{end}}
 
-    <!-- recent blog -->
+    <!-- recent writing -->
     {{if .posts}}
-    <section class="sec">
-      <div class="sec-head"><h2 class="sec-h" style="margin:0;">Recent writing</h2><a class="sec-more" href="/blog">All →</a></div>
-      <div class="blog-grid">
-        {{range .posts}}
-        <a class="blog-card" href="/blog/{{.Slug}}">
-          {{if .PublishedAt}}<div class="blog-date">{{.PublishedAt.Format "Jan 2006"}}</div>{{end}}
-          <div class="blog-title">{{.Title}}</div>
-        </a>
-        {{end}}
+    <section class="wrap sec">
+      <div class="sec-label"><span class="sec-num">05</span>Writing</div>
+      <div>
+        <ul class="post-rows">
+          {{range .posts}}
+          <li><a href="/blog/{{.Slug}}">
+            <span class="post-date">{{if .PublishedAt}}{{.PublishedAt.Format "Jan 2006"}}{{else}}Draft{{end}}</span>
+            <span class="post-title">{{.Title}}</span>
+            <span class="post-arrow" aria-hidden="true">→</span>
+          </a></li>
+          {{end}}
+        </ul>
+        <a class="more-link" href="/blog">All writing →</a>
       </div>
     </section>
     {{end}}
 
     <!-- contact -->
-    <section class="sec" id="contact" style="padding-bottom:64px;">
-      <div class="contact-card">
+    <section class="wrap sec" id="contact">
+      <div class="sec-label"><span class="sec-num">06</span>Contact</div>
+      <div class="contact">
         <div>
-          <h2 class="contact-h">Let's build something.</h2>
-          <p class="contact-sub">Got a project in mind? Send a message — I usually reply within 24 hours.</p>
+          <h2 class="contact-h">Have an idea, a problem, or just want to talk shop?</h2>
+          <p class="muted">Send a message, or email me directly at <a href="mailto:syarif.hidayatull4h@gmail.com">syarif.hidayatull4h@gmail.com</a>.</p>
         </div>
         <div x-data="{
           form: { name:'', email:'', subject:'', message:'' },
@@ -155,16 +177,16 @@
             finally { this.loading = false; }
           }
         }">
-          <template x-if="success"><div class="cf-note">✓ Message sent! I'll reply within 24 hours.</div></template>
+          <template x-if="success"><p class="cf-note cf-ok">✓ Message sent — thanks! I'll get back to you soon.</p></template>
           <form @submit.prevent="submit" x-show="!success" class="cf">
             <div class="cf-row">
-              <input x-model="form.name" type="text" required placeholder="Name">
-              <input x-model="form.email" type="email" required placeholder="Email">
+              <label><span>Name</span><input x-model="form.name" type="text" required autocomplete="name"></label>
+              <label><span>Email</span><input x-model="form.email" type="email" required autocomplete="email"></label>
             </div>
-            <input x-model="form.subject" type="text" placeholder="Subject (optional)">
-            <textarea x-model="form.message" required placeholder="Message…"></textarea>
-            <div x-show="error" class="cf-note" x-text="error" style="display:none;"></div>
-            <button type="submit" class="cf-btn" :disabled="loading" x-text="loading ? 'Sending…' : 'Send message →'">Send message →</button>
+            <label><span>Subject <em>(optional)</em></span><input x-model="form.subject" type="text"></label>
+            <label><span>Message</span><textarea x-model="form.message" required rows="5"></textarea></label>
+            <p x-show="error" class="cf-note cf-err" x-text="error" style="display:none;"></p>
+            <button type="submit" class="btn btn-primary" :disabled="loading" x-text="loading ? 'Sending…' : 'Send message →'">Send message →</button>
           </form>
         </div>
       </div>
@@ -184,4 +206,24 @@
 
 </body>
 </html>
+{{end}}
+
+{{define "project-card"}}
+<article class="pj-card">
+  <div class="pj-shot">
+    <span class="pj-fallback" aria-hidden="true">{{.Title}}</span>
+    {{if .ImageURL}}<img src="{{.ImageURL}}" alt="{{.Title}}" loading="lazy" onerror="this.remove()">{{end}}
+  </div>
+  <div class="pj-body">
+    <h3 class="pj-title">{{.Title}}</h3>
+    {{if .Description}}<p class="pj-desc">{{.Description}}</p>{{end}}
+    {{if .TechStack}}<ul class="chips">{{range .TechStack}}<li>{{.}}</li>{{end}}</ul>{{end}}
+    {{if or .LiveURL .GithubURL}}
+    <div class="link-row">
+      {{if .LiveURL}}<a href="{{.LiveURL}}" target="_blank" rel="noopener noreferrer">Live ↗</a>{{end}}
+      {{if .GithubURL}}<a href="{{.GithubURL}}" target="_blank" rel="noopener noreferrer">Source ↗</a>{{end}}
+    </div>
+    {{end}}
+  </div>
+</article>
 {{end}}

@@ -1,18 +1,16 @@
 {{define "footer"}}
-<!-- Back to top -->
-<button x-data="{ show:false }" @scroll.window.passive="show = window.scrollY > 320" x-show="show" x-transition
-  @click="window.scrollTo({ top:0, behavior:'smooth' })" class="ft-top" aria-label="Back to top" style="display:none;">↑</button>
+<button x-data="{ show:false }" @scroll.window.passive="show = window.scrollY > 600" x-show="show" x-transition
+  @click="window.scrollTo({ top:0, behavior:'smooth' })" class="to-top" aria-label="Back to top" style="display:none;">↑</button>
 
-<footer style="margin-top:64px;">
-  <div class="ft-shell">
-    <div class="ft-bar">
-      <span>© {{currentYear}} Syarif Hidayatullah</span>
-      <span class="ft-links">
-        <a href="https://github.com/syarifmhidayatullah" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://linkedin.com/in/syarifmhidayatullah" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:syarif.hidayatull4h@gmail.com">Email</a>
-      </span>
-    </div>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>© {{currentYear}} Syarif Hidayatullah</span>
+    <span class="footer-links">
+      <a href="https://github.com/syarifmhidayatullah" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://linkedin.com/in/syarifmhidayatullah" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:syarif.hidayatull4h@gmail.com">Email</a>
+      <a href="/feed.xml">RSS</a>
+    </span>
   </div>
 </footer>
 {{end}}

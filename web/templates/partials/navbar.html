@@ -1,36 +1,27 @@
 {{define "navbar"}}
-<header x-data="{ open:false, dark: document.documentElement.getAttribute('data-theme') !== 'light' }" @keydown.escape.window="open=false">
-  <div class="nb-shell">
-    <nav class="nb-nav">
-      <a href="/" class="nb-brand">syarifhidayat<span style="color:var(--red);">.dev</span></a>
+<header class="nav" x-data="{ open:false, dark: document.documentElement.getAttribute('data-theme') !== 'light' }" @keydown.escape.window="open=false">
+  <nav class="wrap nav-inner">
+    <a href="/" class="brand">syarif<span class="accent">.</span>dev</a>
 
-      <!-- desktop pill -->
-      <div class="nb-pill nb-desktop-links">
-        <a href="/" class="nb-link {{if eq .activeNav "home"}}active{{end}}">Home</a>
-        <a href="/projects" class="nb-link {{if eq .activeNav "projects"}}active{{end}}">Projects</a>
-        <a href="/blog" class="nb-link {{if eq .activeNav "blog"}}active{{end}}">Blog</a>
-        <a href="/#contact" class="nb-link {{if eq .activeNav "contact"}}active{{end}}">Contact</a>
-        <button type="button" class="nb-toggle" aria-label="Toggle theme"
-          @click="dark=!dark; document.documentElement.setAttribute('data-theme', dark?'dark':'light'); localStorage.setItem('theme', dark?'dark':'light')"
-          x-text="dark ? '☀' : '☾'">☀</button>
-      </div>
+    <div class="nav-links">
+      <a href="/projects" class="{{if eq .activeNav "projects"}}active{{end}}">Projects</a>
+      <a href="/blog" class="{{if eq .activeNav "blog"}}active{{end}}">Writing</a>
+      <a href="/#contact">Contact</a>
+    </div>
 
-      <!-- mobile controls -->
-      <div class="nb-pill nb-mobile-ctrls">
-        <button type="button" class="nb-toggle" aria-label="Toggle theme"
-          @click="dark=!dark; document.documentElement.setAttribute('data-theme', dark?'dark':'light'); localStorage.setItem('theme', dark?'dark':'light')"
-          x-text="dark ? '☀' : '☾'">☀</button>
-        <button type="button" class="nb-burger" aria-label="Menu" @click="open=!open" x-text="open ? '✕' : '☰'">☰</button>
-      </div>
+    <div class="nav-ctrls">
+      <button type="button" class="icon-btn" :aria-label="dark ? 'Switch to light theme' : 'Switch to dark theme'"
+        @click="dark=!dark; document.documentElement.setAttribute('data-theme', dark?'dark':'light'); localStorage.setItem('theme', dark?'dark':'light')"
+        x-text="dark ? '☀' : '☾'">☀</button>
+      <button type="button" class="icon-btn nav-burger" aria-label="Menu" :aria-expanded="open" @click="open=!open" x-text="open ? '✕' : '☰'">☰</button>
+    </div>
 
-      <!-- mobile dropdown -->
-      <div class="nb-mobile" x-show="open" x-transition.opacity @click.away="open=false" style="display:none;">
-        <a href="/" class="{{if eq .activeNav "home"}}active{{end}}" @click="open=false">Home</a>
-        <a href="/projects" class="{{if eq .activeNav "projects"}}active{{end}}" @click="open=false">Projects</a>
-        <a href="/blog" class="{{if eq .activeNav "blog"}}active{{end}}" @click="open=false">Blog</a>
-        <a href="/#contact" class="{{if eq .activeNav "contact"}}active{{end}}" @click="open=false">Contact</a>
-      </div>
-    </nav>
-  </div>
+    <div class="nav-mobile" x-show="open" x-transition.opacity @click.away="open=false" style="display:none;">
+      <a href="/" @click="open=false">Home</a>
+      <a href="/projects" @click="open=false">Projects</a>
+      <a href="/blog" @click="open=false">Writing</a>
+      <a href="/#contact" @click="open=false">Contact</a>
+    </div>
+  </nav>
 </header>
 {{end}}
